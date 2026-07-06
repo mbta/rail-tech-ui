@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`LadderLabel non-revenue train 1`] = `
+<div
+  class="flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm light:bg-white dark:bg-glides-blue-900 branch-color-glides-yellow-400 light:ring-1 light:ring-inset light:ring-black/30"
+>
+  <div
+    class="flex flex-auto flex-col items-center justify-center light:text-gray-600 dark:text-glides-gray-200"
+  >
+    <div
+      class="font-semibold leading-none text-base"
+    >
+      3600
+    </div>
+    <div
+      class="leading-none text-sm"
+    >
+      3700
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LadderLabel one car train 1`] = `
+<div
+  class="flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm bg-glides-branch branch-color-glides-yellow-400 light:ring-1 light:ring-inset light:ring-black/30"
+>
+  <p
+    class="flex basis-auto items-center justify-center rounded-full text-center font-semibold text-glides-branch light:bg-slate-800 dark:bg-glides-blue-700 h-[1.875rem] w-[1.875rem]"
+  >
+    D
+  </p>
+  <div
+    class="flex flex-auto flex-col items-center justify-center text-glides-blue-700"
+  >
+    <div
+      class="font-semibold leading-none text-base"
+    >
+      3600
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LadderLabel three car train 1`] = `
+<div
+  class="flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm bg-glides-branch branch-color-glides-yellow-400 light:ring-1 light:ring-inset light:ring-black/30"
+>
+  <p
+    class="flex basis-auto items-center justify-center rounded-full text-center font-semibold text-glides-branch light:bg-slate-800 dark:bg-glides-blue-700 h-[1.875rem] w-[1.875rem]"
+  >
+    D
+  </p>
+  <div
+    class="flex flex-auto flex-col items-center justify-center text-glides-blue-700"
+  >
+    <div
+      class="font-semibold leading-none text-base"
+    >
+      3600
+    </div>
+    <div
+      class="leading-none text-sm"
+    >
+      3700
+    </div>
+    <div
+      class="leading-none text-sm"
+    >
+      3800
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LadderLabel two car train 1`] = `
+<div
+  class="flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm bg-glides-branch branch-color-glides-yellow-400 light:ring-1 light:ring-inset light:ring-black/30"
+>
+  <p
+    class="flex basis-auto items-center justify-center rounded-full text-center font-semibold text-glides-branch light:bg-slate-800 dark:bg-glides-blue-700 h-[1.875rem] w-[1.875rem]"
+  >
+    D
+  </p>
+  <div
+    class="flex flex-auto flex-col items-center justify-center text-glides-blue-700"
+  >
+    <div
+      class="font-semibold leading-none text-base"
+    >
+      3600
+    </div>
+    <div
+      class="leading-none text-sm"
+    >
+      3700
+    </div>
+  </div>
+</div>
+`;
