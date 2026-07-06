@@ -22,7 +22,7 @@ import { isTripRevenue } from "src/models/trainsheet";
 import { scrollTo } from "src/util/browser";
 import { routeColorClass } from "src/util/cssNaming";
 import { className } from "src/util/dom";
-import { PredictionsSelection, SideBarSelection } from "./types";
+import { StationSelection, VehicleSelection } from "./types";
 import { TrainWithHeights, trainHeights } from "./trainHeight";
 
 /**
@@ -57,10 +57,10 @@ export const Ladder = ({
   segment,
   zoom,
   trainLocs,
-  predictionsSelection,
+  stationSelection,
   scrollToConsist,
-  setSideBarSelection,
-  setPredictionsSelection,
+  setVehicleSelection,
+  setStationSelection,
   eastToWestStationIds,
   westToEastStationIds,
   initialPredictionsDirection,
@@ -69,10 +69,10 @@ export const Ladder = ({
   segment: Segment;
   zoom: number;
   trainLocs: TrainLoc[];
-  predictionsSelection: PredictionsSelection | null;
+  stationSelection: StationSelection | null;
   scrollToConsist: Consist | null;
-  setSideBarSelection: Dispatch<SetStateAction<SideBarSelection | null>>;
-  setPredictionsSelection: Dispatch<PredictionsSelection | null>;
+  setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
+  setStationSelection: Dispatch<StationSelection | null>;
   westToEastStationIds: StationId[];
   eastToWestStationIds: StationId[];
   initialPredictionsDirection: DirectionId;
@@ -93,8 +93,8 @@ export const Ladder = ({
         <StationList
           zoom={zoom}
           stationIds={eastToWestStationIds}
-          predictionsSelection={predictionsSelection}
-          setPredictionsSelection={setPredictionsSelection}
+          stationSelection={stationSelection}
+          setStationSelection={setStationSelection}
           initialPredictionsDirection={initialPredictionsDirection}
         />
         <TrainList
@@ -102,14 +102,14 @@ export const Ladder = ({
           directionId={0}
           stationIdsInOrder={eastToWestStationIds}
           trainLocs={westboundTrainLocs}
-          setSideBarSelection={setSideBarSelection}
+          setVehicleSelection={setVehicleSelection}
         />
         <TrainList
           zoom={zoom}
           directionId={1}
           stationIdsInOrder={westToEastStationIds}
           trainLocs={eastboundTrainLocs}
-          setSideBarSelection={setSideBarSelection}
+          setVehicleSelection={setVehicleSelection}
         />
       </div>
     </ScrollToConsistContext.Provider>
@@ -190,14 +190,14 @@ export const trainAlignsWithSegment = (
 const StationList = ({
   zoom,
   stationIds,
-  predictionsSelection,
-  setPredictionsSelection,
+  stationSelection,
+  setStationSelection,
   initialPredictionsDirection,
 }: {
   zoom: number;
   stationIds: StationId[];
-  predictionsSelection: PredictionsSelection | null;
-  setPredictionsSelection: Dispatch<PredictionsSelection | null>;
+  stationSelection: StationSelection | null;
+  setStationSelection: Dispatch<StationSelection | null>;
   initialPredictionsDirection: DirectionId;
 }): ReactElement => {
   const stopClass = className([
@@ -215,7 +215,7 @@ const StationList = ({
       aria-label="Stations"
     >
       {stationIds.map((stationId, index) => {
-        const isSelected = stationId === predictionsSelection?.stationId;
+        const isSelected = stationId === stationSelection?.stationId;
         const isLastStation: boolean = index === stationIds.length - 1;
         const heightPx = isLastStation ? 0 : zoom;
         return (
@@ -234,12 +234,12 @@ const StationList = ({
               ])}
               onClick={() => {
                 if (isSelected) {
-                  setPredictionsSelection(null);
+                  setStationSelection(null);
                 } else {
-                  setPredictionsSelection({
+                  setStationSelection({
                     stationId,
                     directionId:
-                      predictionsSelection?.directionId ??
+                      stationSelection?.directionId ??
                       initialPredictionsDirection,
                   });
                 }
@@ -252,18 +252,18 @@ const StationList = ({
                 stopClass,
                 "left-[-12.6px]",
                 isSelected &&
-                predictionsSelection.directionId === DirectionId.Westbound
+                stationSelection.directionId === DirectionId.Westbound
                   ? selectedStopClass
                   : unselectedStopClass,
               ])}
               onClick={() => {
                 if (
                   isSelected &&
-                  predictionsSelection.directionId === DirectionId.Westbound
+                  stationSelection.directionId === DirectionId.Westbound
                 ) {
-                  setPredictionsSelection(null);
+                  setStationSelection(null);
                 } else {
-                  setPredictionsSelection({
+                  setStationSelection({
                     stationId,
                     directionId: DirectionId.Westbound,
                   });
@@ -275,18 +275,18 @@ const StationList = ({
                 stopClass,
                 "right-[-12.6px]",
                 isSelected &&
-                predictionsSelection.directionId === DirectionId.Eastbound
+                stationSelection.directionId === DirectionId.Eastbound
                   ? selectedStopClass
                   : unselectedStopClass,
               ])}
               onClick={() => {
                 if (
                   isSelected &&
-                  predictionsSelection.directionId === DirectionId.Eastbound
+                  stationSelection.directionId === DirectionId.Eastbound
                 ) {
-                  setPredictionsSelection(null);
+                  setStationSelection(null);
                 } else {
-                  setPredictionsSelection({
+                  setStationSelection({
                     stationId,
                     directionId: DirectionId.Eastbound,
                   });
@@ -305,13 +305,13 @@ const TrainList = ({
   directionId,
   stationIdsInOrder,
   trainLocs,
-  setSideBarSelection,
+  setVehicleSelection,
 }: {
   zoom: number;
   directionId: DirectionId;
   stationIdsInOrder: StationId[];
   trainLocs: TrainLoc[];
-  setSideBarSelection: Dispatch<SetStateAction<SideBarSelection | null>>;
+  setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
 }): ReactElement => {
   const trainsWithHeights: TrainWithHeights[] = trainHeights(
     trainLocs,
@@ -334,7 +334,7 @@ const TrainList = ({
         >
           <Train
             trainWithHeights={trainWithHeights}
-            setSideBarSelection={setSideBarSelection}
+            setVehicleSelection={setVehicleSelection}
           />
         </li>
       ))}
@@ -344,10 +344,10 @@ const TrainList = ({
 
 const Train = ({
   trainWithHeights,
-  setSideBarSelection,
+  setVehicleSelection,
 }: {
   trainWithHeights: TrainWithHeights;
-  setSideBarSelection: Dispatch<SetStateAction<SideBarSelection | null>>;
+  setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
 }): ReactElement => {
   const scrollToConsist = useContext(ScrollToConsistContext);
   const isSearchResult =
@@ -372,7 +372,7 @@ const Train = ({
         buttonRef={labelButtonRef}
         trainWithHeights={trainWithHeights}
         isSearchResult={isSearchResult}
-        setSideBarSelection={setSideBarSelection}
+        setVehicleSelection={setVehicleSelection}
       />
       <LineBetweenDotAndLabel trainWithHeights={trainWithHeights} />
     </>
@@ -404,12 +404,12 @@ const LabelButton = ({
   trainWithHeights,
   buttonRef,
   isSearchResult,
-  setSideBarSelection,
+  setVehicleSelection,
 }: {
   trainWithHeights: TrainWithHeights;
   buttonRef: React.MutableRefObject<HTMLButtonElement | null>;
   isSearchResult: boolean;
-  setSideBarSelection: Dispatch<SetStateAction<SideBarSelection | null>>;
+  setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
 }): ReactElement => {
   return (
     <button
@@ -419,11 +419,11 @@ const LabelButton = ({
         isSearchResult ? "z-object" : null,
       ])}
       onClick={() => {
-        const sideBarSelection: SideBarSelection = {
+        const vehicleSelection: VehicleSelection = {
           routeId: trainWithHeights.routeId,
           consist: trainWithHeights.consist,
         };
-        setSideBarSelection(sideBarSelection);
+        setVehicleSelection(vehicleSelection);
       }}
       style={{
         top: `${trainWithHeights.labelPx}px`,

@@ -2,12 +2,12 @@ import { Consist } from "src/data";
 import { DirectionId, RouteId } from "src/models/route";
 import { StationId } from "src/models/stop";
 
-export interface PredictionsSelection {
+export interface StationSelection {
   stationId: StationId;
   directionId: DirectionId;
 }
 
-export interface SideBarSelection {
+export interface VehicleSelection {
   routeId: RouteId;
   consist: Consist;
 }
