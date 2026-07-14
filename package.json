@@ -12,7 +12,7 @@
     "test": "jest",
     "test:tsc": "tsc --noemit",
     "build": "tsc && tsx build.ts",
-    "prepack": "npm run build",
+    "prepare": "npm run build",
     "watch": "tsx build.ts --watch",
     "clean": "tsc --build --clean"
   },
