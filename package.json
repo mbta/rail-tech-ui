@@ -1,9 +1,9 @@
 {
-  "name": "gladder",
+  "name": "rail-test-ui",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mbta/gladder.git"
+    "url": "git+https://github.com/mbta/rail-tech-ui.git"
   },
   "license": "MIT",
   "main": "index.js",
