@@ -9,7 +9,7 @@ const opts: esbuild.BuildOptions = {
   outfile: "./dist/src/index.js",
   logLevel: "debug",
   external: ["react", "react-dom", "react-router-dom"],
-  platform: "node",
+  platform: "browser",
   ...(watch ? { sourcemap: "inline" } : {}),
 };
 
