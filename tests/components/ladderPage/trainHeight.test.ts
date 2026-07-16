@@ -15,7 +15,7 @@ const stationIdsWestbound = [
   "place-cool",
   "place-clmnl",
 ];
-const stationHeights = [1.0, 1.0, 1.0, 1.0];
+const stationSpacingRatios = [1.0, 1.0, 1.0, 1.0];
 const stationIdsEastbound = reverse(stationIdsWestbound);
 
 const stationIdsEastboundM = [
@@ -36,7 +36,7 @@ describe("trainHeights", () => {
       stationId: "place-north",
       stopStatus: StopStatus.InTransitTo,
     });
-    expect(trainHeights([trainLoc], 40, 0, stationIdsWestbound, stationHeights)).toEqual([]);
+    expect(trainHeights([trainLoc], 40, 0, stationIdsWestbound, stationSpacingRatios)).toEqual([]);
   });
 
   test("westbound at top station", () => {
@@ -51,7 +51,7 @@ describe("trainHeights", () => {
       40,
       0,
       stationIdsWestbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toEqual(0);
   });
@@ -68,7 +68,7 @@ describe("trainHeights", () => {
       40,
       0,
       stationIdsWestbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toBeWithinRange(41, 79);
   });
@@ -85,7 +85,7 @@ describe("trainHeights", () => {
       40,
       0,
       stationIdsWestbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toEqual(80);
   });
@@ -102,7 +102,7 @@ describe("trainHeights", () => {
       40,
       0,
       stationIdsWestbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toBeWithinRange(81, 119);
   });
@@ -119,7 +119,7 @@ describe("trainHeights", () => {
       40,
       0,
       stationIdsWestbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -131,7 +131,7 @@ describe("trainHeights", () => {
       stationId: "place-clmnl",
       stopStatus: StopStatus.InTransitTo,
     });
-    expect(trainHeights([trainLoc], 40, 1, stationIdsEastbound,stationHeights)).toEqual([]);
+    expect(trainHeights([trainLoc], 40, 1, stationIdsEastbound,stationSpacingRatios)).toEqual([]);
   });
 
   test("eastbound before Mattapan shows", () => {
@@ -141,7 +141,7 @@ describe("trainHeights", () => {
       stationId: "place-matt",
       stopStatus: StopStatus.InTransitTo,
     });
-    const [result] = trainHeights([trainLoc], 40, 1, stationIdsEastboundM, stationHeights);
+    const [result] = trainHeights([trainLoc], 40, 1, stationIdsEastboundM, stationSpacingRatios);
     expect(result.dotPx).toEqual(120);
   });
 
@@ -157,7 +157,7 @@ describe("trainHeights", () => {
       40,
       1,
       stationIdsEastbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -174,7 +174,7 @@ describe("trainHeights", () => {
       40,
       1,
       stationIdsEastbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toBeWithinRange(81, 119);
   });
@@ -191,7 +191,7 @@ describe("trainHeights", () => {
       40,
       1,
       stationIdsEastbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toEqual(80);
   });
@@ -208,7 +208,7 @@ describe("trainHeights", () => {
       40,
       1,
       stationIdsEastbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toBeWithinRange(0, 39);
   });
@@ -225,7 +225,7 @@ describe("trainHeights", () => {
       40,
       1,
       stationIdsEastbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     expect(result.dotPx).toEqual(0);
   });
@@ -252,7 +252,7 @@ describe("trainHeights", () => {
       40,
       0,
       stationIdsWestbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     const [train1, train2] =
       result[0].consist[0] === "3901" ? result : reverse(result);
@@ -293,7 +293,7 @@ describe("trainHeights", () => {
       40,
       1,
       stationIdsEastbound,
-      stationHeights,
+      stationSpacingRatios,
     );
     const [train1, train2] =
       result[0].consist[0] === "3901" ? result : reverse(result);

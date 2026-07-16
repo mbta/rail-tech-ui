@@ -25,7 +25,7 @@ describe("Ladder", () => {
   test("shows station names", () => {
     const eastToWestStationIds = stationIdsOnSegmentInDirection("d", 0);
     const westToEastStationIds = stationIdsOnSegmentInDirection("d", 1);
-    const eastToWestStationHeights = eastToWestStationIds.map((id) => 1.0);
+    const eastToWestStationSpacingRatios = eastToWestStationIds.map((id) => 1.0);
 
     const view = render(
       <Ladder
@@ -38,7 +38,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStationIds={eastToWestStationIds}
         westToEastStationIds={westToEastStationIds}
-        eastToWestStationDistances={eastToWestStationHeights}
+        eastToWestStationSpacingRatios={eastToWestStationSpacingRatios}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -48,7 +48,7 @@ describe("Ladder", () => {
   test("station for open predictions is highlighted", () => {
     const eastToWestStationIds = stationIdsOnSegmentInDirection("subway", 0);
     const westToEastStationIds = stationIdsOnSegmentInDirection("subway", 1);
-    const eastToWestStationHeights = eastToWestStationIds.map((id) => 1.0);
+    const eastToWestStationSpacingRatios = eastToWestStationIds.map((id) => 1.0);
 
     const view = render(
       <Ladder
@@ -64,7 +64,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStationIds={eastToWestStationIds}
         westToEastStationIds={westToEastStationIds}
-        eastToWestStationDistances={eastToWestStationHeights}
+        eastToWestStationSpacingRatios={eastToWestStationSpacingRatios}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -83,7 +83,7 @@ describe("Ladder", () => {
   test("shows trains", () => {
     const eastToWestStationIds = stationIdsOnSegmentInDirection("e", 0);
     const westToEastStationIds = stationIdsOnSegmentInDirection("e", 1);
-    const eastToWestStationHeights = eastToWestStationIds.map((id) => 1.0);
+    const eastToWestStationSpacingRatios = eastToWestStationIds.map((id) => 1.0);
 
     const view = render(
       <Ladder
@@ -107,7 +107,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStationIds={eastToWestStationIds}
         westToEastStationIds={westToEastStationIds}
-        eastToWestStationDistances={eastToWestStationHeights}
+        eastToWestStationSpacingRatios={eastToWestStationSpacingRatios}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -124,7 +124,7 @@ describe("Ladder", () => {
   test("doesn't show train on other branch", () => {
     const eastToWestStationIds = stationIdsOnSegmentInDirection("d", 0);
     const westToEastStationIds = stationIdsOnSegmentInDirection("d", 1);
-    const eastToWestStationHeights = eastToWestStationIds.map((id) => 1.0);
+    const eastToWestStationSpacingRatios = eastToWestStationIds.map((id) => 1.0);
 
     const view = render(
       <Ladder
@@ -143,7 +143,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStationIds={eastToWestStationIds}
         westToEastStationIds={westToEastStationIds}
-        eastToWestStationDistances={eastToWestStationHeights}
+        eastToWestStationSpacingRatios={eastToWestStationSpacingRatios}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -155,7 +155,7 @@ describe("Ladder", () => {
   test("scrolling to trains based on hash", async () => {
     const eastToWestStationIds = stationIdsOnSegmentInDirection("e", 0);
     const westToEastStationIds = stationIdsOnSegmentInDirection("e", 1);
-    const eastToWestStationHeights = eastToWestStationIds.map((id) => 1.0);
+    const eastToWestStationSpacingRatios = eastToWestStationIds.map((id) => 1.0);
 
     const trainLocs: TrainLoc[] = [
       trainLocFactory.build({
@@ -180,7 +180,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStationIds={eastToWestStationIds}
         westToEastStationIds={westToEastStationIds}
-        eastToWestStationDistances={eastToWestStationHeights}
+        eastToWestStationSpacingRatios={eastToWestStationSpacingRatios}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
