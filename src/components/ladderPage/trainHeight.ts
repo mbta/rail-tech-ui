@@ -53,6 +53,7 @@ export const trainHeights = (
   zoom: number,
   directionId: DirectionId,
   stationIdsInOrder: StationId[],
+  stationHeightsTopToBottom: number[]
 ): TrainWithHeights[] => {
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
@@ -63,7 +64,7 @@ export const trainHeights = (
     directionId,
   );
   const trainsWithDotPx: TrainWithDotPx[] = trainsTopToBottom.map((train) =>
-    trainWithDotPx(train, stationIdsInOrder.length, zoom),
+    trainWithDotPx(train, stationIdsInOrder.length, zoom, stationHeightsTopToBottom),
   );
   const trainsWithLabelPx: TrainWithHeights[] =
     avoidOverlapsTrains(trainsWithDotPx);
@@ -190,6 +191,7 @@ const trainWithDotPx = (
   train: TrainWithStopsTraveled,
   stopsOnSegment: number,
   zoom: number,
+  stationHeightsTopToBottom: number[],
 ): TrainWithDotPx => ({
   routeId: train.routeId,
   consist: train.consist,
@@ -200,6 +202,7 @@ const trainWithDotPx = (
     train.directionId,
     stopsOnSegment,
     zoom,
+    stationHeightsTopToBottom,
   ),
 });
 
@@ -208,15 +211,26 @@ const stopsTraveledToPixelsFromTop = (
   directionId: DirectionId,
   stopsOnSegment: number,
   zoom: number,
+  stationHeightsTopToBottom: number[],
 ): number => {
   if (directionId === DirectionId.Westbound) {
     // westbound. stopsTraveled is already measured top to bottom.
-    return stopsTraveled * zoom;
+    const distanceOfFullStopsTraveled = stationHeightsTopToBottom.slice(0, stopsTraveled).reduce((acc, current) => acc + current, 0);
+    const partialDistance = stopsTraveled - Math.trunc(stopsTraveled);
+    if (partialDistance !== 0) {
+      return (distanceOfFullStopsTraveled + partialDistance * stationHeightsTopToBottom[Math.trunc(stopsTraveled)]) * zoom;
+    }
+    return distanceOfFullStopsTraveled * zoom;
   } else {
     // eastbound. stopsTraveled is measured bottom to top
     const legsOnSegment = stopsOnSegment - 1;
     const stopsFromTop = legsOnSegment - stopsTraveled;
-    return stopsFromTop * zoom;
+    const distanceOfFullStopsToTravel = stationHeightsTopToBottom.slice(0, stopsFromTop).reduce((acc, current) => acc + current, 0);
+    const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
+    if (partialDistance !== 0) {
+      return (distanceOfFullStopsToTravel + partialDistance * stationHeightsTopToBottom[Math.trunc(stopsFromTop)]) * zoom;
+    }
+    return distanceOfFullStopsToTravel * zoom;  
   }
 };
 

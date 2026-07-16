@@ -63,6 +63,7 @@ export const Ladder = ({
   setStationSelection,
   eastToWestStationIds,
   westToEastStationIds,
+  eastToWestStationDistances,
   getInitialPredictionsDirection,
   alignsWithSegment,
 }: {
@@ -75,6 +76,7 @@ export const Ladder = ({
   setStationSelection: Dispatch<StationSelection | null>;
   westToEastStationIds: StationId[];
   eastToWestStationIds: StationId[];
+  eastToWestStationDistances: number[];
   getInitialPredictionsDirection: () => DirectionId;
   alignsWithSegment?: (trainLoc: TrainLoc, segment: Segment) => boolean;
 }): ReactElement => {
@@ -93,6 +95,7 @@ export const Ladder = ({
         <StationList
           zoom={zoom}
           stationIds={eastToWestStationIds}
+          stationHeights={eastToWestStationDistances}
           stationSelection={stationSelection}
           setStationSelection={setStationSelection}
           getInitialPredictionsDirection={getInitialPredictionsDirection}
@@ -101,6 +104,7 @@ export const Ladder = ({
           zoom={zoom}
           directionId={0}
           stationIdsInOrder={eastToWestStationIds}
+          stationHeightsTopToBottom={eastToWestStationDistances}
           trainLocs={westboundTrainLocs}
           setVehicleSelection={setVehicleSelection}
         />
@@ -108,6 +112,7 @@ export const Ladder = ({
           zoom={zoom}
           directionId={1}
           stationIdsInOrder={westToEastStationIds}
+          stationHeightsTopToBottom={eastToWestStationDistances}
           trainLocs={eastboundTrainLocs}
           setVehicleSelection={setVehicleSelection}
         />
@@ -190,12 +195,14 @@ export const trainAlignsWithSegment = (
 const StationList = ({
   zoom,
   stationIds,
+  stationHeights,
   stationSelection,
   setStationSelection,
   getInitialPredictionsDirection,
 }: {
   zoom: number;
   stationIds: StationId[];
+  stationHeights: number[];
   stationSelection: StationSelection | null;
   setStationSelection: Dispatch<StationSelection | null>;
   getInitialPredictionsDirection: () => DirectionId;
@@ -217,7 +224,7 @@ const StationList = ({
       {stationIds.map((stationId, index) => {
         const isSelected = stationId === stationSelection?.stationId;
         const isLastStation: boolean = index === stationIds.length - 1;
-        const heightPx = isLastStation ? 0 : zoom;
+        const heightPx = isLastStation ? 0 : stationHeights[index] * zoom;
         return (
           <li
             key={stationId}
@@ -304,12 +311,14 @@ const TrainList = ({
   zoom,
   directionId,
   stationIdsInOrder,
+  stationHeightsTopToBottom,
   trainLocs,
   setVehicleSelection,
 }: {
   zoom: number;
   directionId: DirectionId;
   stationIdsInOrder: StationId[];
+  stationHeightsTopToBottom: number[];
   trainLocs: TrainLoc[];
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
 }): ReactElement => {
@@ -318,6 +327,7 @@ const TrainList = ({
     zoom,
     directionId,
     stationIdsInOrder,
+    stationHeightsTopToBottom,
   );
   return (
     <ul
