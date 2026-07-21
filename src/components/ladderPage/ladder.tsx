@@ -63,7 +63,7 @@ export const Ladder = ({
   setStationSelection,
   eastToWestStationIds,
   westToEastStationIds,
-  initialPredictionsDirection,
+  getInitialPredictionsDirection,
   alignsWithSegment,
 }: {
   segment: Segment;
@@ -75,7 +75,7 @@ export const Ladder = ({
   setStationSelection: Dispatch<StationSelection | null>;
   westToEastStationIds: StationId[];
   eastToWestStationIds: StationId[];
-  initialPredictionsDirection: DirectionId;
+  getInitialPredictionsDirection: () => DirectionId;
   alignsWithSegment?: (trainLoc: TrainLoc, segment: Segment) => boolean;
 }): ReactElement => {
   const trainLocsOnRoute = trainLocs.filter((trainLoc) =>
@@ -95,7 +95,7 @@ export const Ladder = ({
           stationIds={eastToWestStationIds}
           stationSelection={stationSelection}
           setStationSelection={setStationSelection}
-          initialPredictionsDirection={initialPredictionsDirection}
+          getInitialPredictionsDirection={getInitialPredictionsDirection}
         />
         <TrainList
           zoom={zoom}
@@ -192,13 +192,13 @@ const StationList = ({
   stationIds,
   stationSelection,
   setStationSelection,
-  initialPredictionsDirection,
+  getInitialPredictionsDirection,
 }: {
   zoom: number;
   stationIds: StationId[];
   stationSelection: StationSelection | null;
   setStationSelection: Dispatch<StationSelection | null>;
-  initialPredictionsDirection: DirectionId;
+  getInitialPredictionsDirection: () => DirectionId;
 }): ReactElement => {
   const stopClass = className([
     "absolute top-0 inline-block h-[1.2rem] w-[1.2rem] -translate-y-1/2 rounded-full border-4 border-solid",
@@ -240,7 +240,7 @@ const StationList = ({
                     stationId,
                     directionId:
                       stationSelection?.directionId ??
-                      initialPredictionsDirection,
+                      getInitialPredictionsDirection(),
                   });
                 }
               }}
