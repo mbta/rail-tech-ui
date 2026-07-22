@@ -19,7 +19,11 @@
   "type": "module",
   "private": true,
   "dependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
     "luxon": "^3.7.2",
+    "style-dictionary": "^5.1.0",
+    "style-dictionary-utils": "^4.1.1",
+    "tailwindcss": "^3.4.19",
     "typescript": "5.7.3",
     "zod": "4.4.3"
   },
