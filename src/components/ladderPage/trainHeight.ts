@@ -215,12 +215,12 @@ const stopsTraveledToPixelsFromTop = (
 ): number => {
   // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
   const stopsFromTop = directionId === DirectionId.Westbound ? stopsTraveled : stopsOnSegment - stopsTraveled - 1;
-  const fullStopsAwayFromTop = stationSpacingRatiosTopToBottom.slice(0, stopsFromTop).reduce((acc, current) => acc + current, 0);
+  const sumOfStationRatiosForFullStopsAwayFromTop = stationSpacingRatiosTopToBottom.slice(0, stopsFromTop).reduce((acc, current) => acc + current, 0);
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
   if (partialDistance !== 0) {
-    return (fullStopsAwayFromTop + partialDistance * stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) * zoom;
+    return (sumOfStationRatiosForFullStopsAwayFromTop + partialDistance * stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) * zoom;
   }
-  return fullStopsAwayFromTop * zoom;
+  return sumOfStationRatiosForFullStopsAwayFromTop * zoom;
 };
 
 /**
