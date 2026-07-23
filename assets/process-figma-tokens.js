@@ -61,7 +61,7 @@ StyleDictionary.registerParser({
   pattern: /\.json$/,
   parser: ({ filePath, contents }) => {
     try {
-      modifiedContents = contents
+      const modifiedContents = contents
         // {tailwind-colors.blue.300.20%} -> theme('colors.blue.300 / 20%')
         .replace(
           /\{tailwind-colors\.([a-z]+\.[0-9]+)\.(\d+%)\}/g,

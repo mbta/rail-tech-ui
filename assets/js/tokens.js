@@ -55,10 +55,9 @@ export default {
     'glides-red': 'var(--custom-colors-glides-red)',
     'glides-green-two': 'var(--custom-colors-glides-green-two)',
     'glides-mustard': 'var(--custom-colors-glides-mustard)',
-    'glides-mustard-24': 'var(--custom-colors-glides-mustard-24)'
+    'glides-mustard-sheer': 'var(--custom-colors-glides-mustard-sheer)'
   },
-  tailwindisColors: {
-    white: 'var(--tailwind-colors-white)',
+  tailwindColors: {
     blue: {
       '50': 'var(--tailwind-colors-blue-50)',
       '100': 'var(--tailwind-colors-blue-100)',
@@ -70,9 +69,9 @@ export default {
       '700': 'var(--tailwind-colors-blue-700)',
       '800': 'var(--tailwind-colors-blue-800)',
       '900': 'var(--tailwind-colors-blue-900)',
-      '950': 'var(--tailwind-colors-blue-950)',
-      '300-20': 'var(--tailwind-colors-blue-300-20)'
+      '950': 'var(--tailwind-colors-blue-950)'
     },
+    white: 'var(--tailwind-colors-white)',
     black: 'var(--tailwind-colors-black)',
     gray: {
       '50': 'var(--tailwind-colors-gray-50)',
@@ -116,17 +115,19 @@ export default {
     E: { 'e-branch': 'var(--light-rail-e-e-branch)' },
     Mattapan: { 'mattapan-branch': 'var(--light-rail-mattapan-mattapan-branch)' }
   },
-  orbitBraintree: 'var(--orbit-braintree)',
-  orbitAshmont: 'var(--orbit-ashmont)',
-  orbitOrangeline: 'var(--orbit-orangeline)',
-  orbitBlueline: 'var(--orbit-blueline)',
+  Orbit: {
+    braintree: 'var(--orbit-braintree)',
+    ashmont: 'var(--orbit-ashmont)',
+    orangeline: 'var(--orbit-orangeline)',
+    blueline: 'var(--orbit-blueline)'
+  },
   textPrimary: 'var(--text-primary)',
   textSecondary: 'var(--text-secondary)',
   textAccent: 'var(--text-accent)',
   errorState: {
     warning: 'var(--error-state-warning)',
-    'warning-bg': 'var(--error-state-warning-bg)',
-    error: 'var(--error-state-error)'
+    error: 'var(--error-state-error)',
+    'warning-bg': 'var(--error-state-warning-bg)'
   },
   nonRev: 'var(--non-rev)',
   environment: {
