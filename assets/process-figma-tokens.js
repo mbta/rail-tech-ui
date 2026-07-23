@@ -209,7 +209,6 @@ StyleDictionary.registerFormat({
           if (index === path.length - 1) {
             current[partName] =
               `var(--${path.map((p) => p.toLowerCase()).join("-")})`;
-            // `var(--${path.map((p) => p.toLowerCase().replace(/\s+/g, "-")).join("-")})`;
           } else {
             current[partName] = current[partName] || {};
             current = current[partName];
