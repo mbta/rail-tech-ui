@@ -1,20 +1,20 @@
 {
   "menu": {
     "background": {
-      "$value": "{custom colors.glides-blue.900}",
+      "$value": "{custom-colors.glides-blue.900}",
       "$type": "color"
     },
     "button": {
       "default": {
-        "$value": "{custom colors.glides-blue.700}",
+        "$value": "{custom-colors.glides-blue.700}",
         "$type": "color"
       },
       "active": {
-        "$value": "{custom colors.glides-blue.600}",
+        "$value": "{custom-colors.glides-blue.600}",
         "$type": "color"
       },
       "hover": {
-        "$value": "{custom colors.glides-blue.600}",
+        "$value": "{custom-colors.glides-blue.600}",
         "$type": "color"
       }
     }
@@ -22,21 +22,21 @@
   "button": {
     "primary": {
       "background": {
-        "$value": "{custom colors.alt-blue.700}",
+        "$value": "{custom-colors.alt-blue.700}",
         "$type": "color"
       },
       "text": {
-        "$value": "{tailwind colors.white}",
+        "$value": "{tailwind-colors.white}",
         "$type": "color"
       }
     },
     "secondary": {
       "background": {
-        "$value": "{tailwind colors.slate.200}",
+        "$value": "{tailwind-colors.slate.200}",
         "$type": "color"
       },
       "text": {
-        "$value": "{tailwind colors.slate.900}",
+        "$value": "{tailwind-colors.slate.900}",
         "$type": "color"
       },
       "border": {
@@ -50,98 +50,98 @@
         "$type": "color"
       },
       "text": {
-        "$value": "{custom colors.alt-blue.700}",
+        "$value": "{custom-colors.alt-blue.700}",
         "$type": "color"
       },
       "border": {
-        "$value": "{custom colors.alt-blue.700}",
+        "$value": "{custom-colors.alt-blue.700}",
         "$type": "color"
       }
     }
   },
   "ladder": {
     "background": {
-      "$value": "{tailwind colors.slate.100}",
+      "$value": "{tailwind-colors.slate.100}",
       "$type": "color"
     },
     "pill": {
       "background": {
-        "$value": "{tailwind colors.white}",
+        "$value": "{tailwind-colors.white}",
         "$type": "color"
       },
       "border": {
-        "$value": "{tailwind colors.slate.300}",
+        "$value": "{tailwind-colors.slate.300}",
         "$type": "color"
-      },
-      "nonrev": {
-        "border": {
-          "$value": "{custom colors.glides-gray.500}",
-          "$type": "color"
-        },
-        "background": {
-          "$value": "{tailwind colors.slate.100}",
-          "$type": "color"
-        },
-        "text": {
-          "$value": "{tailwind colors.slate.800}",
-          "$type": "color"
-        }
       },
       "text": {
         "b": {
-          "$value": "{tailwind colors.slate.800}",
+          "$value": "{tailwind-colors.slate.800}",
           "$type": "color"
         },
         "c": {
-          "$value": "{tailwind colors.slate.800}",
+          "$value": "{tailwind-colors.slate.800}",
           "$type": "color"
         },
         "d": {
-          "$value": "{tailwind colors.slate.800}",
+          "$value": "{tailwind-colors.slate.800}",
           "$type": "color"
         },
         "e": {
-          "$value": "{tailwind colors.slate.800}",
+          "$value": "{tailwind-colors.slate.800}",
           "$type": "color"
         },
         "braintree": {
-          "$value": "{tailwind colors.slate.800}",
+          "$value": "{tailwind-colors.slate.800}",
           "$type": "color"
         },
         "ashmont": {
-          "$value": "{tailwind colors.slate.800}",
+          "$value": "{tailwind-colors.slate.800}",
           "$type": "color"
         },
         "blueline": {
-          "$value": "{tailwind colors.slate.800}",
+          "$value": "{tailwind-colors.slate.800}",
           "$type": "color"
         },
         "orangeline": {
-          "$value": "{tailwind colors.slate.800}",
+          "$value": "{tailwind-colors.slate.800}",
+          "$type": "color"
+        }
+      },
+      "nonrev": {
+        "border": {
+          "$value": "{custom-colors.glides-gray.500}",
+          "$type": "color"
+        },
+        "background": {
+          "$value": "{tailwind-colors.slate.100}",
+          "$type": "color"
+        },
+        "text": {
+          "$value": "{tailwind-colors.slate.800}",
           "$type": "color"
         }
       }
     },
     "route ladder": {
-      "$value": "{tailwind colors.slate.200}",
+      "$value": "{tailwind-colors.slate.200}",
       "$type": "color"
     },
     "text": {
       "primary": {
-        "$value": "{tailwind colors.slate.800}",
+        "$value": "{tailwind-colors.slate.800}",
         "$type": "color"
       },
       "secondary": {
-        "$value": "{tailwind colors.gray.200}",
+        "$value": "{tailwind-colors.gray.200}",
         "$type": "color"
       },
       "branch picker": {
-        "$value": "{tailwind colors.white}",
+        "$value": "{tailwind-colors.white}",
         "$type": "color"
       }
     },
     "station marker": {
-      "$value": "{tailwind colors.slate.300}",
+      "$value": "{tailwind-colors.slate.300}",
       "$type": "color"
     },
     "branch picker": {
@@ -153,65 +153,65 @@
   },
   "trainsheet": {
     "background": {
-      "$value": "{tailwind colors.slate.100}",
+      "$value": "{tailwind-colors.slate.100}",
       "$type": "color"
     },
     "Now Zone": {
       "background": {
-        "$value": "{tailwind colors.slate.300}",
+        "$value": "{tailwind-colors.slate.300}",
         "$type": "color"
       },
       "border": {
-        "$value": "{tailwind colors.slate.400}",
+        "$value": "{tailwind-colors.slate.400}",
         "$type": "color"
       }
     }
   },
   "drawer": {
     "background": {
-      "$value": "{tailwind colors.white}",
+      "$value": "{tailwind-colors.white}",
       "$type": "color"
     },
     "border": {
-      "$value": "{tailwind colors.slate.300}",
+      "$value": "{tailwind-colors.slate.300}",
       "$type": "color"
     },
     "exit icon": {
-      "$value": "{tailwind colors.slate.500}",
+      "$value": "{tailwind-colors.slate.500}",
       "$type": "color"
     }
   },
   "card": {
     "background": {
-      "$value": "{tailwind colors.white}",
+      "$value": "{tailwind-colors.white}",
       "$type": "color"
     },
     "border": {
-      "$value": "{tailwind colors.gray.200}",
+      "$value": "{tailwind-colors.gray.200}",
       "$type": "color"
     },
     "header": {
-      "$value": "{tailwind colors.gray.200}",
+      "$value": "{tailwind-colors.gray.200}",
       "$type": "color"
     }
   },
   "input field": {
     "search": {
       "background": {
-        "$value": "{tailwind colors.slate.700}",
+        "$value": "{tailwind-colors.slate.700}",
         "$type": "color"
       },
       "border": {
-        "$value": "{tailwind colors.slate.600}",
+        "$value": "{tailwind-colors.slate.600}",
         "$type": "color"
       },
       "text": {
         "type in": {
-          "$value": "{tailwind colors.white}",
+          "$value": "{tailwind-colors.white}",
           "$type": "color"
         },
         "placeholder": {
-          "$value": "{custom colors.glides-gray.200}",
+          "$value": "{custom-colors.glides-gray.200}",
           "$type": "color"
         }
       }
@@ -219,7 +219,7 @@
   },
   "popup": {
     "background": {
-      "$value": "#ffffff",
+      "$value": "{tailwind-colors.white}",
       "$type": "color"
     }
   }

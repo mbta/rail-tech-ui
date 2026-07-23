@@ -1,0 +1,66 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --environment-env-dev: #1fecff;
+  --environment-env-dev-green: #50e38c;
+  --environment-env-dev-blue: #ffdd1f;
+  --button-secondary-background: rgba(255, 255, 255, 0);
+  --button-tertiary-border: rgba(255, 255, 255, 0);
+  --ladder-pill-border: rgba(255, 255, 255, 0);
+  --popup-background: #ffffff;
+  --text-primary: var(--custom-colors-glides-gray-200);
+  --text-secondary: var(--tailwind-colors-slate-400);
+  --text-accent: var(--tailwind-colors-white);
+  --error-state-warning: var(--custom-colors-glides-mustard);
+  --error-state-warning-bg: var(--custom-colors-glides-mustard-24);
+  --error-state-error: var(--custom-colors-glides-red);
+  --non-rev: var(--custom-colors-glides-gray-400);
+  --success: var(--custom-colors-glides-green-two);
+  --arrivals: var(--custom-colors-glides-wintergreen);
+  --departures: var(--custom-colors-glides-purple);
+  --icon: var(--custom-colors-glides-gray-200);
+  --menu-background: var(--custom-colors-glides-blue-900);
+  --menu-button-default: var(--custom-colors-glides-blue-700);
+  --menu-button-active: var(--custom-colors-glides-blue-600);
+  --menu-button-hover: var(--custom-colors-glides-blue-600);
+  --button-primary-background: var(--tailwind-colors-blue-300);
+  --button-primary-text: var(--tailwind-colors-slate-800);
+  --button-secondary-text: var(--tailwind-colors-white);
+  --button-secondary-border: var(--tailwind-colors-white);
+  --button-tertiary-background: var(--tailwind-colors-blue-300-20);
+  --button-tertiary-text: var(--tailwind-colors-blue-300);
+  --ladder-background: var(--custom-colors-glides-blue-700);
+  --ladder-pill-background: var(--custom-colors-glides-blue-900);
+  --ladder-pill-nonrev-border: var(--custom-colors-glides-gray-400);
+  --ladder-pill-nonrev-background: var(--custom-colors-glides-blue-700);
+  --ladder-pill-nonrev-text: var(--custom-colors-glides-gray-400);
+  --ladder-pill-text-b: var(--light-rail-b-b-branch);
+  --ladder-pill-text-c: var(--light-rail-c-c-branch);
+  --ladder-pill-text-d: var(--light-rail-d-d-branch);
+  --ladder-pill-text-e: var(--light-rail-e-e-branch);
+  --ladder-pill-text-braintree: var(--orbit-braintree);
+  --ladder-pill-text-ashmont: var(--orbit-ashmont);
+  --ladder-pill-text-blueline: var(--orbit-blueline);
+  --ladder-pill-text-orangeline: var(--orbit-orangeline);
+  --ladder-route-ladder: var(--custom-colors-glides-blue-900);
+  --ladder-text-primary: var(--custom-colors-glides-gray-200);
+  --ladder-text-secondary: var(--custom-colors-glides-blue-200);
+  --ladder-text-branch-picker: var(--custom-colors-glides-gray-200);
+  --ladder-station-marker: var(--custom-colors-glides-blue-900);
+  --ladder-branch-picker-background: var(--custom-colors-glides-blue-600);
+  --trainsheet-background: var(--tailwind-colors-slate-900);
+  --trainsheet-now-zone-background: var(--tailwind-colors-slate-800);
+  --trainsheet-now-zone-border: var(--tailwind-colors-slate-400);
+  --drawer-background: var(--tailwind-colors-slate-800);
+  --drawer-border: var(--tailwind-colors-slate-700);
+  --drawer-exit-icon: var(--custom-colors-glides-gray-200);
+  --card-background: var(--tailwind-colors-slate-700);
+  --card-border: var(--tailwind-colors-slate-600);
+  --card-header: var(--tailwind-colors-slate-600);
+  --input-field-search-background: var(--tailwind-colors-slate-700);
+  --input-field-search-border: var(--tailwind-colors-slate-600);
+  --input-field-search-text-type-in: var(--tailwind-colors-white);
+  --input-field-search-text-placeholder: var(--custom-colors-glides-gray-200);
+}

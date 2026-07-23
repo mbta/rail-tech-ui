@@ -61,7 +61,18 @@ StyleDictionary.registerParser({
   pattern: /\.json$/,
   parser: ({ filePath, contents }) => {
     try {
-      const parsed = JSON.parse(contents);
+      modifiedContents = contents
+        // {tailwind-colors.blue.300.20%} -> theme('colors.blue.300 / 20%')
+        .replace(
+          /\{tailwind-colors\.([a-z]+\.[0-9]+)\.(\d+%)\}/g,
+          "theme('colors.$1 / $2')",
+        )
+        // {tailwind-colors.blue.300} -> theme('colors.blue.300')
+        .replace(
+          /\{tailwind-colors\.([a-z]+\.[0-9]+)\}/g,
+          "theme('colors.$1')",
+        );
+      const parsed = JSON.parse(modifiedContents);
       return traverseTree(parsed);
     } catch (error) {
       console.log(error);
@@ -89,19 +100,6 @@ const baseConfig = {
         basePxFontSize: 16,
       },
     },
-    tw: {
-      transforms: ["attribute/cti", "name/kebab"],
-      buildPath,
-      files: [
-        {
-          destination: "js/tokens.js",
-          format: "javascript/tailwind",
-          options: {
-            outputReferences: true,
-          },
-        },
-      ],
-    },
   },
 };
 
@@ -125,6 +123,18 @@ const opsConfig = {
         basePxFontSize: 16,
       },
     },
+  },
+};
+
+const tailwindConfig = {
+  parsers: ["custom-parser"],
+  source: [
+    `${SRC_DIR}/Base Mode 1.json`,
+    `${SRC_DIR}/Ops Mode 1.json`,
+    `${SRC_DIR}/Semantic Dark Mode.json`,
+    `${SRC_DIR}/Semantic Light Mode.json`,
+  ],
+  platforms: {
     tw: {
       transforms: ["attribute/cti", "name/kebab"],
       buildPath,
@@ -147,7 +157,7 @@ const themeConfigs = ["Light", "Dark"].map((theme) => ({
     `${SRC_DIR}/Semantic ${theme} Mode.json`,
     `${SRC_DIR}/Components ${theme} Mode.json`,
   ],
-  include: [`${SRC_DIR}/Base Mode 1.json`],
+  include: [`${SRC_DIR}/Base Mode 1.json`, `${SRC_DIR}/Ops Mode 1.json`],
   platforms: {
     css: {
       transformGroup: "web",
@@ -199,6 +209,7 @@ StyleDictionary.registerFormat({
           if (index === path.length - 1) {
             current[partName] =
               `var(--${path.map((p) => p.toLowerCase()).join("-")})`;
+            // `var(--${path.map((p) => p.toLowerCase().replace(/\s+/g, "-")).join("-")})`;
           } else {
             current[partName] = current[partName] || {};
             current = current[partName];
@@ -214,7 +225,7 @@ StyleDictionary.registerFormat({
   },
 });
 
-for (var config of [baseConfig, opsConfig, ...themeConfigs]) {
+for (var config of [baseConfig, opsConfig, ...themeConfigs, tailwindConfig]) {
   const sd = new StyleDictionary(config, { verbosity: "verbose" });
   await sd.cleanAllPlatforms();
   await sd.buildAllPlatforms();

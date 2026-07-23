@@ -9,12 +9,12 @@
   --button-secondary-border: rgba(255, 255, 255, 0);
   --button-tertiary-background: rgba(255, 255, 255, 0);
   --ladder-branch-picker-background: #2a4365;
-  --popup-background: #ffffff;
   --text-primary: var(--tailwind-colors-slate-700);
   --text-secondary: var(--tailwind-colors-slate-500);
   --text-accent: var(--tailwind-colors-slate-900);
   --error-state-warning: var(--custom-colors-glides-mustard);
   --error-state-error: var(--custom-colors-glides-red);
+  --error-state-warning-bg: var(--custom-colors-glides-mustard-sheer);
   --non-rev: var(--custom-colors-glides-gray-400);
   --success: var(--custom-colors-glides-green-two);
   --arrivals: var(--custom-colors-glides-wintergreen);
@@ -33,9 +33,6 @@
   --ladder-background: var(--tailwind-colors-slate-100);
   --ladder-pill-background: var(--tailwind-colors-white);
   --ladder-pill-border: var(--tailwind-colors-slate-300);
-  --ladder-pill-nonrev-border: var(--custom-colors-glides-gray-500);
-  --ladder-pill-nonrev-background: var(--tailwind-colors-slate-100);
-  --ladder-pill-nonrev-text: var(--tailwind-colors-slate-800);
   --ladder-pill-text-b: var(--tailwind-colors-slate-800);
   --ladder-pill-text-c: var(--tailwind-colors-slate-800);
   --ladder-pill-text-d: var(--tailwind-colors-slate-800);
@@ -44,6 +41,9 @@
   --ladder-pill-text-ashmont: var(--tailwind-colors-slate-800);
   --ladder-pill-text-blueline: var(--tailwind-colors-slate-800);
   --ladder-pill-text-orangeline: var(--tailwind-colors-slate-800);
+  --ladder-pill-nonrev-border: var(--custom-colors-glides-gray-500);
+  --ladder-pill-nonrev-background: var(--tailwind-colors-slate-100);
+  --ladder-pill-nonrev-text: var(--tailwind-colors-slate-800);
   --ladder-route-ladder: var(--tailwind-colors-slate-200);
   --ladder-text-primary: var(--tailwind-colors-slate-800);
   --ladder-text-secondary: var(--tailwind-colors-gray-200);
@@ -62,4 +62,5 @@
   --input-field-search-border: var(--tailwind-colors-slate-600);
   --input-field-search-text-type-in: var(--tailwind-colors-white);
   --input-field-search-text-placeholder: var(--custom-colors-glides-gray-200);
+  --popup-background: var(--tailwind-colors-white);
 }

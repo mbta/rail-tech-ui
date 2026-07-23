@@ -1,5 +1,5 @@
 {
-  "Light Rail": {
+  "Light-Rail": {
     "B": {
       "b-branch": {
         "$value": "#ff6693",
@@ -31,20 +31,22 @@
       }
     }
   },
-  "orbit-braintree": {
-    "$value": "#ff4a4a",
-    "$type": "color"
-  },
-  "orbit-ashmont": {
-    "$value": "#ffb330",
-    "$type": "color"
-  },
-  "orbit-orangeline": {
-    "$value": "#ff7a15",
-    "$type": "color"
-  },
-  "orbit-blueline": {
-    "$value": "#4195fc",
-    "$type": "color"
+  "Orbit": {
+    "braintree": {
+      "$value": "#ff4a4a",
+      "$type": "color"
+    },
+    "ashmont": {
+      "$value": "#ffb330",
+      "$type": "color"
+    },
+    "orangeline": {
+      "$value": "#ff7a15",
+      "$type": "color"
+    },
+    "blueline": {
+      "$value": "#4195fc",
+      "$type": "color"
+    }
   }
 }

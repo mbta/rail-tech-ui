@@ -31,7 +31,7 @@
   --custom-colors-glides-teal-800: #344d56;
   --custom-colors-glides-teal-900: #2f424a;
   --custom-colors-glides-teal-950: #141f24;
-  --custom-colors-glides-blue-20: #b6d8f5;
+  --custom-colors-glides-blue-200: #b6d8f5;
   --custom-colors-glides-blue-400: #77a0c3;
   --custom-colors-glides-blue-600: #165c96;
   --custom-colors-glides-blue-700: #0a3355;
@@ -44,8 +44,7 @@
   --custom-colors-glides-red: #ff4531;
   --custom-colors-glides-green-two: #00c58a;
   --custom-colors-glides-mustard: #ffc961;
-  --custom-colors-glides-mustard-light: rgba(255, 201, 97, 0.24);
-  --tailwind-colors-white: #ffffff;
+  --custom-colors-glides-mustard-sheer: rgba(255, 201, 97, 0.24);
   --tailwind-colors-blue-50: #eff6ff;
   --tailwind-colors-blue-100: #dbeafe;
   --tailwind-colors-blue-200: #bfdbfe;
@@ -57,6 +56,7 @@
   --tailwind-colors-blue-800: #1e40af;
   --tailwind-colors-blue-900: #1e3a8a;
   --tailwind-colors-blue-950: #172554;
+  --tailwind-colors-white: #ffffff;
   --tailwind-colors-black: #000000;
   --tailwind-colors-gray-50: #f9fafb;
   --tailwind-colors-gray-100: #f3f4f6;
@@ -80,10 +80,10 @@
   --tailwind-colors-slate-800: #1e293b;
   --tailwind-colors-slate-900: #0f172a;
   --tailwind-colors-slate-950: #020617;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-md: 1.25rem;
-  --font-size-lg: 1.75rem;
+  --sm: [object Object];
+  --base: [object Object];
+  --md: [object Object];
+  --lg: [object Object];
   --spacing-default: 0;
   --font-family-base: Inter;
 }

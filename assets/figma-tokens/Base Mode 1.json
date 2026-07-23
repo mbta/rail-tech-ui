@@ -1,5 +1,5 @@
 {
-  "custom colors": {
+  "custom-colors": {
     "glides-gray-blue": {
       "50": {
         "$value": "#f6f7f9",
@@ -121,7 +121,7 @@
       }
     },
     "glides-blue": {
-      "20": {
+      "200": {
         "$value": "#b6d8f5",
         "$type": "color"
       },
@@ -176,16 +176,12 @@
       "$value": "#ffc961",
       "$type": "color"
     },
-    "glides-mustard-light": {
+    "glides-mustard-sheer": {
       "$value": "#ffc9613d",
       "$type": "color"
     }
   },
-  "tailwind colors": {
-    "white": {
-      "$value": "#ffffff",
-      "$type": "color"
-    },
+  "tailwind-colors": {
     "blue": {
       "50": {
         "$value": "#eff6ff",
@@ -235,6 +231,10 @@
         "$value": "#172554",
         "$type": "color"
       }
+    },
+    "white": {
+      "$value": "#ffffff",
+      "$type": "color"
     },
     "black": {
       "$value": "#000000",

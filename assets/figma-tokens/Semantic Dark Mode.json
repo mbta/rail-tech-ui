@@ -1,32 +1,36 @@
 {
   "text-primary": {
-    "$value": "{custom colors.glides-gray.200}",
+    "$value": "{custom-colors.glides-gray.200}",
     "$type": "color"
   },
   "text-secondary": {
-    "$value": "{tailwind colors.slate.400}",
+    "$value": "{tailwind-colors.slate.400}",
     "$type": "color"
   },
   "text-accent": {
-    "$value": "{tailwind colors.white}",
+    "$value": "{tailwind-colors.white}",
     "$type": "color"
   },
   "error-state": {
     "warning": {
-      "$value": "{custom colors.glides-mustard}",
+      "$value": "{custom-colors.glides-mustard}",
       "$type": "color",
       "background": {
-        "$value": "{custom colors.glides-mustard-light}",
+        "$value": "{custom-colors.glides-mustard-sheer}",
         "$type": "color"
       }
     },
     "error": {
-      "$value": "{custom colors.glides-red}",
+      "$value": "{custom-colors.glides-red}",
+      "$type": "color"
+    },
+    "warning-bg": {
+      "$value": "{custom-colors.glides-mustard-sheer}",
       "$type": "color"
     }
   },
   "non-rev": {
-    "$value": "{custom colors.glides-gray.400}",
+    "$value": "{custom-colors.glides-gray.400}",
     "$type": "color"
   },
   "environment": {
@@ -44,19 +48,19 @@
     }
   },
   "success": {
-    "$value": "{custom colors.glides-green-two}",
+    "$value": "{custom-colors.glides-green-two}",
     "$type": "color"
   },
   "arrivals": {
-    "$value": "{custom colors.glides-wintergreen}",
+    "$value": "{custom-colors.glides-wintergreen}",
     "$type": "color"
   },
   "departures": {
-    "$value": "{custom colors.glides-purple}",
+    "$value": "{custom-colors.glides-purple}",
     "$type": "color"
   },
   "icon": {
-    "$value": "{custom colors.glides-gray.200}",
+    "$value": "{custom-colors.glides-gray.200}",
     "$type": "color"
   }
 }
