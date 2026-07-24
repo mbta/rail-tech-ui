@@ -2,6 +2,9 @@ import util from "node:util";
 import { StyleDictionary } from "style-dictionary-utils";
 import { transformGroups } from "style-dictionary/enums";
 
+// mostly acquired from github.com/mbta/mbta_metro/blob/main/assets/process-figma-tokens.js
+// with modifications for glorbit figma tokens
+
 const SRC_DIR = "./figma-tokens";
 const buildPath = "./";
 
