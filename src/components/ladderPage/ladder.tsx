@@ -6,6 +6,7 @@ import {
   useEffect,
   SetStateAction,
   Dispatch,
+  useMemo,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { LadderLabel } from "src/components/ladderPage/ladderLabel";
@@ -53,6 +54,11 @@ const routeLetterRadius = 12;
 
 const ScrollToConsistContext = createContext<Consist | null>(null);
 
+type StationConfig = {
+  id: string,
+  spacingRatio: number,
+}
+
 export const Ladder = ({
   segment,
   zoom,
@@ -61,9 +67,7 @@ export const Ladder = ({
   scrollToConsist,
   setVehicleSelection,
   setStationSelection,
-  eastToWestStationIds,
-  westToEastStationIds,
-  eastToWestStationSpacingRatios,
+  eastToWestStationConfigs,
   getInitialPredictionsDirection,
   alignsWithSegment,
 }: {
@@ -74,9 +78,7 @@ export const Ladder = ({
   scrollToConsist: Consist | null;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
   setStationSelection: Dispatch<StationSelection | null>;
-  westToEastStationIds: StationId[];
-  eastToWestStationIds: StationId[];
-  eastToWestStationSpacingRatios: number[];
+  eastToWestStationConfigs: StationConfig[]; 
   getInitialPredictionsDirection: () => DirectionId;
   alignsWithSegment?: (trainLoc: TrainLoc, segment: Segment) => boolean;
 }): ReactElement => {
@@ -89,13 +91,16 @@ export const Ladder = ({
   const eastboundTrainLocs = trainLocsOnRoute.filter(
     (trainLoc) => trainLoc.directionId === DirectionId.Eastbound,
   );
+  const eastToWestStationIds = useMemo(() => eastToWestStationConfigs.map((config) => config.id), [eastToWestStationConfigs]);
+  const eastToWestStationSpacingRatios = useMemo(() => eastToWestStationConfigs.map((config) => config.spacingRatio), [eastToWestStationConfigs]);
+  const westToEastStationIds = useMemo(() => eastToWestStationIds.slice().reverse(), [eastToWestStationConfigs]);
+  
   return (
     <ScrollToConsistContext.Provider value={scrollToConsist}>
       <div className="relative pb-20 sm:pb-0">
         <StationList
           zoom={zoom}
-          stationIds={eastToWestStationIds}
-          stationSpacingRatios={eastToWestStationSpacingRatios}
+          stationConfigs={eastToWestStationConfigs}
           stationSelection={stationSelection}
           setStationSelection={setStationSelection}
           getInitialPredictionsDirection={getInitialPredictionsDirection}
@@ -194,15 +199,13 @@ export const trainAlignsWithSegment = (
 
 const StationList = ({
   zoom,
-  stationIds,
-  stationSpacingRatios,
+  stationConfigs,
   stationSelection,
   setStationSelection,
   getInitialPredictionsDirection,
 }: {
   zoom: number;
-  stationIds: StationId[];
-  stationSpacingRatios: number[];
+  stationConfigs: StationConfig[];
   stationSelection: StationSelection | null;
   setStationSelection: Dispatch<StationSelection | null>;
   getInitialPredictionsDirection: () => DirectionId;
@@ -221,10 +224,12 @@ const StationList = ({
       className="mx-auto w-32 border-0 border-x-[6px] border-solid light:border-slate-200 dark:border-glides-blue-900"
       aria-label="Stations"
     >
-      {stationIds.map((stationId, index) => {
+      {stationConfigs.map((stationConfig, index) => {
+        const stationId = stationConfig.id;
+        const stationSpacingRatio = stationConfig.spacingRatio;
         const isSelected = stationId === stationSelection?.stationId;
-        const isLastStation: boolean = index === stationIds.length - 1;
-        const heightPx = isLastStation ? 0 : stationSpacingRatios[index] * zoom;
+        const isLastStation: boolean = index === stationConfigs.length - 1;
+        const heightPx = isLastStation ? 0 : stationSpacingRatio * zoom;
         return (
           <li
             key={stationId}
