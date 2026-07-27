@@ -64,6 +64,10 @@ StyleDictionary.registerParser({
   pattern: /\.json$/,
   parser: ({ filePath, contents }) => {
     try {
+      // Design uses native tailwind colors for component theming so they are present in
+      // the Figma export. Translate uses of native colors with instructions to use
+      // theme() so that we retain the ability to modify opacity and also avoid breaking
+      // other functionality by clashing with native tailwind colors.
       const modifiedContents = contents
         // {tailwind-colors.blue.300.20%} -> theme('colors.blue.300 / 20%')
         .replace(
@@ -168,16 +172,9 @@ const themeConfigs = ["Light", "Dark"].map((theme) => ({
       files: [
         {
           destination: `css/variables.${theme.toLowerCase()}.css`,
-          // format: "css/advanced",
           format: "css/variables",
           filter: "isSource",
           options: {
-            // default to light, opt-in to dark with an HTML attribute
-            // selector: theme == "Light" ? ":root" : ".mbta-metro-dark-mode",
-            // we're not ready for automated dark mode across all components!
-            // rules: [{
-            //   atRule: `@media (prefers-color-scheme: ${theme.toLowerCase()})`,
-            // }],
             outputReferences: true,
           },
         },

@@ -6,6 +6,7 @@ const {
   fontSize,
   spacing,
   fontFamily,
+  // do not export tailwindColors so as not to clash with native Tailwind colors
   ...semanticAndSystemColors
 } = figmaTokens;
 
