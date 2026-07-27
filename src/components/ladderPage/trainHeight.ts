@@ -53,6 +53,7 @@ export const trainHeights = (
   zoom: number,
   directionId: DirectionId,
   stationIdsInOrder: StationId[],
+  stationSpacingRatiosTopToBottom: number[]
 ): TrainWithHeights[] => {
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
@@ -63,7 +64,7 @@ export const trainHeights = (
     directionId,
   );
   const trainsWithDotPx: TrainWithDotPx[] = trainsTopToBottom.map((train) =>
-    trainWithDotPx(train, stationIdsInOrder.length, zoom),
+    trainWithDotPx(train, stationIdsInOrder.length, zoom, stationSpacingRatiosTopToBottom),
   );
   const trainsWithLabelPx: TrainWithHeights[] =
     avoidOverlapsTrains(trainsWithDotPx);
@@ -190,6 +191,7 @@ const trainWithDotPx = (
   train: TrainWithStopsTraveled,
   stopsOnSegment: number,
   zoom: number,
+  stationSpacingRatiosTopToBottom: number[],
 ): TrainWithDotPx => ({
   routeId: train.routeId,
   consist: train.consist,
@@ -200,6 +202,7 @@ const trainWithDotPx = (
     train.directionId,
     stopsOnSegment,
     zoom,
+    stationSpacingRatiosTopToBottom,
   ),
 });
 
@@ -208,16 +211,16 @@ const stopsTraveledToPixelsFromTop = (
   directionId: DirectionId,
   stopsOnSegment: number,
   zoom: number,
+  stationSpacingRatiosTopToBottom: number[],
 ): number => {
-  if (directionId === DirectionId.Westbound) {
-    // westbound. stopsTraveled is already measured top to bottom.
-    return stopsTraveled * zoom;
-  } else {
-    // eastbound. stopsTraveled is measured bottom to top
-    const legsOnSegment = stopsOnSegment - 1;
-    const stopsFromTop = legsOnSegment - stopsTraveled;
-    return stopsFromTop * zoom;
+  // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
+  const stopsFromTop = directionId === DirectionId.Westbound ? stopsTraveled : stopsOnSegment - stopsTraveled - 1;
+  const sumOfStationRatiosForFullStopsAwayFromTop = stationSpacingRatiosTopToBottom.slice(0, stopsFromTop).reduce((acc, current) => acc + current, 0);
+  const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
+  if (partialDistance !== 0) {
+    return (sumOfStationRatiosForFullStopsAwayFromTop + partialDistance * stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) * zoom;
   }
+  return sumOfStationRatiosForFullStopsAwayFromTop * zoom;
 };
 
 /**
