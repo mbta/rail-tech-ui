@@ -23,16 +23,12 @@ function parseLeaf(token) {
   }
   return token;
 }
-function traverseTree(dict) {
+function traverseTree(dict, theme = null) {
   const output = {};
+  const themeSuffix = theme === "light" || theme === "dark" ? `-${theme}` : "";
+
   for (const key in dict) {
-    if (key === "transition-duration") {
-      const val = dict[key]["DEFAULT"];
-      output[key] = {
-        $value: val.$value.value,
-        $type: "time",
-      };
-    } else if (key === "spacing") {
+    if (key === "spacing") {
       const spacingVals = dict[key];
       output[key] = {};
       for (const spacingKey in spacingVals) {
@@ -51,9 +47,10 @@ function traverseTree(dict) {
     } else {
       const val = dict[key];
       if (isLeaf(val)) {
-        output[key] = parseLeaf(val);
+        // append "-{theme}" suffix directly to key in order to avoid token collision
+        output[`${key}${themeSuffix}`] = parseLeaf(val);
       } else {
-        output[key] = traverseTree(val);
+        output[key] = traverseTree(val, theme);
       }
     }
   }
@@ -79,11 +76,48 @@ StyleDictionary.registerParser({
           /\{tailwind-colors\.([a-z]+\.[0-9]+)\}/g,
           "theme('colors.$1')",
         );
+
+      const theme = filePath.includes("Light Mode")
+        ? "light"
+        : filePath.includes("Dark Mode")
+          ? "dark"
+          : "";
+
       const parsed = JSON.parse(modifiedContents);
-      return traverseTree(parsed);
+      return traverseTree(parsed, theme);
     } catch (error) {
       console.log(error);
     }
+  },
+});
+
+// transforms hex values of exported figma variables into r g b channels to allow
+// tailwind opacity modifications
+StyleDictionary.registerTransform({
+  type: "value",
+  name: "color/rgb-channels",
+  transitive: true,
+  filter: (token) => token.$type === "color",
+  transform: (token) => {
+    // only target "#{6 digits}" hex strings i.e ignore colors with additional alpha channel already
+    if (
+      typeof token.$value === "string" &&
+      token.$value.startsWith("#") &&
+      token.$value.length === 7
+    ) {
+      const hexParseResult = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/.exec(
+        token.$value,
+      );
+      if (hexParseResult === null) {
+        return token.$value;
+      }
+      const [, rHex, gHex, bHex] = hexParseResult;
+      const r = parseInt(rHex, 16);
+      const g = parseInt(gHex, 16);
+      const b = parseInt(bHex, 16);
+      return `${r} ${g} ${b}`;
+    }
+    return token.$value;
   },
 });
 
@@ -93,7 +127,11 @@ const baseConfig = {
   platforms: {
     base: {
       transformGroup: "web",
-      transforms: ["time/seconds", "dimension/pixelToRem"],
+      transforms: [
+        "time/seconds",
+        "dimension/pixelToRem",
+        "color/rgb-channels",
+      ],
       outputUnit: "rem",
       buildPath,
       files: [
@@ -116,7 +154,11 @@ const opsConfig = {
   platforms: {
     base: {
       transformGroup: "web",
-      transforms: ["time/seconds", "dimension/pixelToRem"],
+      transforms: [
+        "time/seconds",
+        "dimension/pixelToRem",
+        "color/rgb-channels",
+      ],
       outputUnit: "rem",
       buildPath,
       files: [
@@ -143,7 +185,7 @@ const tailwindConfig = {
   ],
   platforms: {
     tw: {
-      transforms: ["attribute/cti", "name/kebab"],
+      transforms: ["attribute/cti", "name/kebab", "color/rgb-channels"],
       buildPath,
       files: [
         {
@@ -167,7 +209,13 @@ const themeConfigs = ["Light", "Dark"].map((theme) => ({
   include: [`${SRC_DIR}/Base Mode 1.json`, `${SRC_DIR}/Ops Mode 1.json`],
   platforms: {
     css: {
-      transformGroup: "web",
+      transforms: [
+        "attribute/cti",
+        "name/kebab",
+        "time/seconds",
+        "dimension/pixelToRem",
+        "color/rgb-channels",
+      ],
       buildPath,
       files: [
         {
@@ -207,8 +255,16 @@ StyleDictionary.registerFormat({
         path.forEach((part, index) => {
           const partName = index === 0 ? camelCase(part) : part;
           if (index === path.length - 1) {
-            current[partName] =
-              `var(--${path.map((p) => p.toLowerCase()).join("-")})`;
+            const varName = `--${path.map((p) => p.toLowerCase()).join("-")}`;
+            const isRgbChannels = /^\d{1,3}\s\d{1,3}\s\d{1,3}$/.test($value);
+
+            if (isRgbChannels) {
+              // allows opacity modification like "bg-alt-blue-700/25"
+              current[partName] = `rgb(var(${varName}) / <alpha-value>)`;
+            } else {
+              // must be alpha-modified already like glides-mustard-sheer
+              current[partName] = `var(${varName})`;
+            }
           } else {
             current[partName] = current[partName] || {};
             current = current[partName];
