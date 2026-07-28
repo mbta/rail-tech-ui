@@ -209,13 +209,8 @@ const themeConfigs = ["Light", "Dark"].map((theme) => ({
   include: [`${SRC_DIR}/Base Mode 1.json`, `${SRC_DIR}/Ops Mode 1.json`],
   platforms: {
     css: {
-      transforms: [
-        "attribute/cti",
-        "name/kebab",
-        "time/seconds",
-        "dimension/pixelToRem",
-        "color/rgb-channels",
-      ],
+      transformGroup: "web",
+      transforms: ["color/rgb-channels"],
       buildPath,
       files: [
         {

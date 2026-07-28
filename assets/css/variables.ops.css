@@ -3,13 +3,13 @@
  */
 
 :root {
-  --light-rail-b-b-branch: #ff6693;
-  --light-rail-c-c-branch: #50e38c;
-  --light-rail-d-d-branch: #ffdd1f;
-  --light-rail-e-e-branch: #1fecff;
-  --light-rail-mattapan-mattapan-branch: #f1ac15;
-  --orbit-braintree: #ff4a4a;
-  --orbit-ashmont: #ffb330;
-  --orbit-orangeline: #ff7a15;
-  --orbit-blueline: #4195fc;
+  --light-rail-b-b-branch: 255 102 147;
+  --light-rail-c-c-branch: 80 227 140;
+  --light-rail-d-d-branch: 255 221 31;
+  --light-rail-e-e-branch: 31 236 255;
+  --light-rail-mattapan-mattapan-branch: 241 172 21;
+  --orbit-braintree: 255 74 74;
+  --orbit-ashmont: 255 179 48;
+  --orbit-orangeline: 255 122 21;
+  --orbit-blueline: 65 149 252;
 }
