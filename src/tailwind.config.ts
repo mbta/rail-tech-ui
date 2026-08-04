@@ -1,20 +1,25 @@
 import { Config } from "tailwindcss";
 import figmaTokens from "../assets/js/tokens";
+import defaultTheme from "tailwindcss/defaultConfig";
 
 const {
   customColors,
-  fontSize,
-  spacing,
-  fontFamily,
   // do not export tailwindColors so as not to clash with native Tailwind colors
 } = figmaTokens;
 
 const railTechUITheme = {
   theme: {
     extend: {
-      fontSize,
-      spacing,
-      fontFamily,
+      fontFamily: {
+        sans: ["Inter", ...defaultTheme.fontFamily.sans],
+      },
+      fontSize: {
+        xs: figmaTokens.xs.regular,
+        sm: figmaTokens.sm.regular,
+        base: figmaTokens.base.regular,
+        md: figmaTokens.md.regular,
+        lg: figmaTokens.lg.regular,
+      },
       colors: {
         ...customColors,
         "light-rail": {

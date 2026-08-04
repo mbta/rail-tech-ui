@@ -11,6 +11,7 @@
   "scripts": {
     "test": "jest",
     "test:tsc": "tsc --noemit",
+    "process-tokens": "tsx ./assets/process-figma-tokens.ts",
     "build": "tsc && tsx build.ts",
     "prepare": "npm run build",
     "watch": "tsx build.ts --watch",

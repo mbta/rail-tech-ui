@@ -86,4 +86,16 @@
   --font-size-lg: 1.75rem;
   --spacing-default: 0;
   --font-family-base: Inter;
+  --xs-regular: 0.75rem;
+  --xs-semibold: 0.75rem;
+  --sm-regular: 0.875rem;
+  --sm-semibold: 0.875rem;
+  --base-regular: 1rem;
+  --base-semibold: 1rem;
+  --base-italic: 1rem;
+  --base-italicsemibold: 1rem;
+  --md-regular: 1.25rem;
+  --md-semibold: 1.25rem;
+  --lg-regular: 1.75rem;
+  --lg-semibold: 1.75rem;
 }

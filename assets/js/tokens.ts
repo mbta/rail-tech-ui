@@ -156,5 +156,15 @@ export default {
   successLight: 'rgb(var(--success-light) / <alpha-value>)',
   arrivalsLight: 'rgb(var(--arrivals-light) / <alpha-value>)',
   departuresLight: 'rgb(var(--departures-light) / <alpha-value>)',
-  iconLight: 'rgb(var(--icon-light) / <alpha-value>)'
+  iconLight: 'rgb(var(--icon-light) / <alpha-value>)',
+  xs: { regular: 'var(--xs-regular)', semibold: 'var(--xs-semibold)' },
+  sm: { regular: 'var(--sm-regular)', semibold: 'var(--sm-semibold)' },
+  base: {
+    regular: 'var(--base-regular)',
+    semibold: 'var(--base-semibold)',
+    italic: 'var(--base-italic)',
+    italicsemibold: 'var(--base-italicsemibold)'
+  },
+  md: { regular: 'var(--md-regular)', semibold: 'var(--md-semibold)' },
+  lg: { regular: 'var(--lg-regular)', semibold: 'var(--lg-semibold)' }
 };
