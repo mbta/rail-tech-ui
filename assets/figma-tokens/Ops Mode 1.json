@@ -1,0 +1,52 @@
+{
+  "Light-Rail": {
+    "B": {
+      "b-branch": {
+        "$value": "#ff6693",
+        "$type": "color"
+      }
+    },
+    "C": {
+      "c-branch": {
+        "$value": "#50e38c",
+        "$type": "color"
+      }
+    },
+    "D": {
+      "d-branch": {
+        "$value": "#ffdd1f",
+        "$type": "color"
+      }
+    },
+    "E": {
+      "e-branch": {
+        "$value": "#1fecff",
+        "$type": "color"
+      }
+    },
+    "Mattapan": {
+      "mattapan-branch": {
+        "$value": "#f1ac15",
+        "$type": "color"
+      }
+    }
+  },
+  "Orbit": {
+    "braintree": {
+      "$value": "#ff4a4a",
+      "$type": "color"
+    },
+    "ashmont": {
+      "$value": "#ffb330",
+      "$type": "color"
+    },
+    "orangeline": {
+      "$value": "#ff7a15",
+      "$type": "color"
+    },
+    "blueline": {
+      "$value": "#4195fc",
+      "$type": "color"
+    }
+  }
+}

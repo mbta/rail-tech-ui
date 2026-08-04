@@ -14,6 +14,14 @@ npm test
 npm run watch
 ```
 
+## Building Figma Tokens
+
+Variables have to be exported out of Figma manually into .json files. These are saved to to `assets/figma-tokens/`. `assets/process-figma-tokens.ts` processes the exported Figma design tokens and generates some `variables.*.css` files, as well as `tokens.ts`, which will be used to build the Tailwind theme. -- StyleDictionary throws some warnings, but ultimately works.
+
+```shell
+npm run process-tokens
+```
+
 ### Important about `npm link`
 
 If running a local copy within glides or orbit using `npm link`, make sure to ALSO run:

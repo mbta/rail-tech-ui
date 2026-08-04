@@ -1,19 +1,31 @@
 import esbuild from "esbuild";
+import fs from "node:fs";
 
 const args = process.argv.slice(2);
 const watch = args.includes("--watch");
 
 const opts: esbuild.BuildOptions = {
-  entryPoints: ["./src/index.ts"],
+  entryPoints: ["./src/index.ts", "./src/tailwind.config.ts"],
   bundle: true,
-  outfile: "./dist/src/index.js",
+  outdir: "./dist/src",
   logLevel: "debug",
   external: ["react", "react-dom", "react-router-dom"],
   platform: "neutral",
   ...(watch ? { sourcemap: "inline" } : {}),
 };
 
+const copyCss = () => {
+  const src = "./assets/css";
+  const dest = "./dist/css";
+
+  if (fs.existsSync(src)) {
+    fs.cpSync(src, dest, { recursive: true });
+  }
+};
+
 const main = async () => {
+  copyCss();
+
   if (watch) {
     const ctx = await esbuild.context(opts);
     await ctx.watch();

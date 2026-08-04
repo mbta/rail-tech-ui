@@ -1,0 +1,276 @@
+{
+  "xs": {
+    "regular": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 12,
+          "unit": "px"
+        },
+        "fontWeight": "regular",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    },
+    "semibold": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 12,
+          "unit": "px"
+        },
+        "fontWeight": "semi-bold",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    }
+  },
+  "sm": {
+    "regular": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "fontWeight": "regular",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    },
+    "semibold": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "fontWeight": "semi-bold",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    }
+  },
+  "base": {
+    "regular": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 16,
+          "unit": "px"
+        },
+        "fontWeight": "regular",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    },
+    "semibold": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 16,
+          "unit": "px"
+        },
+        "fontWeight": "semi-bold",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    },
+    "italic": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 16,
+          "unit": "px"
+        },
+        "fontWeight": "",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    },
+    "italicsemibold": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 16,
+          "unit": "px"
+        },
+        "fontWeight": "semi-bold",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    }
+  },
+  "md": {
+    "regular": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 20,
+          "unit": "px"
+        },
+        "fontWeight": "regular",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    },
+    "semibold": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 20,
+          "unit": "px"
+        },
+        "fontWeight": "semi-bold",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    }
+  },
+  "lg": {
+    "regular": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 28,
+          "unit": "px"
+        },
+        "fontWeight": "regular",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    },
+    "semibold": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 28,
+          "unit": "px"
+        },
+        "fontWeight": "semi-bold",
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.2
+      },
+      "$extensions": {
+        "com.vml.prism": {
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    }
+  }
+}
