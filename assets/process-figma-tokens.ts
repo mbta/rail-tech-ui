@@ -1,4 +1,3 @@
-import util from "node:util";
 import { StyleDictionary } from "style-dictionary-utils";
 import type { ParserOptions, DesignTokens } from "style-dictionary/types";
 
@@ -329,7 +328,7 @@ StyleDictionary.registerFormat({
 
     const tokens = buildNestedObject(dictionary.allTokens);
 
-    return `/**\n* Do not edit directly, this file was auto-generated.\n*/\n\nexport default ${util.inspect(tokens)};`;
+    return `/**\n* Do not edit directly, this file was auto-generated.\n*/\n\nexport default ${JSON.stringify(tokens, null, 2)};`;
   },
 });
 
