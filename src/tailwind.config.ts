@@ -1,6 +1,6 @@
 import { Config } from "tailwindcss";
 import figmaTokens from "../assets/js/tokens";
-import defaultTheme from "tailwindcss/defaultConfig";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 const {
   customColors,
