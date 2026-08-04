@@ -102,14 +102,6 @@ export default {
       '950': 'rgb(var(--tailwind-colors-slate-950) / <alpha-value>)'
     }
   },
-  fontSize: {
-    sm: 'var(--font-size-sm)',
-    base: 'var(--font-size-base)',
-    md: 'var(--font-size-md)',
-    lg: 'var(--font-size-lg)'
-  },
-  spacing: { default: 'var(--spacing-default)' },
-  fontFamily: { base: 'var(--font-family-base)' },
   LightRail: {
     B: { 'b-branch': 'rgb(var(--light-rail-b-b-branch) / <alpha-value>)' },
     C: { 'c-branch': 'rgb(var(--light-rail-c-c-branch) / <alpha-value>)' },
