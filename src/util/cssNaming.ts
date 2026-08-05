@@ -8,14 +8,14 @@ import { RouteId } from "src/models/route";
 export const routeColorClass = (route: RouteId): string => {
   switch (route) {
     case "Green-B":
-      return "branch-color-glides-pink-400";
+      return "branch-color-light-rail-b-branch";
     case "Green-C":
-      return "branch-color-glides-green-400";
+      return "branch-color-light-rail-c-branch";
     case "Green-D":
-      return "branch-color-glides-yellow-400";
+      return "branch-color-light-rail-d-branch";
     case "Green-E":
-      return "branch-color-glides-aqua-400";
+      return "branch-color-light-rail-e-branch";
     case "Mattapan":
-      return "branch-color-glides-orange-400";
+      return "branch-color-light-rail-mattapan-branch";
   }
 };
