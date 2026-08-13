@@ -227,41 +227,41 @@ export default {
       "background-dark": "rgb(var(--ladder-pill-background-dark) / <alpha-value>)",
       "border-dark": "var(--ladder-pill-border-dark)"
     },
-    "route ladder-light": "var(--ladder-route ladder-light)",
+    "route-ladder-light": "var(--ladder-route-ladder-light)",
     "text": {
       "primary-light": "var(--ladder-text-primary-light)",
       "secondary-light": "var(--ladder-text-secondary-light)",
-      "branch picker-light": "rgb(var(--ladder-text-branch picker-light) / <alpha-value>)",
+      "branch-picker-light": "rgb(var(--ladder-text-branch-picker-light) / <alpha-value>)",
       "primary-dark": "rgb(var(--ladder-text-primary-dark) / <alpha-value>)",
       "secondary-dark": "rgb(var(--ladder-text-secondary-dark) / <alpha-value>)",
-      "branch picker-dark": "rgb(var(--ladder-text-branch picker-dark) / <alpha-value>)"
+      "branch-picker-dark": "rgb(var(--ladder-text-branch-picker-dark) / <alpha-value>)"
     },
-    "station marker-light": "var(--ladder-station marker-light)",
-    "branch picker": {
-      "background-light": "rgb(var(--ladder-branch picker-background-light) / <alpha-value>)",
-      "background-dark": "rgb(var(--ladder-branch picker-background-dark) / <alpha-value>)"
+    "station-marker-light": "var(--ladder-station-marker-light)",
+    "branch-picker": {
+      "background-light": "rgb(var(--ladder-branch-picker-background-light) / <alpha-value>)",
+      "background-dark": "rgb(var(--ladder-branch-picker-background-dark) / <alpha-value>)"
     },
     "background-dark": "rgb(var(--ladder-background-dark) / <alpha-value>)",
-    "route ladder-dark": "rgb(var(--ladder-route ladder-dark) / <alpha-value>)",
-    "station marker-dark": "rgb(var(--ladder-station marker-dark) / <alpha-value>)"
+    "route-ladder-dark": "rgb(var(--ladder-route-ladder-dark) / <alpha-value>)",
+    "station-marker-dark": "rgb(var(--ladder-station-marker-dark) / <alpha-value>)"
   },
   "trainsheet": {
     "background-light": "var(--trainsheet-background-light)",
-    "Now Zone": {
-      "background-light": "var(--trainsheet-now zone-background-light)",
-      "border-light": "var(--trainsheet-now zone-border-light)",
-      "background-dark": "var(--trainsheet-now zone-background-dark)",
-      "border-dark": "var(--trainsheet-now zone-border-dark)"
+    "now-zone": {
+      "background-light": "var(--trainsheet-now-zone-background-light)",
+      "border-light": "var(--trainsheet-now-zone-border-light)",
+      "background-dark": "var(--trainsheet-now-zone-background-dark)",
+      "border-dark": "var(--trainsheet-now-zone-border-dark)"
     },
     "background-dark": "var(--trainsheet-background-dark)"
   },
   "drawer": {
     "background-light": "rgb(var(--drawer-background-light) / <alpha-value>)",
     "border-light": "var(--drawer-border-light)",
-    "exit icon-light": "var(--drawer-exit icon-light)",
+    "exit-icon-light": "var(--drawer-exit-icon-light)",
     "background-dark": "var(--drawer-background-dark)",
     "border-dark": "var(--drawer-border-dark)",
-    "exit icon-dark": "rgb(var(--drawer-exit icon-dark) / <alpha-value>)"
+    "exit-icon-dark": "rgb(var(--drawer-exit-icon-dark) / <alpha-value>)"
   },
   "card": {
     "background-light": "rgb(var(--card-background-light) / <alpha-value>)",
@@ -273,16 +273,16 @@ export default {
   },
   "inputField": {
     "search": {
-      "background-light": "var(--input field-search-background-light)",
-      "border-light": "var(--input field-search-border-light)",
+      "background-light": "var(--input-field-search-background-light)",
+      "border-light": "var(--input-field-search-border-light)",
       "text": {
-        "type in-light": "rgb(var(--input field-search-text-type in-light) / <alpha-value>)",
-        "placeholder-light": "rgb(var(--input field-search-text-placeholder-light) / <alpha-value>)",
-        "type in-dark": "rgb(var(--input field-search-text-type in-dark) / <alpha-value>)",
-        "placeholder-dark": "rgb(var(--input field-search-text-placeholder-dark) / <alpha-value>)"
+        "type-in-light": "rgb(var(--input-field-search-text-type-in-light) / <alpha-value>)",
+        "placeholder-light": "rgb(var(--input-field-search-text-placeholder-light) / <alpha-value>)",
+        "type-in-dark": "rgb(var(--input-field-search-text-type-in-dark) / <alpha-value>)",
+        "placeholder-dark": "rgb(var(--input-field-search-text-placeholder-dark) / <alpha-value>)"
       },
-      "background-dark": "var(--input field-search-background-dark)",
-      "border-dark": "var(--input field-search-border-dark)"
+      "background-dark": "var(--input-field-search-background-dark)",
+      "border-dark": "var(--input-field-search-border-dark)"
     }
   },
   "popup": {
