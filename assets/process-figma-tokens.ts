@@ -254,6 +254,8 @@ const tailwindConfig = {
     `${SRC_DIR}/Ops Mode 1.json`,
     `${SRC_DIR}/Semantic Dark Mode.json`,
     `${SRC_DIR}/Semantic Light Mode.json`,
+    `${SRC_DIR}/Components Light Mode.json`,
+    `${SRC_DIR}/Components Dark Mode.json`,
     `${SRC_DIR}/Text Styles.json`,
   ],
   platforms: {
