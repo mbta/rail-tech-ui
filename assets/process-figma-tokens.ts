@@ -49,6 +49,22 @@ function parseLeaf(token: Token): Token {
   return token;
 }
 
+function kebabCase(str: string): string {
+  return str
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, "-")
+    .replace(/-+/g, "-")
+    .toLowerCase();
+}
+
+function normalizeComponentKeys(dict: Record<string, any>): Record<string, any> {
+  return Object.entries(dict).reduce<Record<string, any>>((acc, [key, value]) => {
+    const normalizedKey = kebabCase(key);
+    acc[normalizedKey] = isLeaf(value) ? value : normalizeComponentKeys(value);
+    return acc;
+  }, {});
+}
+
 function traverseTree(
   dict: Record<string, any>,
   theme: "light" | "dark" | null = null,
@@ -113,9 +129,16 @@ StyleDictionary.registerParser({
           : filePath && filePath.includes("Dark Mode")
             ? "dark"
             : null;
+      const isComponentStyles =
+        filePath !== undefined &&
+        (filePath.includes("Components Light Mode.json") ||
+          filePath.includes("Components Dark Mode.json"));
 
       const parsed = JSON.parse(modifiedContents);
-      return traverseTree(parsed, theme) as DesignTokens;
+      const normalizedParsed = isComponentStyles
+        ? normalizeComponentKeys(parsed)
+        : parsed;
+      return traverseTree(normalizedParsed, theme) as DesignTokens;
     } catch (error) {
       console.log(error);
       return {} as DesignTokens;
@@ -254,6 +277,8 @@ const tailwindConfig = {
     `${SRC_DIR}/Ops Mode 1.json`,
     `${SRC_DIR}/Semantic Dark Mode.json`,
     `${SRC_DIR}/Semantic Light Mode.json`,
+    `${SRC_DIR}/Components Light Mode.json`,
+    `${SRC_DIR}/Components Dark Mode.json`,
     `${SRC_DIR}/Text Styles.json`,
   ],
   platforms: {
