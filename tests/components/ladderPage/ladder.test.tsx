@@ -23,7 +23,9 @@ const getInitialPredictionsDirection = () => DirectionId.Eastbound;
 
 describe("Ladder", () => {
   test("shows station names", () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map((id) => ({id: id, spacingRatio: 1.0}));
+    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
+      (id) => ({ id: id, spacingRatio: 1.0 }),
+    );
 
     const view = render(
       <Ladder
@@ -42,7 +44,9 @@ describe("Ladder", () => {
   });
 
   test("station for open predictions is highlighted", () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map((id) => ({id: id, spacingRatio: 1.0}));
+    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
+      (id) => ({ id: id, spacingRatio: 1.0 }),
+    );
 
     const view = render(
       <Ladder
@@ -73,7 +77,9 @@ describe("Ladder", () => {
   });
 
   test("shows trains", () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map((id) => ({id: id, spacingRatio: 1.0}));
+    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
+      (id) => ({ id: id, spacingRatio: 1.0 }),
+    );
 
     const view = render(
       <Ladder
@@ -110,7 +116,9 @@ describe("Ladder", () => {
   });
 
   test("doesn't show train on other branch", () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map((id) => ({id: id, spacingRatio: 1.0}));
+    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
+      (id) => ({ id: id, spacingRatio: 1.0 }),
+    );
 
     const view = render(
       <Ladder
@@ -137,7 +145,9 @@ describe("Ladder", () => {
   });
 
   test("scrolling to trains based on hash", async () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map((id) => ({id: id, spacingRatio: 1.0}));
+    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
+      (id) => ({ id: id, spacingRatio: 1.0 }),
+    );
 
     const trainLocs: TrainLoc[] = [
       trainLocFactory.build({

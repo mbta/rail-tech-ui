@@ -26,17 +26,17 @@ export const LadderLabel = ({
   return (
     <div
       className={className([
-        "flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm",
+        "rounded-4xl light:border light:border-slate-300 light:shadow-sm flex h-[2.625rem] w-24 p-1.5",
         revenue
           ? primaryColor === "bg"
             ? "light:bg-white dark:bg-glides-blue-900"
             : "bg-glides-branch"
           : primaryColor === "bg"
-            ? "border-2 border-solid light:border-glides-gray-500 light:bg-slate-100 dark:border-glides-gray-400"
+            ? "light:border-glides-gray-500 light:bg-slate-100 border-2 border-solid dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
         routeColorClass(routeId),
         searchResult
-          ? "ring-8 ring-glides-branch/50 light:animate-train-label-search-result-light dark:animate-train-label-search-result"
+          ? "ring-glides-branch/50 light:animate-train-label-search-result-light dark:animate-train-label-search-result ring-8"
           : primaryColor === "route"
             ? "light:ring-1 light:ring-inset light:ring-black/30"
             : null,

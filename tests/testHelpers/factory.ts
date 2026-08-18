@@ -16,9 +16,8 @@ export const trainLocFactory = Factory.define<TrainLoc>(() => {
   return {
     routeId: randomOf(...allRouteIds),
     directionId: randomOf(DirectionId.Westbound, DirectionId.Eastbound),
-    consist: Array.from(
-      { length: randomOf(1, 2) },
-      () => randomOf(...activeCars),
+    consist: Array.from({ length: randomOf(1, 2) }, () =>
+      randomOf(...activeCars),
     ),
     ab: [],
     latLng: station?.latLng ?? { latitude: 0, longitude: 0 },

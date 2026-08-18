@@ -3,27 +3,27 @@
  */
 
 :root {
-  --text-secondary-dark: theme('colors.slate.400');
+  --text-secondary-dark: theme("colors.slate.400");
   --environment-env-dev-dark: 31 236 255;
   --environment-env-dev-green-dark: 80 227 140;
   --environment-env-dev-blue-dark: 255 221 31;
-  --button-primary-background-dark: theme('colors.blue.300');
-  --button-primary-text-dark: theme('colors.slate.800');
+  --button-primary-background-dark: theme("colors.blue.300");
+  --button-primary-text-dark: theme("colors.slate.800");
   --button-secondary-background-dark: rgba(255, 255, 255, 0);
-  --button-tertiary-background-dark: theme('colors.blue.300 / 20%');
-  --button-tertiary-text-dark: theme('colors.blue.300');
+  --button-tertiary-background-dark: theme("colors.blue.300 / 20%");
+  --button-tertiary-text-dark: theme("colors.blue.300");
   --button-tertiary-border-dark: rgba(255, 255, 255, 0);
   --ladder-pill-border-dark: rgba(255, 255, 255, 0);
-  --trainsheet-background-dark: theme('colors.slate.900');
-  --trainsheet-now-zone-background-dark: theme('colors.slate.800');
-  --trainsheet-now-zone-border-dark: theme('colors.slate.400');
-  --drawer-background-dark: theme('colors.slate.800');
-  --drawer-border-dark: theme('colors.slate.700');
-  --card-background-dark: theme('colors.slate.700');
-  --card-border-dark: theme('colors.slate.600');
-  --card-header-dark: theme('colors.slate.600');
-  --input-field-search-background-dark: theme('colors.slate.700');
-  --input-field-search-border-dark: theme('colors.slate.600');
+  --trainsheet-background-dark: theme("colors.slate.900");
+  --trainsheet-now-zone-background-dark: theme("colors.slate.800");
+  --trainsheet-now-zone-border-dark: theme("colors.slate.400");
+  --drawer-background-dark: theme("colors.slate.800");
+  --drawer-border-dark: theme("colors.slate.700");
+  --card-background-dark: theme("colors.slate.700");
+  --card-border-dark: theme("colors.slate.600");
+  --card-header-dark: theme("colors.slate.600");
+  --input-field-search-background-dark: theme("colors.slate.700");
+  --input-field-search-border-dark: theme("colors.slate.600");
   --text-primary-dark: var(--custom-colors-glides-gray-200);
   --text-accent-dark: var(--tailwind-colors-white);
   --error-state-warning-dark: var(--custom-colors-glides-mustard);
@@ -61,6 +61,8 @@
   --ladder-branch-picker-background-dark: var(--custom-colors-glides-blue-600);
   --drawer-exit-icon-dark: var(--custom-colors-glides-gray-200);
   --input-field-search-text-type-in-dark: var(--tailwind-colors-white);
-  --input-field-search-text-placeholder-dark: var(--custom-colors-glides-gray-200);
+  --input-field-search-text-placeholder-dark: var(
+    --custom-colors-glides-gray-200
+  );
   --popup-background-dark: var(--tailwind-colors-white);
 }

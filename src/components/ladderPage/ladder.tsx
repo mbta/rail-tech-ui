@@ -55,9 +55,9 @@ const routeLetterRadius = 12;
 const ScrollToConsistContext = createContext<Consist | null>(null);
 
 type StationConfig = {
-  id: string,
-  spacingRatio: number,
-}
+  id: string;
+  spacingRatio: number;
+};
 
 export const Ladder = ({
   segment,
@@ -78,7 +78,7 @@ export const Ladder = ({
   scrollToConsist: Consist | null;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
   setStationSelection: Dispatch<StationSelection | null>;
-  eastToWestStationConfigs: StationConfig[]; 
+  eastToWestStationConfigs: StationConfig[];
   getInitialPredictionsDirection: () => DirectionId;
   alignsWithSegment?: (trainLoc: TrainLoc, segment: Segment) => boolean;
 }): ReactElement => {
@@ -91,10 +91,19 @@ export const Ladder = ({
   const eastboundTrainLocs = trainLocsOnRoute.filter(
     (trainLoc) => trainLoc.directionId === DirectionId.Eastbound,
   );
-  const eastToWestStationIds = useMemo(() => eastToWestStationConfigs.map((config) => config.id), [eastToWestStationConfigs]);
-  const eastToWestStationSpacingRatios = useMemo(() => eastToWestStationConfigs.map((config) => config.spacingRatio), [eastToWestStationConfigs]);
-  const westToEastStationIds = useMemo(() => eastToWestStationIds.slice().reverse(), [eastToWestStationConfigs]);
-  
+  const eastToWestStationIds = useMemo(
+    () => eastToWestStationConfigs.map((config) => config.id),
+    [eastToWestStationConfigs],
+  );
+  const eastToWestStationSpacingRatios = useMemo(
+    () => eastToWestStationConfigs.map((config) => config.spacingRatio),
+    [eastToWestStationConfigs],
+  );
+  const westToEastStationIds = useMemo(
+    () => eastToWestStationIds.slice().reverse(),
+    [eastToWestStationConfigs],
+  );
+
   return (
     <ScrollToConsistContext.Provider value={scrollToConsist}>
       <div className="relative pb-20 sm:pb-0">
@@ -221,7 +230,7 @@ const StationList = ({
   ]);
   return (
     <ul
-      className="mx-auto w-32 border-0 border-x-[6px] border-solid light:border-slate-200 dark:border-glides-blue-900"
+      className="light:border-slate-200 mx-auto w-32 border-0 border-x-[6px] border-solid dark:border-glides-blue-900"
       aria-label="Stations"
     >
       {stationConfigs.map((stationConfig, index) => {
@@ -242,7 +251,7 @@ const StationList = ({
                 "-translate-y-1/2 rounded",
                 isSelected
                   ? "light:-ml-7 light:w-[calc(100%+3.5rem)] light:rounded-full light:border light:border-slate-300 light:bg-white light:py-2 light:text-slate-900 light:outline light:outline-2 light:outline-offset-2 light:outline-alt-blue-700 dark:w-full dark:bg-glides-gray-200 dark:text-glides-blue-700"
-                  : "mx-auto w-full light:text-slate-800 dark:text-glides-gray-200",
+                  : "light:text-slate-800 mx-auto w-full dark:text-glides-gray-200",
               ])}
               onClick={() => {
                 if (isSelected) {
@@ -401,7 +410,7 @@ const Dot = ({
 }): ReactElement => (
   <div
     className={className([
-      "pointer-events-none absolute mx-[-5px] h-[10px] w-[10px] -translate-y-1/2 rounded-full bg-glides-branch ring-4 ring-glides-branch/[.33]",
+      "bg-glides-branch ring-glides-branch/[.33] pointer-events-none absolute mx-[-5px] h-[10px] w-[10px] -translate-y-1/2 rounded-full ring-4",
       isTripRevenue(trainWithHeights.trip)
         ? routeColorClass(trainWithHeights.routeId)
         : "bg-glides-gray-400 ring-glides-gray-400/[.33]",
@@ -504,7 +513,7 @@ const LineBetweenDotAndLabel = ({
         y2={labelY * connectorLengthScale}
         strokeWidth={connectorWidth}
         className={className([
-          "stroke-current text-glides-branch",
+          "text-glides-branch stroke-current",
           isTripRevenue(trip)
             ? routeColorClass(routeId)
             : "text-glides-gray-400",
