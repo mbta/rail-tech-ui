@@ -53,7 +53,7 @@ export const trainHeights = (
   zoom: number,
   directionId: DirectionId,
   stationIdsInOrder: StationId[],
-  stationSpacingRatiosTopToBottom: number[]
+  stationSpacingRatiosTopToBottom: number[],
 ): TrainWithHeights[] => {
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
@@ -64,7 +64,12 @@ export const trainHeights = (
     directionId,
   );
   const trainsWithDotPx: TrainWithDotPx[] = trainsTopToBottom.map((train) =>
-    trainWithDotPx(train, stationIdsInOrder.length, zoom, stationSpacingRatiosTopToBottom),
+    trainWithDotPx(
+      train,
+      stationIdsInOrder.length,
+      zoom,
+      stationSpacingRatiosTopToBottom,
+    ),
   );
   const trainsWithLabelPx: TrainWithHeights[] =
     avoidOverlapsTrains(trainsWithDotPx);
@@ -214,11 +219,22 @@ const stopsTraveledToPixelsFromTop = (
   stationSpacingRatiosTopToBottom: number[],
 ): number => {
   // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
-  const stopsFromTop = directionId === DirectionId.Westbound ? stopsTraveled : stopsOnSegment - stopsTraveled - 1;
-  const sumOfStationRatiosForFullStopsAwayFromTop = stationSpacingRatiosTopToBottom.slice(0, stopsFromTop).reduce((acc, current) => acc + current, 0);
+  const stopsFromTop =
+    directionId === DirectionId.Westbound
+      ? stopsTraveled
+      : stopsOnSegment - stopsTraveled - 1;
+  const sumOfStationRatiosForFullStopsAwayFromTop =
+    stationSpacingRatiosTopToBottom
+      .slice(0, stopsFromTop)
+      .reduce((acc, current) => acc + current, 0);
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
   if (partialDistance !== 0) {
-    return (sumOfStationRatiosForFullStopsAwayFromTop + partialDistance * stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) * zoom;
+    return (
+      (sumOfStationRatiosForFullStopsAwayFromTop +
+        partialDistance *
+          stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
+      zoom
+    );
   }
   return sumOfStationRatiosForFullStopsAwayFromTop * zoom;
 };
@@ -230,16 +246,12 @@ const avoidOverlapsTrains = (
   trainsWithDotPx: TrainWithDotPx[],
 ): TrainWithHeights[] =>
   avoidOverlaps(
-    trainsWithDotPx.map(
-      (train: TrainWithDotPx): Start<TrainWithDotPx> => ({
-        payload: train,
-        start: train.dotPx,
-      }),
-    ),
+    trainsWithDotPx.map((train: TrainWithDotPx): Start<TrainWithDotPx> => ({
+      payload: train,
+      start: train.dotPx,
+    })),
     minSpaceBetweenTrainLabels,
-  ).map(
-    (train: End<TrainWithDotPx>): TrainWithHeights => ({
-      ...train.payload,
-      labelPx: train.end,
-    }),
-  );
+  ).map((train: End<TrainWithDotPx>): TrainWithHeights => ({
+    ...train.payload,
+    labelPx: train.end,
+  }));

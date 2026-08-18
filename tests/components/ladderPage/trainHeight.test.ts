@@ -36,7 +36,15 @@ describe("trainHeights", () => {
       stationId: "place-north",
       stopStatus: StopStatus.InTransitTo,
     });
-    expect(trainHeights([trainLoc], 40, 0, stationIdsWestbound, stationSpacingRatios)).toEqual([]);
+    expect(
+      trainHeights(
+        [trainLoc],
+        40,
+        0,
+        stationIdsWestbound,
+        stationSpacingRatios,
+      ),
+    ).toEqual([]);
   });
 
   test("westbound at top station", () => {
@@ -131,7 +139,15 @@ describe("trainHeights", () => {
       stationId: "place-clmnl",
       stopStatus: StopStatus.InTransitTo,
     });
-    expect(trainHeights([trainLoc], 40, 1, stationIdsEastbound,stationSpacingRatios)).toEqual([]);
+    expect(
+      trainHeights(
+        [trainLoc],
+        40,
+        1,
+        stationIdsEastbound,
+        stationSpacingRatios,
+      ),
+    ).toEqual([]);
   });
 
   test("eastbound before Mattapan shows", () => {
@@ -141,7 +157,13 @@ describe("trainHeights", () => {
       stationId: "place-matt",
       stopStatus: StopStatus.InTransitTo,
     });
-    const [result] = trainHeights([trainLoc], 40, 1, stationIdsEastboundM, stationSpacingRatios);
+    const [result] = trainHeights(
+      [trainLoc],
+      40,
+      1,
+      stationIdsEastboundM,
+      stationSpacingRatios,
+    );
     expect(result.dotPx).toEqual(120);
   });
 

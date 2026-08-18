@@ -57,12 +57,19 @@ function kebabCase(str: string): string {
     .toLowerCase();
 }
 
-function normalizeComponentKeys(dict: Record<string, any>): Record<string, any> {
-  return Object.entries(dict).reduce<Record<string, any>>((acc, [key, value]) => {
-    const normalizedKey = kebabCase(key);
-    acc[normalizedKey] = isLeaf(value) ? value : normalizeComponentKeys(value);
-    return acc;
-  }, {});
+function normalizeComponentKeys(
+  dict: Record<string, any>,
+): Record<string, any> {
+  return Object.entries(dict).reduce<Record<string, any>>(
+    (acc, [key, value]) => {
+      const normalizedKey = kebabCase(key);
+      acc[normalizedKey] = isLeaf(value)
+        ? value
+        : normalizeComponentKeys(value);
+      return acc;
+    },
+    {},
+  );
 }
 
 function traverseTree(
