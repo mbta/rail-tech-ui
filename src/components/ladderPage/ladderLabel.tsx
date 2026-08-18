@@ -2,7 +2,6 @@ import { ReactElement } from "react";
 import { Icon } from "src/components/icons";
 import { CarId, Consist } from "src/data";
 import { RouteId, routeLetter } from "src/models/route";
-import { routeColorClass } from "src/util/cssNaming";
 import { className } from "src/util/dom";
 
 export interface LadderLabelProps {
@@ -16,10 +15,12 @@ export const LadderLabel = ({
   routeId,
   revenue,
   primaryColor = "route",
+  routeColor,
   routeOnRight,
   searchResult = false,
 }: LadderLabelProps & {
   primaryColor?: "route" | "bg";
+  routeColor: string;
   routeOnRight?: boolean;
   searchResult?: boolean;
 }): ReactElement => {
@@ -34,7 +35,7 @@ export const LadderLabel = ({
           : primaryColor === "bg"
             ? "light:border-glides-gray-500 light:bg-slate-100 border-2 border-solid dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
-        routeColorClass(routeId),
+        routeColor,
         searchResult
           ? "ring-glides-branch/50 light:animate-train-label-search-result-light dark:animate-train-label-search-result ring-8"
           : primaryColor === "route"

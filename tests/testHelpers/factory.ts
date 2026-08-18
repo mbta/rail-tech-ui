@@ -1,9 +1,9 @@
 import { Factory } from "fishery";
 import { activeCars } from "src/data/cars";
-import { allStations } from "src/data/stops";
-import { allRouteIds, DirectionId } from "src/models/route";
+import { DirectionId } from "src/models/route";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { dateTimeFromUnix } from "src/util/dateTime";
+import { DEMO_C_STATIONS } from "./stops";
 
 const randomOf = <T>(...options: T[]): T => {
   const index = Math.floor(Math.random() * options.length);
@@ -11,10 +11,9 @@ const randomOf = <T>(...options: T[]): T => {
 };
 
 export const trainLocFactory = Factory.define<TrainLoc>(() => {
-  const stations = Object.values(allStations);
-  const station = stations.length > 0 ? randomOf(...stations) : null;
+  const station = randomOf(...DEMO_C_STATIONS);
   return {
-    routeId: randomOf(...allRouteIds),
+    routeId: "Green-C",
     directionId: randomOf(DirectionId.Westbound, DirectionId.Eastbound),
     consist: Array.from({ length: randomOf(1, 2) }, () =>
       randomOf(...activeCars),

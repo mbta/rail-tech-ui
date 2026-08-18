@@ -8,20 +8,13 @@ import {
   Dispatch,
   useMemo,
 } from "react";
-import { useNavigate } from "react-router-dom";
 import { LadderLabel } from "src/components/ladderPage/ladderLabel";
 import { Consist, consistEq, consistToString } from "src/data";
-import {
-  DirectionId,
-  directionIdToString,
-  routeIdToSegment,
-  Segment,
-} from "src/models/route";
-import { StationId, stationShortName } from "src/models/stop";
+import { DirectionId, directionIdToString } from "src/models/route";
+import { Station, StationId, StationMap } from "src/models/stop";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { isTripRevenue } from "src/models/trainsheet";
 import { scrollTo } from "src/util/browser";
-import { routeColorClass } from "src/util/cssNaming";
 import { className } from "src/util/dom";
 import { StationSelection, VehicleSelection } from "./types";
 import { TrainWithHeights, trainHeights } from "./trainHeight";
@@ -52,64 +45,85 @@ const connectorWidth = 3;
  */
 const routeLetterRadius = 12;
 
-const ScrollToConsistContext = createContext<Consist | null>(null);
-
-type StationConfig = {
-  id: string;
-  spacingRatio: number;
+type SearchResultContextValue = {
+  scrollToConsist: Consist | null;
+  onSearchResultAcknowledged: (() => void) | null;
 };
 
+const SearchResultContext = createContext<SearchResultContextValue>({
+  scrollToConsist: null,
+  onSearchResultAcknowledged: null,
+});
+
 export const Ladder = ({
-  segment,
   zoom,
   trainLocs,
+  routeColors,
   stationSelection,
   scrollToConsist,
+  onSearchResultAcknowledged,
   setVehicleSelection,
   setStationSelection,
-  eastToWestStationConfigs,
+  eastToWestStations,
   getInitialPredictionsDirection,
-  alignsWithSegment,
 }: {
-  segment: Segment;
   zoom: number;
   trainLocs: TrainLoc[];
+  routeColors: Readonly<Record<string, string>>;
   stationSelection: StationSelection | null;
   scrollToConsist: Consist | null;
+  /**
+   * Called ~5 seconds after a search result has been scrolled into view, so
+   * that the consumer can clear whatever URL state (e.g. a location hash) it
+   * used to trigger the search. Optional; if omitted, the ladder still scrolls
+   * to the consist but does not attempt to clear any external state.
+   */
+  onSearchResultAcknowledged?: () => void;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
   setStationSelection: Dispatch<StationSelection | null>;
-  eastToWestStationConfigs: StationConfig[];
+  eastToWestStations: Station[];
   getInitialPredictionsDirection: () => DirectionId;
-  alignsWithSegment?: (trainLoc: TrainLoc, segment: Segment) => boolean;
 }): ReactElement => {
-  const trainLocsOnRoute = trainLocs.filter((trainLoc) =>
-    (alignsWithSegment ?? trainAlignsWithSegment)(trainLoc, segment),
-  );
-  const westboundTrainLocs = trainLocsOnRoute.filter(
+  const westboundTrainLocs = trainLocs.filter(
     (trainLoc) => trainLoc.directionId === DirectionId.Westbound,
   );
-  const eastboundTrainLocs = trainLocsOnRoute.filter(
+  const eastboundTrainLocs = trainLocs.filter(
     (trainLoc) => trainLoc.directionId === DirectionId.Eastbound,
   );
   const eastToWestStationIds = useMemo(
-    () => eastToWestStationConfigs.map((config) => config.id),
-    [eastToWestStationConfigs],
+    () => eastToWestStations.map((station) => station.id),
+    [eastToWestStations],
   );
   const eastToWestStationSpacingRatios = useMemo(
-    () => eastToWestStationConfigs.map((config) => config.spacingRatio),
-    [eastToWestStationConfigs],
+    () => eastToWestStations.map((station) => station.spacingRatio),
+    [eastToWestStations],
   );
   const westToEastStationIds = useMemo(
     () => eastToWestStationIds.slice().reverse(),
-    [eastToWestStationConfigs],
+    [eastToWestStationIds],
+  );
+  const stationMap: StationMap = useMemo(
+    () =>
+      Object.fromEntries(
+        eastToWestStations.map((station) => [station.id, station]),
+      ),
+    [eastToWestStations],
+  );
+
+  const searchResultContextValue = useMemo<SearchResultContextValue>(
+    () => ({
+      scrollToConsist,
+      onSearchResultAcknowledged: onSearchResultAcknowledged ?? null,
+    }),
+    [scrollToConsist, onSearchResultAcknowledged],
   );
 
   return (
-    <ScrollToConsistContext.Provider value={scrollToConsist}>
+    <SearchResultContext.Provider value={searchResultContextValue}>
       <div className="relative pb-20 sm:pb-0">
         <StationList
           zoom={zoom}
-          stationConfigs={eastToWestStationConfigs}
+          eastToWestStations={eastToWestStations}
           stationSelection={stationSelection}
           setStationSelection={setStationSelection}
           getInitialPredictionsDirection={getInitialPredictionsDirection}
@@ -120,7 +134,9 @@ export const Ladder = ({
           stationIdsInOrder={eastToWestStationIds}
           stationSpacingRatiosTopToBottom={eastToWestStationSpacingRatios}
           trainLocs={westboundTrainLocs}
+          stationMap={stationMap}
           setVehicleSelection={setVehicleSelection}
+          routeColors={routeColors}
         />
         <TrainList
           zoom={zoom}
@@ -128,93 +144,24 @@ export const Ladder = ({
           stationIdsInOrder={westToEastStationIds}
           stationSpacingRatiosTopToBottom={eastToWestStationSpacingRatios}
           trainLocs={eastboundTrainLocs}
+          stationMap={stationMap}
           setVehicleSelection={setVehicleSelection}
+          routeColors={routeColors}
         />
       </div>
-    </ScrollToConsistContext.Provider>
+    </SearchResultContext.Provider>
   );
-};
-
-/**
- * Configuration point: Green-line-specific merge-point logic.
- * Checks whether this train aligns with this segment at Kenmore, Copley, and Lechmere.
- * For rail operations, pass a custom `alignsWithSegment` function to the Ladder component.
- *
- * This used to be more comprehensive, but it was too zealous and caused some
- * unconventionally-branched trains (for example, C-branch trains near Union Square) to be hidden
- * incorrectly. Additionally, it used to filter out other branches on the ladder for a specific
- * branch, but users preferred to see all of the trains along the relevant tracks. As such, now
- * this only checks for the three specific merge points in the system:
- *
- * 1. Eastbound:
- *    ```text
- *    b: Blandford St ──┐
- *    c:  St Marys St ──┼── Kenmore
- *    d:       Fenway ──┘
- *    ```
- * 2. Eastbound:
- *    ```text
- *    b,c,d,subway: Hynes ──┐
- *                          ├── Copley
- *    e:       Prudential ──┘
- *    ```
- * 3. Westbound:
- *    ```text
- *    d:     Union Sq ──┐
- *                      ├── Lechmere
- *    e: E Somerville ──┘
- *    ```
- */
-export const trainAlignsWithSegment = (
-  trainLoc: TrainLoc,
-  segment: Segment,
-): boolean => {
-  const westbound = trainLoc.directionId === DirectionId.Westbound;
-  const eastbound = trainLoc.directionId === DirectionId.Eastbound;
-
-  const routeSegment = trainLoc.routeId && routeIdToSegment(trainLoc.routeId);
-
-  const approachingKenmore =
-    trainLoc.stopStatus === StopStatus.InTransitTo &&
-    trainLoc.stationId === "place-kencl";
-  if (approachingKenmore && eastbound) {
-    // Since nothing before Kenmore is shown on the subway, only show the train if we are looking
-    // at the segment matching its route.
-    return segment === routeSegment;
-  }
-
-  const approachingCopley =
-    trainLoc.stopStatus === StopStatus.InTransitTo &&
-    trainLoc.stationId === "place-coecl";
-  if (approachingCopley && eastbound) {
-    // Since Hynes is shown before Copley on many segments, only show the train if the segment and
-    // route agree on what comes before Copley.
-    const routeBeforeCopley =
-      trainLoc.routeId === "Green-E" ? "Prudential" : "Hynes";
-    const segmentBeforeCopley = segment === "e" ? "Prudential" : "Hynes";
-    return routeBeforeCopley === segmentBeforeCopley;
-  }
-
-  const approachingLechmere =
-    trainLoc.stopStatus === StopStatus.InTransitTo &&
-    trainLoc.stationId === "place-lech";
-  if (approachingLechmere && westbound) {
-    // Since nothing before Lechmere is shown on the subway, only show the train if we are looking
-    // at the segment matching its route.
-    return segment === routeSegment;
-  }
-  return true;
 };
 
 const StationList = ({
   zoom,
-  stationConfigs,
+  eastToWestStations,
   stationSelection,
   setStationSelection,
   getInitialPredictionsDirection,
 }: {
   zoom: number;
-  stationConfigs: StationConfig[];
+  eastToWestStations: Station[];
   stationSelection: StationSelection | null;
   setStationSelection: Dispatch<StationSelection | null>;
   getInitialPredictionsDirection: () => DirectionId;
@@ -233,11 +180,11 @@ const StationList = ({
       className="light:border-slate-200 mx-auto w-32 border-0 border-x-[6px] border-solid dark:border-glides-blue-900"
       aria-label="Stations"
     >
-      {stationConfigs.map((stationConfig, index) => {
-        const stationId = stationConfig.id;
-        const stationSpacingRatio = stationConfig.spacingRatio;
+      {eastToWestStations.map((station, index) => {
+        const stationId = station.id;
+        const stationSpacingRatio = station.spacingRatio;
         const isSelected = stationId === stationSelection?.stationId;
-        const isLastStation: boolean = index === stationConfigs.length - 1;
+        const isLastStation: boolean = index === eastToWestStations.length - 1;
         const heightPx = isLastStation ? 0 : stationSpacingRatio * zoom;
         return (
           <li
@@ -266,7 +213,7 @@ const StationList = ({
                 }
               }}
             >
-              {stationShortName(stationId)}
+              {station.shortName}
             </button>
             <button
               className={className([
@@ -327,6 +274,8 @@ const TrainList = ({
   stationIdsInOrder,
   stationSpacingRatiosTopToBottom,
   trainLocs,
+  routeColors,
+  stationMap,
   setVehicleSelection,
 }: {
   zoom: number;
@@ -334,6 +283,8 @@ const TrainList = ({
   stationIdsInOrder: StationId[];
   stationSpacingRatiosTopToBottom: number[];
   trainLocs: TrainLoc[];
+  routeColors: Readonly<Record<string, string>>;
+  stationMap: StationMap;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
 }): ReactElement => {
   const trainsWithHeights: TrainWithHeights[] = trainHeights(
@@ -342,6 +293,7 @@ const TrainList = ({
     directionId,
     stationIdsInOrder,
     stationSpacingRatiosTopToBottom,
+    stationMap,
   );
   return (
     <ul
@@ -359,6 +311,7 @@ const TrainList = ({
           <Train
             trainWithHeights={trainWithHeights}
             setVehicleSelection={setVehicleSelection}
+            color={routeColors[trainWithHeights.routeId] ?? ""}
           />
         </li>
       ))}
@@ -369,50 +322,56 @@ const TrainList = ({
 const Train = ({
   trainWithHeights,
   setVehicleSelection,
+  color,
 }: {
   trainWithHeights: TrainWithHeights;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
+  color: string;
 }): ReactElement => {
-  const scrollToConsist = useContext(ScrollToConsistContext);
+  const { scrollToConsist, onSearchResultAcknowledged } =
+    useContext(SearchResultContext);
   const isSearchResult =
     scrollToConsist !== null &&
     consistEq(scrollToConsist, trainWithHeights.consist, "exact");
   const labelButtonRef = useRef<HTMLButtonElement | null>(null);
-  const navigate = useNavigate();
   useEffect(() => {
     if (isSearchResult && labelButtonRef.current !== null) {
       scrollTo(labelButtonRef.current, "center", false);
-      const timeout = setTimeout(
-        () => navigate({ hash: "" }, { replace: true }),
-        5000,
-      );
+      if (onSearchResultAcknowledged === null) return;
+      const timeout = setTimeout(onSearchResultAcknowledged, 5000);
       return () => clearTimeout(timeout);
     }
-  }, [isSearchResult, labelButtonRef, navigate]);
+  }, [isSearchResult, labelButtonRef, onSearchResultAcknowledged]);
   return (
     <>
-      <Dot trainWithHeights={trainWithHeights} />
+      <Dot trainWithHeights={trainWithHeights} color={color} />
       <LabelButton
         buttonRef={labelButtonRef}
         trainWithHeights={trainWithHeights}
         isSearchResult={isSearchResult}
         setVehicleSelection={setVehicleSelection}
+        color={color}
       />
-      <LineBetweenDotAndLabel trainWithHeights={trainWithHeights} />
+      <LineBetweenDotAndLabel
+        color={color}
+        trainWithHeights={trainWithHeights}
+      />
     </>
   );
 };
 
 const Dot = ({
   trainWithHeights,
+  color,
 }: {
   trainWithHeights: TrainWithHeights;
+  color: string;
 }): ReactElement => (
   <div
     className={className([
       "bg-glides-branch ring-glides-branch/[.33] pointer-events-none absolute mx-[-5px] h-[10px] w-[10px] -translate-y-1/2 rounded-full ring-4",
       isTripRevenue(trainWithHeights.trip)
-        ? routeColorClass(trainWithHeights.routeId)
+        ? color
         : "bg-glides-gray-400 ring-glides-gray-400/[.33]",
     ])}
     style={{
@@ -429,11 +388,13 @@ const LabelButton = ({
   buttonRef,
   isSearchResult,
   setVehicleSelection,
+  color,
 }: {
   trainWithHeights: TrainWithHeights;
-  buttonRef: React.MutableRefObject<HTMLButtonElement | null>;
+  buttonRef: React.RefObject<HTMLButtonElement | null>;
   isSearchResult: boolean;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
+  color: string;
 }): ReactElement => {
   return (
     <button
@@ -460,6 +421,7 @@ const LabelButton = ({
         consist={trainWithHeights.consist}
         routeId={trainWithHeights.routeId}
         primaryColor={isSearchResult ? "route" : "bg"}
+        routeColor={color}
         revenue={isTripRevenue(trainWithHeights.trip)}
         routeOnRight={trainWithHeights.directionId === DirectionId.Westbound}
         searchResult={isSearchResult}
@@ -470,8 +432,10 @@ const LabelButton = ({
 
 const LineBetweenDotAndLabel = ({
   trainWithHeights,
+  color,
 }: {
   trainWithHeights: TrainWithHeights;
+  color: string;
 }): ReactElement => {
   const { dotPx, labelPx, routeId, trip } = trainWithHeights;
   // svg 0,0 is at the dot
@@ -514,9 +478,7 @@ const LineBetweenDotAndLabel = ({
         strokeWidth={connectorWidth}
         className={className([
           "text-glides-branch stroke-current",
-          isTripRevenue(trip)
-            ? routeColorClass(routeId)
-            : "text-glides-gray-400",
+          isTripRevenue(trip) ? color : "text-glides-gray-400",
         ])}
       />
     </svg>
