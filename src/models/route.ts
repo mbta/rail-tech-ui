@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { Mutable } from "src/util/ts";
 
 // RouteId matches GTFS route_id
 export type RouteId = string;
@@ -39,22 +38,3 @@ export const switchDirection = (directionId: DirectionId): DirectionId =>
 // Result is title case, caller can toLowerCase if needed
 export const directionIdToString = (directionId: DirectionId) =>
   directionId === DirectionId.Westbound ? "Westbound" : "Eastbound";
-
-export type RouteNumber = string;
-
-export const routeLetter = (routeId: RouteId): string => {
-  switch (routeId) {
-    case "Green-B":
-      return "B";
-    case "Green-C":
-      return "C";
-    case "Green-D":
-      return "D";
-    case "Green-E":
-      return "E";
-    case "Mattapan":
-      return "M";
-  }
-
-  return "";
-};

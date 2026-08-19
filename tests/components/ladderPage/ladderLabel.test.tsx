@@ -1,5 +1,6 @@
 import { LadderLabel } from "src/components/ladderPage/ladderLabel";
 import { LR_COLORS } from "tests/testHelpers/colors";
+import { LR_ROUTE_LETTERS } from "tests/testHelpers/route";
 import { testSnapshot } from "tests/testHelpers/snapshot";
 
 // Mock the Icon component since it relies on external SVG sprites
@@ -14,6 +15,7 @@ describe("LadderLabel", () => {
       consist={["3600"]}
       routeId="Green-D"
       routeColor={LR_COLORS["Green-D"]}
+      routeLetter={LR_ROUTE_LETTERS["Green-D"]}
     />
   ));
   testSnapshot("two car train", () => (
@@ -22,6 +24,7 @@ describe("LadderLabel", () => {
       consist={["3600", "3700"]}
       routeId="Green-D"
       routeColor={LR_COLORS["Green-D"]}
+      routeLetter={LR_ROUTE_LETTERS["Green-D"]}
     />
   ));
   testSnapshot("three car train", () => (
@@ -30,6 +33,7 @@ describe("LadderLabel", () => {
       consist={["3600", "3700", "3800"]}
       routeId="Green-D"
       routeColor={LR_COLORS["Green-D"]}
+      routeLetter={LR_ROUTE_LETTERS["Green-D"]}
     />
   ));
   testSnapshot("non-revenue train", () => (
@@ -38,6 +42,7 @@ describe("LadderLabel", () => {
       consist={["3600", "3700"]}
       routeId="Green-D"
       routeColor={LR_COLORS["Green-D"]}
+      routeLetter={LR_ROUTE_LETTERS["Green-D"]}
     />
   ));
 });

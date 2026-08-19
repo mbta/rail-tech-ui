@@ -1,24 +1,23 @@
 import { ReactElement } from "react";
 import { Icon } from "src/components/icons";
 import { CarId, Consist } from "src/data";
-import { RouteId, routeLetter } from "src/models/route";
+import { RouteId } from "src/models/route";
 import { className } from "src/util/dom";
-
-export interface LadderLabelProps {
-  consist: Consist;
-  routeId: RouteId;
-  revenue: boolean;
-}
 
 export const LadderLabel = ({
   consist,
   routeId,
+  routeLetter,
   revenue,
   primaryColor = "route",
   routeColor,
   routeOnRight,
   searchResult = false,
-}: LadderLabelProps & {
+}: {
+  consist: Consist;
+  routeId: RouteId;
+  routeLetter: string;
+  revenue: boolean;
   primaryColor?: "route" | "bg";
   routeColor: string;
   routeOnRight?: boolean;
@@ -52,6 +51,7 @@ export const LadderLabel = ({
           />
           <RouteIcon
             routeId={routeId}
+            routeLetter={routeLetter}
             iconStyle={revenue ? "letter" : "nonrev"}
             primaryColor={primaryColor}
             searchResult={searchResult}
@@ -61,6 +61,7 @@ export const LadderLabel = ({
         <>
           <RouteIcon
             routeId={routeId}
+            routeLetter={routeLetter}
             iconStyle={revenue ? "letter" : "nonrev"}
             primaryColor={primaryColor}
             searchResult={searchResult}
@@ -78,11 +79,13 @@ export const LadderLabel = ({
 
 const RouteIcon = ({
   routeId,
+  routeLetter,
   primaryColor,
   iconStyle,
   searchResult,
 }: {
   routeId: RouteId;
+  routeLetter: string;
   primaryColor: "route" | "bg";
   iconStyle: "letter" | "nonrev";
   searchResult: boolean;
@@ -101,7 +104,7 @@ const RouteIcon = ({
             : null,
         ])}
       >
-        {routeLetter(routeId)}
+        {routeLetter}
       </p>
     );
   } else {

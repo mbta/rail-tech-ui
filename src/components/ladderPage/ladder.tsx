@@ -59,6 +59,7 @@ export const Ladder = ({
   zoom,
   trainLocs,
   routeColors,
+  routeLetters,
   stationSelection,
   scrollToConsist,
   onSearchResultTimeout,
@@ -70,6 +71,7 @@ export const Ladder = ({
   zoom: number;
   trainLocs: TrainLoc[];
   routeColors: Readonly<Record<string, string>>;
+  routeLetters: Readonly<Record<string, string>>;
   stationSelection: StationSelection | null;
   scrollToConsist: Consist | null;
 
@@ -135,6 +137,7 @@ export const Ladder = ({
           stationMap={stationMap}
           setVehicleSelection={setVehicleSelection}
           routeColors={routeColors}
+          routeLetters={routeLetters}
         />
         <TrainList
           zoom={zoom}
@@ -145,6 +148,7 @@ export const Ladder = ({
           stationMap={stationMap}
           setVehicleSelection={setVehicleSelection}
           routeColors={routeColors}
+          routeLetters={routeLetters}
         />
       </div>
     </SearchResultContext.Provider>
@@ -272,6 +276,7 @@ const TrainList = ({
   stationIdsInOrder,
   stationSpacingRatiosTopToBottom,
   trainLocs,
+  routeLetters,
   routeColors,
   stationMap,
   setVehicleSelection,
@@ -281,6 +286,7 @@ const TrainList = ({
   stationIdsInOrder: StationId[];
   stationSpacingRatiosTopToBottom: number[];
   trainLocs: TrainLoc[];
+  routeLetters: Readonly<Record<string, string>>;
   routeColors: Readonly<Record<string, string>>;
   stationMap: StationMap;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
@@ -309,6 +315,7 @@ const TrainList = ({
           <Train
             trainWithHeights={trainWithHeights}
             setVehicleSelection={setVehicleSelection}
+            routeLetter={routeLetters[trainWithHeights.routeId] ?? ""}
             color={routeColors[trainWithHeights.routeId] ?? ""}
           />
         </li>
@@ -319,10 +326,12 @@ const TrainList = ({
 
 const Train = ({
   trainWithHeights,
+  routeLetter,
   setVehicleSelection,
   color,
 }: {
   trainWithHeights: TrainWithHeights;
+  routeLetter: string;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
   color: string;
 }): ReactElement => {
@@ -344,6 +353,7 @@ const Train = ({
     <>
       <Dot trainWithHeights={trainWithHeights} color={color} />
       <LabelButton
+        routeLetter={routeLetter}
         buttonRef={labelButtonRef}
         trainWithHeights={trainWithHeights}
         isSearchResult={isSearchResult}
@@ -383,12 +393,14 @@ const Dot = ({
 
 const LabelButton = ({
   trainWithHeights,
+  routeLetter,
   buttonRef,
   isSearchResult,
   setVehicleSelection,
   color,
 }: {
   trainWithHeights: TrainWithHeights;
+  routeLetter: string;
   buttonRef: React.RefObject<HTMLButtonElement | null>;
   isSearchResult: boolean;
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
@@ -418,6 +430,7 @@ const LabelButton = ({
       <LadderLabel
         consist={trainWithHeights.consist}
         routeId={trainWithHeights.routeId}
+        routeLetter={routeLetter}
         primaryColor={isSearchResult ? "route" : "bg"}
         routeColor={color}
         revenue={isTripRevenue(trainWithHeights.trip)}

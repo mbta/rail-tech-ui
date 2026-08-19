@@ -5,6 +5,7 @@ import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { scrollTo } from "src/util/browser";
 import { LR_COLORS } from "tests/testHelpers/colors";
 import { trainLocFactory } from "tests/testHelpers/factory";
+import { LR_ROUTE_LETTERS } from "tests/testHelpers/route";
 import {
   DEMO_B_STATIONS,
   DEMO_C_STATIONS,
@@ -31,6 +32,7 @@ describe("Ladder", () => {
         eastToWestStations={DEMO_C_STATIONS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
         routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
       />,
     );
     expect(view.getByText("Coolidge Cnr")).toBeInTheDocument();
@@ -50,6 +52,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_C_STATIONS}
         routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -87,6 +90,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_E_STATIONS}
         routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -117,6 +121,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_B_STATIONS}
         routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -151,6 +156,7 @@ describe("Ladder", () => {
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_E_STATIONS}
         routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
