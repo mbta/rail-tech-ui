@@ -126,7 +126,7 @@ describe("Ladder", () => {
   });
 
   test("scrolling to trains based on hash", async () => {
-    const onSearchResultAcknowledged = jest.fn();
+    const onSearchResultTimeout = jest.fn();
 
     const trainLocs: TrainLoc[] = [
       trainLocFactory.build({
@@ -146,7 +146,7 @@ describe("Ladder", () => {
         trainLocs={trainLocs}
         stationSelection={null}
         scrollToConsist={["3701", "3702"]}
-        onSearchResultAcknowledged={onSearchResultAcknowledged}
+        onSearchResultTimeout={onSearchResultTimeout}
         setVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_E_STATIONS}
@@ -155,6 +155,6 @@ describe("Ladder", () => {
       />,
     );
     await waitFor(() => expect(scrollTo).toHaveBeenCalledTimes(1));
-    expect(onSearchResultAcknowledged).not.toHaveBeenCalled();
+    expect(onSearchResultTimeout).not.toHaveBeenCalled();
   });
 });

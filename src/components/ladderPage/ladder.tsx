@@ -47,12 +47,12 @@ const routeLetterRadius = 12;
 
 type SearchResultContextValue = {
   scrollToConsist: Consist | null;
-  onSearchResultAcknowledged: (() => void) | null;
+  onSearchResultTimeout: (() => void) | null;
 };
 
 const SearchResultContext = createContext<SearchResultContextValue>({
   scrollToConsist: null,
-  onSearchResultAcknowledged: null,
+  onSearchResultTimeout: null,
 });
 
 export const Ladder = ({
@@ -61,7 +61,7 @@ export const Ladder = ({
   routeColors,
   stationSelection,
   scrollToConsist,
-  onSearchResultAcknowledged,
+  onSearchResultTimeout,
   setVehicleSelection,
   setStationSelection,
   eastToWestStations,
@@ -72,13 +72,11 @@ export const Ladder = ({
   routeColors: Readonly<Record<string, string>>;
   stationSelection: StationSelection | null;
   scrollToConsist: Consist | null;
-  /**
-   * Called ~5 seconds after a search result has been scrolled into view, so
-   * that the consumer can clear whatever URL state (e.g. a location hash) it
-   * used to trigger the search. Optional; if omitted, the ladder still scrolls
-   * to the consist but does not attempt to clear any external state.
-   */
-  onSearchResultAcknowledged?: () => void;
+
+  // Called 5s after a search result has been scrolled into view so a consumer
+  //  can choose to clear e.g. a URL state
+  onSearchResultTimeout?: () => void;
+
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
   setStationSelection: Dispatch<StationSelection | null>;
   eastToWestStations: Station[];
@@ -113,9 +111,9 @@ export const Ladder = ({
   const searchResultContextValue = useMemo<SearchResultContextValue>(
     () => ({
       scrollToConsist,
-      onSearchResultAcknowledged: onSearchResultAcknowledged ?? null,
+      onSearchResultTimeout: onSearchResultTimeout ?? null,
     }),
-    [scrollToConsist, onSearchResultAcknowledged],
+    [scrollToConsist, onSearchResultTimeout],
   );
 
   return (
@@ -328,7 +326,7 @@ const Train = ({
   setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
   color: string;
 }): ReactElement => {
-  const { scrollToConsist, onSearchResultAcknowledged } =
+  const { scrollToConsist, onSearchResultTimeout } =
     useContext(SearchResultContext);
   const isSearchResult =
     scrollToConsist !== null &&
@@ -337,11 +335,11 @@ const Train = ({
   useEffect(() => {
     if (isSearchResult && labelButtonRef.current !== null) {
       scrollTo(labelButtonRef.current, "center", false);
-      if (onSearchResultAcknowledged === null) return;
-      const timeout = setTimeout(onSearchResultAcknowledged, 5000);
+      if (onSearchResultTimeout === null) return;
+      const timeout = setTimeout(onSearchResultTimeout, 5000);
       return () => clearTimeout(timeout);
     }
-  }, [isSearchResult, labelButtonRef, onSearchResultAcknowledged]);
+  }, [isSearchResult, labelButtonRef, onSearchResultTimeout]);
   return (
     <>
       <Dot trainWithHeights={trainWithHeights} color={color} />
