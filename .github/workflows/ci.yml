@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  merge_group:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zizmor:
+    name: Run zizmor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
+        with:
+          advanced-security: false
+          persona: pedantic
+
+  setup:
+    name: asdf dependencies
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key-asdf: ${{ steps.cache-keys.outputs.asdf }}
+      cache-key-node: ${{ steps.cache-keys.outputs.node }}
+      cache-key-node-restore: ${{ steps.cache-keys.outputs.node-restore }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set cache keys
+        id: cache-keys
+        env:
+          TOOL_VERSIONS: ${{ hashFiles('.tool-versions') }}
+          PACKAGE_LOCK: ${{ hashFiles('package-lock.json') }}
+        run: |
+          echo "asdf-restore=cache-asdf-" >> $GITHUB_OUTPUT
+          echo "asdf=cache-asdf-${TOOL_VERSIONS}" >> $GITHUB_OUTPUT
+          echo "node-restore=cache-node-" >> $GITHUB_OUTPUT
+          echo "node=cache-node-${PACKAGE_LOCK}" >> $GITHUB_OUTPUT
+      # cache the asdf directory, using the values from .tool-versions
+      - name: asdf cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.asdf
+          key: ${{ steps.cache-keys.outputs.asdf }}
+          restore-keys: ${{ steps.cache-keys.outputs.asdf-restore }}
+        id: asdf-cache
+      # only run `asdf install` if we didn't hit the cache
+      - uses: asdf-vm/actions/install@b7bcd026f18772e44fe1026d729e1611cc435d47 # v4.0.1
+        if: steps.asdf-cache.outputs.cache-hit != 'true'
+      - name: Setup asdf environment
+        uses: mbta/actions/reshim-asdf@788f8e264e9ebb1b76b927c89e6466d5a162be80 # v2.24
+
+  setup_node:
+    name: npm install
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: asdf cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.asdf
+          key: ${{ needs.setup.outputs.cache-key-asdf }}
+      - name: Setup asdf environment
+        uses: mbta/actions/reshim-asdf@788f8e264e9ebb1b76b927c89e6466d5a162be80 # v2.24
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: node_modules cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: node-cache
+        with:
+          path: node_modules
+          key: ${{ needs.setup.outputs.cache-key-node }}
+          restore-keys: ${{ needs.setup.outputs.cache-key-node-restore }}
+      - name: npm ci
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+  build_typescript:
+    name: Build and test TypeScript
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    needs: [setup, setup_node]
+    steps:
+      - name: Restore asdf cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.asdf
+          key: ${{ needs.setup.outputs.cache-key-asdf }}
+      - name: Setup asdf environment
+        uses: mbta/actions/reshim-asdf@788f8e264e9ebb1b76b927c89e6466d5a162be80 # v2.24
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules
+          key: ${{ needs.setup.outputs.cache-key-node }}
+      - name: esbuild
+        run: npm run build
+      - name: Jest
+        run: npm run test
+      - name: Prettier
+        run: npm run format
