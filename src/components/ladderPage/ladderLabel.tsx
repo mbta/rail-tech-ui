@@ -1,25 +1,25 @@
 import { ReactElement } from "react";
 import { Icon } from "src/components/icons";
 import { CarId, Consist } from "src/data";
-import { RouteId, routeLetter } from "src/models/route";
-import { routeColorClass } from "src/util/cssNaming";
+import { RouteId } from "src/models/route";
 import { className } from "src/util/dom";
-
-export interface LadderLabelProps {
-  consist: Consist;
-  routeId: RouteId;
-  revenue: boolean;
-}
 
 export const LadderLabel = ({
   consist,
   routeId,
+  routeLetter,
   revenue,
   primaryColor = "route",
+  routeColor,
   routeOnRight,
   searchResult = false,
-}: LadderLabelProps & {
+}: {
+  consist: Consist;
+  routeId: RouteId;
+  routeLetter: string;
+  revenue: boolean;
   primaryColor?: "route" | "bg";
+  routeColor: string;
   routeOnRight?: boolean;
   searchResult?: boolean;
 }): ReactElement => {
@@ -34,7 +34,7 @@ export const LadderLabel = ({
           : primaryColor === "bg"
             ? "light:border-glides-gray-500 light:bg-slate-100 border-2 border-solid dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
-        routeColorClass(routeId),
+        routeColor,
         searchResult
           ? "ring-glides-branch/50 light:animate-train-label-search-result-light dark:animate-train-label-search-result ring-8"
           : primaryColor === "route"
@@ -51,6 +51,7 @@ export const LadderLabel = ({
           />
           <RouteIcon
             routeId={routeId}
+            routeLetter={routeLetter}
             iconStyle={revenue ? "letter" : "nonrev"}
             primaryColor={primaryColor}
             searchResult={searchResult}
@@ -60,6 +61,7 @@ export const LadderLabel = ({
         <>
           <RouteIcon
             routeId={routeId}
+            routeLetter={routeLetter}
             iconStyle={revenue ? "letter" : "nonrev"}
             primaryColor={primaryColor}
             searchResult={searchResult}
@@ -77,11 +79,13 @@ export const LadderLabel = ({
 
 const RouteIcon = ({
   routeId,
+  routeLetter,
   primaryColor,
   iconStyle,
   searchResult,
 }: {
   routeId: RouteId;
+  routeLetter: string;
   primaryColor: "route" | "bg";
   iconStyle: "letter" | "nonrev";
   searchResult: boolean;
@@ -100,7 +104,7 @@ const RouteIcon = ({
             : null,
         ])}
       >
-        {routeLetter(routeId)}
+        {routeLetter}
       </p>
     );
   } else {

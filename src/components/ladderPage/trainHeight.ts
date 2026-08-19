@@ -1,8 +1,7 @@
 import { Consist } from "src/data";
-import { stationIdsOnSegmentInDirection } from "src/data/stops";
 import { proportionBetweenLatLngs } from "src/models/latLng";
-import { DirectionId, RouteId, routeIdToSegment } from "src/models/route";
-import { StationId, stationLatLng } from "src/models/stop";
+import { DirectionId, RouteId } from "src/models/route";
+import { StationId, StationMap, stationLatLng } from "src/models/stop";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { TripEnd } from "src/models/trainsheet";
 import { filterMap, reverse } from "src/util/array";
@@ -54,10 +53,12 @@ export const trainHeights = (
   directionId: DirectionId,
   stationIdsInOrder: StationId[],
   stationSpacingRatiosTopToBottom: number[],
+  stationMap: StationMap,
 ): TrainWithHeights[] => {
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
-    (trainLoc) => trainWithStopsTraveled(trainLoc, stationIdsInOrder),
+    (trainLoc) =>
+      trainWithStopsTraveled(trainLoc, stationIdsInOrder, stationMap),
   );
   const trainsTopToBottom: TrainWithStopsTraveled[] = sortTrainsTopToBottom(
     trainsWithStopsTraveled,
@@ -76,22 +77,10 @@ export const trainHeights = (
   return trainsWithLabelPx;
 };
 
-/**
- * check if this train will show on the ladder view for its route
- */
-export const willTrainShowOnRouteLadder = (trainLoc: TrainLoc): boolean => {
-  if (trainLoc.directionId === null || trainLoc.routeId === null) return false;
-  const segment = routeIdToSegment(trainLoc.routeId);
-  const stationIds = stationIdsOnSegmentInDirection(
-    segment,
-    trainLoc.directionId,
-  );
-  return stopsTraveledAlongSegment(stationIds, trainLoc) !== null;
-};
-
 const trainWithStopsTraveled = (
   trainLoc: TrainLoc,
   stationIdsInOrder: StationId[],
+  stationMap: StationMap,
 ): TrainWithStopsTraveled | null => {
   // don't even check if the route or direction is missing
   if (trainLoc.routeId === null || trainLoc.directionId === null) {
@@ -100,6 +89,7 @@ const trainWithStopsTraveled = (
   const stopsTraveled: number | null = stopsTraveledAlongSegment(
     stationIdsInOrder,
     trainLoc,
+    stationMap,
   );
   if (stopsTraveled === null) {
     return null;
@@ -129,6 +119,7 @@ const trainWithStopsTraveled = (
 export const stopsTraveledAlongSegment = (
   stationIdsInOrder: StationId[],
   trainLoc: TrainLoc,
+  stationMap: StationMap,
 ): number | null => {
   if (trainLoc.stationId === null || trainLoc.routeId === null) return null;
   const stationIndex = stationIdsInOrder.indexOf(trainLoc.stationId);
@@ -146,8 +137,8 @@ export const stopsTraveledAlongSegment = (
     const prevStationIndex = stationIndex - 1;
     const prevStationId: StationId = stationIdsInOrder[prevStationIndex];
     const proportionBetweenPrevAndNext: number = proportionBetweenLatLngs(
-      stationLatLng(prevStationId),
-      stationLatLng(trainLoc.stationId),
+      stationLatLng(stationMap, prevStationId),
+      stationLatLng(stationMap, trainLoc.stationId),
       trainLoc.latLng,
     );
     /* Enforce a minimum distance from the nearest station, to make the difference
@@ -232,7 +223,7 @@ const stopsTraveledToPixelsFromTop = (
     return (
       (sumOfStationRatiosForFullStopsAwayFromTop +
         partialDistance *
-          stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
+        stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
       zoom
     );
   }

@@ -2,7 +2,7 @@
 
 exports[`LadderLabel non-revenue train 1`] = `
 <div
-  class="flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm light:bg-white dark:bg-glides-blue-900 branch-color-glides-yellow-400 light:ring-1 light:ring-inset light:ring-black/30"
+  class="rounded-4xl light:border light:border-slate-300 light:shadow-sm flex h-[2.625rem] w-24 p-1.5 light:bg-white dark:bg-glides-blue-900 branch-color-light-rail-d-branch light:ring-1 light:ring-inset light:ring-black/30"
 >
   <div
     class="flex flex-auto flex-col items-center justify-center light:text-gray-600 dark:text-glides-gray-200"
@@ -23,7 +23,7 @@ exports[`LadderLabel non-revenue train 1`] = `
 
 exports[`LadderLabel one car train 1`] = `
 <div
-  class="flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm bg-glides-branch branch-color-glides-yellow-400 light:ring-1 light:ring-inset light:ring-black/30"
+  class="rounded-4xl light:border light:border-slate-300 light:shadow-sm flex h-[2.625rem] w-24 p-1.5 bg-glides-branch branch-color-light-rail-d-branch light:ring-1 light:ring-inset light:ring-black/30"
 >
   <p
     class="flex basis-auto items-center justify-center rounded-full text-center font-semibold text-glides-branch light:bg-slate-800 dark:bg-glides-blue-700 h-[1.875rem] w-[1.875rem]"
@@ -44,7 +44,7 @@ exports[`LadderLabel one car train 1`] = `
 
 exports[`LadderLabel three car train 1`] = `
 <div
-  class="flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm bg-glides-branch branch-color-glides-yellow-400 light:ring-1 light:ring-inset light:ring-black/30"
+  class="rounded-4xl light:border light:border-slate-300 light:shadow-sm flex h-[2.625rem] w-24 p-1.5 bg-glides-branch branch-color-light-rail-d-branch light:ring-1 light:ring-inset light:ring-black/30"
 >
   <p
     class="flex basis-auto items-center justify-center rounded-full text-center font-semibold text-glides-branch light:bg-slate-800 dark:bg-glides-blue-700 h-[1.875rem] w-[1.875rem]"
@@ -75,7 +75,7 @@ exports[`LadderLabel three car train 1`] = `
 
 exports[`LadderLabel two car train 1`] = `
 <div
-  class="flex h-[2.625rem] w-24 rounded-4xl p-1.5 light:border light:border-slate-300 light:shadow-sm bg-glides-branch branch-color-glides-yellow-400 light:ring-1 light:ring-inset light:ring-black/30"
+  class="rounded-4xl light:border light:border-slate-300 light:shadow-sm flex h-[2.625rem] w-24 p-1.5 bg-glides-branch branch-color-light-rail-d-branch light:ring-1 light:ring-inset light:ring-black/30"
 >
   <p
     class="flex basis-auto items-center justify-center rounded-full text-center font-semibold text-glides-branch light:bg-slate-800 dark:bg-glides-blue-700 h-[1.875rem] w-[1.875rem]"

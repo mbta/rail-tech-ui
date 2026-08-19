@@ -27,7 +27,7 @@ npm run process-tokens
 If running a local copy within glides or orbit using `npm link`, make sure to ALSO run:
 
 ```sh
-npm link ../glides/node_modules/react ../glides/node_modules/react-router-dom ../glides/node_modules/react-dom
+npm link ../glides/node_modules/react ../glides/node_modules/react-dom
 ```
 
 within `rail-tech-ui` to ensure that they're using the same react. Otherwise, the ladder will error out on load!

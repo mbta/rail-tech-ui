@@ -9,7 +9,7 @@ const opts: esbuild.BuildOptions = {
   bundle: true,
   outdir: "./dist/src",
   logLevel: "debug",
-  external: ["react", "react-dom", "react-router-dom"],
+  external: ["react", "react-dom"],
   platform: "neutral",
   ...(watch ? { sourcemap: "inline" } : {}),
 };

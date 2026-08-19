@@ -1,56 +1,46 @@
 import { render, waitFor } from "@testing-library/react";
-import {
-  Ladder,
-  trainAlignsWithSegment,
-} from "src/components/ladderPage/ladder";
-import { stationIdsOnSegmentInDirection } from "src/data/stops";
+import { Ladder } from "src/components/ladderPage/ladder";
 import { DirectionId } from "src/models/route";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { scrollTo } from "src/util/browser";
+import { LR_COLORS } from "tests/testHelpers/colors";
 import { trainLocFactory } from "tests/testHelpers/factory";
+import { LR_ROUTE_LETTERS } from "tests/testHelpers/route";
+import {
+  DEMO_B_STATIONS,
+  DEMO_C_STATIONS,
+  DEMO_E_STATIONS,
+} from "tests/testHelpers/stops";
 
 jest.mock("src/util/browser", () => ({
   __esModule: true,
   scrollTo: jest.fn(),
 }));
 
-jest.mock("react-router-dom", () => ({
-  __esModule: true,
-  useNavigate: jest.fn(),
-}));
-
 const getInitialPredictionsDirection = () => DirectionId.Eastbound;
 
 describe("Ladder", () => {
   test("shows station names", () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
-      (id) => ({ id: id, spacingRatio: 1.0 }),
-    );
-
     const view = render(
       <Ladder
-        segment={"d"}
         zoom={40}
         trainLocs={[]}
         stationSelection={null}
         scrollToConsist={null}
         setVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
-        eastToWestStationConfigs={eastToWestStationConfigs}
+        eastToWestStations={DEMO_C_STATIONS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
+        routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
       />,
     );
-    expect(view.getByText("Kenmore")).toBeInTheDocument();
+    expect(view.getByText("Coolidge Cnr")).toBeInTheDocument();
   });
 
   test("station for open predictions is highlighted", () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
-      (id) => ({ id: id, spacingRatio: 1.0 }),
-    );
-
     const view = render(
       <Ladder
-        segment={"subway"}
         zoom={40}
         trainLocs={[]}
         stationSelection={{
@@ -60,7 +50,9 @@ describe("Ladder", () => {
         scrollToConsist={null}
         setVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
-        eastToWestStationConfigs={eastToWestStationConfigs}
+        eastToWestStations={DEMO_C_STATIONS}
+        routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -77,13 +69,8 @@ describe("Ladder", () => {
   });
 
   test("shows trains", () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
-      (id) => ({ id: id, spacingRatio: 1.0 }),
-    );
-
     const view = render(
       <Ladder
-        segment={"e"}
         zoom={40}
         trainLocs={[
           trainLocFactory.build({
@@ -101,7 +88,9 @@ describe("Ladder", () => {
         scrollToConsist={null}
         setVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
-        eastToWestStationConfigs={eastToWestStationConfigs}
+        eastToWestStations={DEMO_E_STATIONS}
+        routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -116,13 +105,8 @@ describe("Ladder", () => {
   });
 
   test("doesn't show train on other branch", () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
-      (id) => ({ id: id, spacingRatio: 1.0 }),
-    );
-
     const view = render(
       <Ladder
-        segment={"d"}
         zoom={40}
         trainLocs={[
           trainLocFactory.build({
@@ -135,7 +119,9 @@ describe("Ladder", () => {
         scrollToConsist={null}
         setVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
-        eastToWestStationConfigs={eastToWestStationConfigs}
+        eastToWestStations={DEMO_B_STATIONS}
+        routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -145,9 +131,7 @@ describe("Ladder", () => {
   });
 
   test("scrolling to trains based on hash", async () => {
-    const eastToWestStationConfigs = stationIdsOnSegmentInDirection("d", 0).map(
-      (id) => ({ id: id, spacingRatio: 1.0 }),
-    );
+    const onSearchResultTimeout = jest.fn();
 
     const trainLocs: TrainLoc[] = [
       trainLocFactory.build({
@@ -163,87 +147,20 @@ describe("Ladder", () => {
     ];
     render(
       <Ladder
-        segment="e"
         zoom={80}
         trainLocs={trainLocs}
         stationSelection={null}
         scrollToConsist={["3701", "3702"]}
+        onSearchResultTimeout={onSearchResultTimeout}
         setVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
-        eastToWestStationConfigs={eastToWestStationConfigs}
+        eastToWestStations={DEMO_E_STATIONS}
+        routeColors={LR_COLORS}
+        routeLetters={LR_ROUTE_LETTERS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
     await waitFor(() => expect(scrollTo).toHaveBeenCalledTimes(1));
-  });
-});
-
-describe("trainAlignsWithSegment", () => {
-  test("segment for the same route", () => {
-    const trainLoc = trainLocFactory.build({
-      routeId: "Green-D",
-      directionId: DirectionId.Westbound,
-      stationId: "place-longw",
-      stopStatus: StopStatus.StoppedAt,
-    });
-    expect(trainAlignsWithSegment(trainLoc, "d")).toBe(true);
-  });
-
-  test("on subway, not moving", () => {
-    const trainLoc = trainLocFactory.build({
-      routeId: "Green-C",
-      directionId: DirectionId.Westbound,
-      stationId: "place-armnl",
-      stopStatus: StopStatus.StoppedAt,
-    });
-    expect(trainAlignsWithSegment(trainLoc, "subway")).toBe(true);
-  });
-
-  test("moving along subway", () => {
-    const trainLoc = trainLocFactory.build({
-      routeId: "Green-B",
-      directionId: DirectionId.Westbound,
-      stationId: "place-coecl",
-      stopStatus: StopStatus.InTransitTo,
-    });
-    expect(trainAlignsWithSegment(trainLoc, "subway")).toBe(true);
-  });
-
-  test("moving, almost off subway", () => {
-    const trainLoc = trainLocFactory.build({
-      routeId: "Green-E",
-      directionId: DirectionId.Westbound,
-      stationId: "place-coecl",
-      stopStatus: StopStatus.InTransitTo,
-    });
-    expect(trainAlignsWithSegment(trainLoc, "subway")).toBe(true);
-  });
-
-  test("Don't show E train on subway as it approaches Copley Eastbound", () => {
-    const comingIntoCopley = trainLocFactory.build({
-      routeId: "Green-E",
-      directionId: DirectionId.Eastbound,
-      stationId: "place-coecl",
-      stopStatus: StopStatus.InTransitTo,
-    });
-    expect(trainAlignsWithSegment(comingIntoCopley, "subway")).toBe(false);
-    expect(trainAlignsWithSegment(comingIntoCopley, "e")).toBe(true);
-    const boardingAtCopley = trainLocFactory.build({
-      routeId: "Green-E",
-      directionId: DirectionId.Eastbound,
-      stationId: "place-coecl",
-      stopStatus: StopStatus.StoppedAt,
-    });
-    expect(trainAlignsWithSegment(boardingAtCopley, "subway")).toBe(true);
-  });
-
-  test("Subway ladder shows non-E trains past North Station", () => {
-    const trainLoc = trainLocFactory.build({
-      routeId: "Green-C",
-      directionId: DirectionId.Westbound,
-      stationId: "place-spmnl",
-      stopStatus: StopStatus.InTransitTo,
-    });
-    expect(trainAlignsWithSegment(trainLoc, "subway")).toBe(true);
+    expect(onSearchResultTimeout).not.toHaveBeenCalled();
   });
 });
