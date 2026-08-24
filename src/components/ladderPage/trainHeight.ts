@@ -1,6 +1,6 @@
 import { Consist } from "src/data";
 import { proportionBetweenLatLngs } from "src/models/latLng";
-import { DirectionId, RouteId } from "src/models/route";
+import { DirectionId, RouteId, RoutePatternId } from "src/models/route";
 import { StationId, StationMap, stationLatLng } from "src/models/stop";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { TripEnd } from "src/models/trainsheet";
@@ -15,6 +15,7 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
 
 export interface TrainWithHeights {
   routeId: RouteId;
+  routePatternId?: RoutePatternId;
   consist: Consist;
   directionId: DirectionId;
   dotPx: number;
@@ -29,6 +30,7 @@ const minSpaceBetweenTrainLabels = 44;
 
 interface TrainWithStopsTraveled {
   routeId: RouteId;
+  routePatternId?: RoutePatternId;
   consist: Consist;
   directionId: DirectionId;
   trip: TripEnd | null;
@@ -38,6 +40,7 @@ interface TrainWithStopsTraveled {
 
 interface TrainWithDotPx {
   routeId: RouteId;
+  routePatternId?: RoutePatternId;
   consist: Consist;
   directionId: DirectionId;
   trip: TripEnd | null;
@@ -96,6 +99,7 @@ const trainWithStopsTraveled = (
   } else {
     return {
       routeId: trainLoc.routeId,
+      routePatternId: trainLoc.routePatternId,
       consist: trainLoc.consist,
       directionId: trainLoc.directionId,
       trip: trainLoc.trip,
@@ -190,6 +194,7 @@ const trainWithDotPx = (
   stationSpacingRatiosTopToBottom: number[],
 ): TrainWithDotPx => ({
   routeId: train.routeId,
+  routePatternId: train.routePatternId,
   consist: train.consist,
   directionId: train.directionId,
   trip: train.trip,
@@ -223,7 +228,7 @@ const stopsTraveledToPixelsFromTop = (
     return (
       (sumOfStationRatiosForFullStopsAwayFromTop +
         partialDistance *
-        stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
+          stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
       zoom
     );
   }

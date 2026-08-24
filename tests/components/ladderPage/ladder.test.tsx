@@ -3,9 +3,7 @@ import { Ladder } from "src/components/ladderPage/ladder";
 import { DirectionId } from "src/models/route";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { scrollTo } from "src/util/browser";
-import { LR_COLORS } from "tests/testHelpers/colors";
 import { trainLocFactory } from "tests/testHelpers/factory";
-import { LR_ROUTE_LETTERS } from "tests/testHelpers/route";
 import {
   DEMO_B_STATIONS,
   DEMO_C_STATIONS,
@@ -23,16 +21,18 @@ describe("Ladder", () => {
   test("shows station names", () => {
     const view = render(
       <Ladder
+        trainsClickable={true}
         zoom={40}
+        labelMode="lead"
         trainLocs={[]}
         stationSelection={null}
         scrollToConsist={null}
-        setVehicleSelection={jest.fn()}
+        onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_C_STATIONS}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
-        routeColors={LR_COLORS}
-        routeLetters={LR_ROUTE_LETTERS}
+        letterFn={() => "A"}
+        routeColorFn={() => "branch-color-light-rail-e-branch"}
       />,
     );
     expect(view.getByText("Coolidge Cnr")).toBeInTheDocument();
@@ -41,18 +41,20 @@ describe("Ladder", () => {
   test("station for open predictions is highlighted", () => {
     const view = render(
       <Ladder
+        trainsClickable={true}
         zoom={40}
+        labelMode="lead"
         trainLocs={[]}
         stationSelection={{
           stationId: "place-kencl",
           directionId: DirectionId.Westbound,
         }}
         scrollToConsist={null}
-        setVehicleSelection={jest.fn()}
+        onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_C_STATIONS}
-        routeColors={LR_COLORS}
-        routeLetters={LR_ROUTE_LETTERS}
+        letterFn={() => "A"}
+        routeColorFn={() => "branch-color-light-rail-e-branch"}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -71,7 +73,9 @@ describe("Ladder", () => {
   test("shows trains", () => {
     const view = render(
       <Ladder
+        trainsClickable={true}
         zoom={40}
+        labelMode="lead"
         trainLocs={[
           trainLocFactory.build({
             consist: ["3701", "3702"],
@@ -86,11 +90,11 @@ describe("Ladder", () => {
         ]}
         stationSelection={null}
         scrollToConsist={null}
-        setVehicleSelection={jest.fn()}
+        onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_E_STATIONS}
-        routeColors={LR_COLORS}
-        routeLetters={LR_ROUTE_LETTERS}
+        letterFn={() => "A"}
+        routeColorFn={() => "branch-color-light-rail-e-branch"}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -107,7 +111,9 @@ describe("Ladder", () => {
   test("doesn't show train on other branch", () => {
     const view = render(
       <Ladder
+        trainsClickable={true}
         zoom={40}
+        labelMode="lead"
         trainLocs={[
           trainLocFactory.build({
             consist: ["3701", "3702"],
@@ -117,11 +123,11 @@ describe("Ladder", () => {
         ]}
         stationSelection={null}
         scrollToConsist={null}
-        setVehicleSelection={jest.fn()}
+        onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_B_STATIONS}
-        routeColors={LR_COLORS}
-        routeLetters={LR_ROUTE_LETTERS}
+        letterFn={() => "A"}
+        routeColorFn={() => "branch-color-light-rail-e-branch"}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );
@@ -147,16 +153,18 @@ describe("Ladder", () => {
     ];
     render(
       <Ladder
+        trainsClickable={true}
         zoom={80}
+        labelMode="lead"
         trainLocs={trainLocs}
         stationSelection={null}
         scrollToConsist={["3701", "3702"]}
         onSearchResultTimeout={onSearchResultTimeout}
-        setVehicleSelection={jest.fn()}
+        onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_E_STATIONS}
-        routeColors={LR_COLORS}
-        routeLetters={LR_ROUTE_LETTERS}
+        letterFn={() => "A"}
+        routeColorFn={() => "branch-color-light-rail-e-branch"}
         getInitialPredictionsDirection={getInitialPredictionsDirection}
       />,
     );

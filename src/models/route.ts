@@ -2,6 +2,7 @@ import { z } from "zod";
 
 // RouteId matches GTFS route_id
 export type RouteId = string;
+export type RoutePatternId = string;
 
 // DirectionId matches GTFS
 export enum DirectionId {

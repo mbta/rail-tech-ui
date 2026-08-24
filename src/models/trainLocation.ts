@@ -1,7 +1,7 @@
 import { Consist, consistEq } from "src/data";
 import { DateTime } from "src/util/dateTime";
 import { LatLng } from "./latLng";
-import { DirectionId, RouteId } from "./route";
+import { DirectionId, RouteId, RoutePatternId } from "./route";
 import { StationId } from "./stop";
 import { TripEnd, isTripRevenue } from "./trainsheet";
 
@@ -14,6 +14,7 @@ export interface TrainLoc {
   ab: ("ab" | "ba" | null)[];
   stationId: StationId | null;
   stopStatus: StopStatus;
+  routePatternId?: RoutePatternId;
   latLng: LatLng | null;
   heading: number | null;
   timestamp: DateTime | null;

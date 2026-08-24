@@ -10,13 +10,18 @@ import {
 } from "react";
 import { LadderLabel } from "src/components/ladderPage/ladderLabel";
 import { Consist, consistEq, consistToString } from "src/data";
-import { DirectionId, directionIdToString } from "src/models/route";
+import {
+  DirectionId,
+  directionIdToString,
+  RouteId,
+  RoutePatternId,
+} from "src/models/route";
 import { Station, StationId, StationMap } from "src/models/stop";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { isTripRevenue } from "src/models/trainsheet";
 import { scrollTo } from "src/util/browser";
 import { className } from "src/util/dom";
-import { StationSelection, VehicleSelection } from "./types";
+import { LabelMode, StationSelection, VehicleSelection } from "./types";
 import { TrainWithHeights, trainHeights } from "./trainHeight";
 
 /**
@@ -58,20 +63,24 @@ const SearchResultContext = createContext<SearchResultContextValue>({
 export const Ladder = ({
   zoom,
   trainLocs,
-  routeColors,
-  routeLetters,
+  letterFn,
+  routeColorFn,
+  trainsClickable,
+  labelMode,
   stationSelection,
   scrollToConsist,
   onSearchResultTimeout,
-  setVehicleSelection,
+  onVehicleSelection,
   setStationSelection,
   eastToWestStations,
   getInitialPredictionsDirection,
 }: {
   zoom: number;
+  letterFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
+  routeColorFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
+  trainsClickable: boolean;
   trainLocs: TrainLoc[];
-  routeColors: Readonly<Record<string, string>>;
-  routeLetters: Readonly<Record<string, string>>;
+  labelMode: LabelMode;
   stationSelection: StationSelection | null;
   scrollToConsist: Consist | null;
 
@@ -79,7 +88,7 @@ export const Ladder = ({
   //  can choose to clear e.g. a URL state
   onSearchResultTimeout?: () => void;
 
-  setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
+  onVehicleSelection: (selection: VehicleSelection) => void;
   setStationSelection: Dispatch<StationSelection | null>;
   eastToWestStations: Station[];
   getInitialPredictionsDirection: () => DirectionId;
@@ -129,26 +138,30 @@ export const Ladder = ({
           getInitialPredictionsDirection={getInitialPredictionsDirection}
         />
         <TrainList
+          trainsClickable={trainsClickable}
           zoom={zoom}
           directionId={0}
+          labelMode={labelMode}
           stationIdsInOrder={eastToWestStationIds}
           stationSpacingRatiosTopToBottom={eastToWestStationSpacingRatios}
           trainLocs={westboundTrainLocs}
+          letterFn={letterFn}
+          routeColorFn={routeColorFn}
           stationMap={stationMap}
-          setVehicleSelection={setVehicleSelection}
-          routeColors={routeColors}
-          routeLetters={routeLetters}
+          onVehicleSelection={onVehicleSelection}
         />
         <TrainList
+          trainsClickable={trainsClickable}
           zoom={zoom}
           directionId={1}
+          labelMode={labelMode}
           stationIdsInOrder={westToEastStationIds}
           stationSpacingRatiosTopToBottom={eastToWestStationSpacingRatios}
           trainLocs={eastboundTrainLocs}
+          letterFn={letterFn}
+          routeColorFn={routeColorFn}
           stationMap={stationMap}
-          setVehicleSelection={setVehicleSelection}
-          routeColors={routeColors}
-          routeLetters={routeLetters}
+          onVehicleSelection={onVehicleSelection}
         />
       </div>
     </SearchResultContext.Provider>
@@ -275,21 +288,25 @@ const TrainList = ({
   directionId,
   stationIdsInOrder,
   stationSpacingRatiosTopToBottom,
+  labelMode,
   trainLocs,
-  routeLetters,
-  routeColors,
+  letterFn,
+  routeColorFn,
+  trainsClickable,
   stationMap,
-  setVehicleSelection,
+  onVehicleSelection,
 }: {
   zoom: number;
   directionId: DirectionId;
   stationIdsInOrder: StationId[];
   stationSpacingRatiosTopToBottom: number[];
+  labelMode: LabelMode;
   trainLocs: TrainLoc[];
-  routeLetters: Readonly<Record<string, string>>;
-  routeColors: Readonly<Record<string, string>>;
+  letterFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
+  routeColorFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
+  trainsClickable: boolean;
   stationMap: StationMap;
-  setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
+  onVehicleSelection: (selection: VehicleSelection) => void;
 }): ReactElement => {
   const trainsWithHeights: TrainWithHeights[] = trainHeights(
     trainLocs,
@@ -313,10 +330,18 @@ const TrainList = ({
           key={consistToString(trainWithHeights.consist)}
         >
           <Train
+            clickable={trainsClickable}
             trainWithHeights={trainWithHeights}
-            setVehicleSelection={setVehicleSelection}
-            routeLetter={routeLetters[trainWithHeights.routeId] ?? ""}
-            color={routeColors[trainWithHeights.routeId] ?? ""}
+            labelMode={labelMode}
+            onVehicleSelection={onVehicleSelection}
+            letter={letterFn(
+              trainWithHeights.routeId,
+              trainWithHeights.routePatternId,
+            )}
+            color={routeColorFn(
+              trainWithHeights.routeId,
+              trainWithHeights.routePatternId,
+            )}
           />
         </li>
       ))}
@@ -326,14 +351,18 @@ const TrainList = ({
 
 const Train = ({
   trainWithHeights,
-  routeLetter,
-  setVehicleSelection,
+  labelMode,
+  letter,
   color,
+  clickable,
+  onVehicleSelection,
 }: {
   trainWithHeights: TrainWithHeights;
-  routeLetter: string;
-  setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
+  labelMode: LabelMode;
+  letter: string;
   color: string;
+  clickable: boolean;
+  onVehicleSelection: (selection: VehicleSelection) => void;
 }): ReactElement => {
   const { scrollToConsist, onSearchResultTimeout } =
     useContext(SearchResultContext);
@@ -351,14 +380,16 @@ const Train = ({
   }, [isSearchResult, labelButtonRef, onSearchResultTimeout]);
   return (
     <>
-      <Dot trainWithHeights={trainWithHeights} color={color} />
+      <Dot color={color} trainWithHeights={trainWithHeights} />
       <LabelButton
-        routeLetter={routeLetter}
+        clickable={clickable}
+        mode={labelMode}
+        letter={letter}
+        color={color}
         buttonRef={labelButtonRef}
         trainWithHeights={trainWithHeights}
         isSearchResult={isSearchResult}
-        setVehicleSelection={setVehicleSelection}
-        color={color}
+        onVehicleSelection={onVehicleSelection}
       />
       <LineBetweenDotAndLabel
         color={color}
@@ -393,32 +424,38 @@ const Dot = ({
 
 const LabelButton = ({
   trainWithHeights,
-  routeLetter,
+  mode,
+  letter,
+  color,
+  clickable,
   buttonRef,
   isSearchResult,
-  setVehicleSelection,
-  color,
+  onVehicleSelection,
 }: {
   trainWithHeights: TrainWithHeights;
-  routeLetter: string;
+  mode: LabelMode;
+  letter: string;
+  color: string;
+  clickable: boolean;
   buttonRef: React.RefObject<HTMLButtonElement | null>;
   isSearchResult: boolean;
-  setVehicleSelection: Dispatch<SetStateAction<VehicleSelection | null>>;
-  color: string;
+  onVehicleSelection: (selection: VehicleSelection) => void;
 }): ReactElement => {
   return (
     <button
+      disabled={!clickable}
       ref={buttonRef}
       className={className([
         "absolute mx-[-21px] -translate-y-1/2",
         isSearchResult ? "z-object" : null,
       ])}
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         const vehicleSelection: VehicleSelection = {
           routeId: trainWithHeights.routeId,
           consist: trainWithHeights.consist,
         };
-        setVehicleSelection(vehicleSelection);
+        onVehicleSelection(vehicleSelection);
       }}
       style={{
         top: `${trainWithHeights.labelPx}px`,
@@ -429,13 +466,13 @@ const LabelButton = ({
     >
       <LadderLabel
         consist={trainWithHeights.consist}
-        routeId={trainWithHeights.routeId}
-        routeLetter={routeLetter}
+        letter={letter}
+        color={color}
         primaryColor={isSearchResult ? "route" : "bg"}
-        routeColor={color}
         revenue={isTripRevenue(trainWithHeights.trip)}
         routeOnRight={trainWithHeights.directionId === DirectionId.Westbound}
         searchResult={isSearchResult}
+        labelMode={mode}
       />
     </button>
   );
