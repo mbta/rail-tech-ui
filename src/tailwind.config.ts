@@ -147,18 +147,25 @@ const railTechUITheme = {
           text: {
             "primary-light": figmaTokens.ladder.text["primary-light"],
             "secondary-light": figmaTokens.ladder.text["secondary-light"],
-            "branch-picker-light":
-              figmaTokens.ladder.text["branch-picker-light"],
+            "unselected-branch-light":
+              figmaTokens.ladder.text["unselected-branch-light"],
+            "selected-branch-light":
+              figmaTokens.ladder.text["selected-branch-light"],
             "primary-dark": figmaTokens.ladder.text["primary-dark"],
             "secondary-dark": figmaTokens.ladder.text["secondary-dark"],
-            "branch-picker-dark": figmaTokens.ladder.text["branch-picker-dark"],
+            "unselected-branch-dark": figmaTokens.ladder.text["unselected-branch-dark"],
+            "selected-branch-dark": figmaTokens.ladder.text["selected-branch-dark"],
           },
           "station-marker-light": figmaTokens.ladder["station-marker-light"],
           "branch-picker": {
-            "background-light":
-              figmaTokens.ladder["branch-picker"]["background-light"],
-            "background-dark":
-              figmaTokens.ladder["branch-picker"]["background-dark"],
+            "inactive-bg-light": figmaTokens.ladder["branch-picker"]["inactive-bg-light"],
+            "active-bg-light": figmaTokens.ladder["branch-picker"]["active-bg-light"],
+            "alewife-dot-light": figmaTokens.ladder["branch-picker"]["alewife-dot-light"],
+            "active-dot-light": figmaTokens.ladder["branch-picker"]["active-dot-light"],
+            "inactive-bg-dark": figmaTokens.ladder["branch-picker"]["inactive-bg-dark"],
+            "active-bg-dark": figmaTokens.ladder["branch-picker"]["active-bg-dark"],
+            "alewife-dot-dark": figmaTokens.ladder["branch-picker"]["alewife-dot-dark"],
+            "active-dot-dark": figmaTokens.ladder["branch-picker"]["active-dot-dark"],
           },
           "background-dark": figmaTokens.ladder["background-dark"],
           "route-ladder-dark": figmaTokens.ladder["route-ladder-dark"],
