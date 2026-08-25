@@ -216,7 +216,7 @@ const StationList = ({
             {station.externalUrl ? (
               <a
                 href={station.externalUrl}
-                className="absolute inset-0 -top-10 block text-ladder-text-primary-light dark:text-ladder-text-primary-dark"
+                className="absolute inset-0 -top-10 hidden text-ladder-text-primary-light md:block dark:text-ladder-text-primary-dark"
               >
                 <DepArrow
                   className="mx-auto h-5 w-5"
