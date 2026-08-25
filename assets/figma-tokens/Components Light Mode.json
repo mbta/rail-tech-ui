@@ -126,6 +126,28 @@
       "$value": "{tailwind-colors.slate.200}",
       "$type": "color"
     },
+    "branch picker": {
+      "inactive-bg": {
+        "$value": "#2a4365",
+        "$type": "color"
+      },
+      "active-bg": {
+        "$value": "{custom-colors.glides-blue.400}",
+        "$type": "color"
+      },
+      "alewife dot": {
+        "$value": "{custom-colors.glides-blue.400}",
+        "$type": "color"
+      },
+      "active-dot": {
+        "$value": "{custom-colors.glides-blue.700}",
+        "$type": "color"
+      }
+    },
+    "station marker": {
+      "$value": "{tailwind-colors.slate.300}",
+      "$type": "color"
+    },
     "text": {
       "primary": {
         "$value": "{tailwind-colors.slate.800}",
@@ -135,18 +157,22 @@
         "$value": "{tailwind-colors.gray.200}",
         "$type": "color"
       },
-      "branch picker": {
+      "unselected branch": {
         "$value": "{tailwind-colors.white}",
+        "$type": "color"
+      },
+      "selected branch": {
+        "$value": "{custom-colors.glides-blue.700}",
         "$type": "color"
       }
     },
-    "station marker": {
-      "$value": "{tailwind-colors.slate.300}",
-      "$type": "color"
-    },
-    "branch picker": {
-      "background": {
-        "$value": "#2a4365",
+    "search result": {
+      "highlight": {
+        "$value": "{tailwind-colors.slate.700}",
+        "$type": "color"
+      },
+      "text": {
+        "$value": "{custom-colors.glides-gray.200}",
         "$type": "color"
       }
     }
