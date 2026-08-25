@@ -10,6 +10,7 @@ export interface Station {
   shortName: string;
   latLng: LatLng;
   spacingRatio: number;
+  externalUrl?: string;
 }
 
 export type StationMap = Readonly<Partial<Record<StationId, Station>>>;
