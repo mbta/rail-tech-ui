@@ -334,14 +334,8 @@ const TrainList = ({
             trainWithHeights={trainWithHeights}
             labelMode={labelMode}
             onVehicleSelection={onVehicleSelection}
-            letter={letterFn(
-              trainWithHeights.routeId,
-              trainWithHeights.routePatternId,
-            )}
-            color={routeColorFn(
-              trainWithHeights.routeId,
-              trainWithHeights.routePatternId,
-            )}
+            letterFn={letterFn}
+            routeColorFn={routeColorFn}
           />
         </li>
       ))}
@@ -352,15 +346,15 @@ const TrainList = ({
 const Train = ({
   trainWithHeights,
   labelMode,
-  letter,
-  color,
+  letterFn,
+  routeColorFn,
   clickable,
   onVehicleSelection,
 }: {
   trainWithHeights: TrainWithHeights;
   labelMode: LabelMode;
-  letter: string;
-  color: string;
+  letterFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
+  routeColorFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
   clickable: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
 }): ReactElement => {
@@ -378,6 +372,16 @@ const Train = ({
       return () => clearTimeout(timeout);
     }
   }, [isSearchResult, labelButtonRef, onSearchResultTimeout]);
+
+  const letter = useMemo(() => {
+    return letterFn(trainWithHeights.routeId, trainWithHeights.routePatternId);
+  }, [trainWithHeights.routeId, trainWithHeights.routePatternId]);
+  const color = useMemo(() => {
+    return routeColorFn(
+      trainWithHeights.routeId,
+      trainWithHeights.routePatternId,
+    );
+  }, [trainWithHeights.routeId, trainWithHeights.routePatternId]);
   return (
     <>
       <Dot color={color} trainWithHeights={trainWithHeights} />
