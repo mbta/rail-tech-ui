@@ -51,7 +51,7 @@
     "typescript-language-server": "5.0.1"
   },
   "peerDependencies": {
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   }
 }
