@@ -11,3 +11,5 @@ export interface VehicleSelection {
   routeId: RouteId;
   consist: Consist;
 }
+
+export type LabelMode = "all" | "lead";

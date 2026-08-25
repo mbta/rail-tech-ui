@@ -1,8 +1,7 @@
 import { Consist } from "src/data";
-import { stationIdsOnSegmentInDirection } from "src/data/stops";
 import { proportionBetweenLatLngs } from "src/models/latLng";
-import { DirectionId, RouteId, routeIdToSegment } from "src/models/route";
-import { StationId, stationLatLng } from "src/models/stop";
+import { DirectionId, RouteId, RoutePatternId } from "src/models/route";
+import { StationId, StationMap, stationLatLng } from "src/models/stop";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { TripEnd } from "src/models/trainsheet";
 import { filterMap, reverse } from "src/util/array";
@@ -16,6 +15,7 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
 
 export interface TrainWithHeights {
   routeId: RouteId;
+  routePatternId?: RoutePatternId;
   consist: Consist;
   directionId: DirectionId;
   dotPx: number;
@@ -30,6 +30,7 @@ const minSpaceBetweenTrainLabels = 44;
 
 interface TrainWithStopsTraveled {
   routeId: RouteId;
+  routePatternId?: RoutePatternId;
   consist: Consist;
   directionId: DirectionId;
   trip: TripEnd | null;
@@ -39,6 +40,7 @@ interface TrainWithStopsTraveled {
 
 interface TrainWithDotPx {
   routeId: RouteId;
+  routePatternId?: RoutePatternId;
   consist: Consist;
   directionId: DirectionId;
   trip: TripEnd | null;
@@ -54,10 +56,12 @@ export const trainHeights = (
   directionId: DirectionId,
   stationIdsInOrder: StationId[],
   stationSpacingRatiosTopToBottom: number[],
+  stationMap: StationMap,
 ): TrainWithHeights[] => {
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
-    (trainLoc) => trainWithStopsTraveled(trainLoc, stationIdsInOrder),
+    (trainLoc) =>
+      trainWithStopsTraveled(trainLoc, stationIdsInOrder, stationMap),
   );
   const trainsTopToBottom: TrainWithStopsTraveled[] = sortTrainsTopToBottom(
     trainsWithStopsTraveled,
@@ -76,22 +80,10 @@ export const trainHeights = (
   return trainsWithLabelPx;
 };
 
-/**
- * check if this train will show on the ladder view for its route
- */
-export const willTrainShowOnRouteLadder = (trainLoc: TrainLoc): boolean => {
-  if (trainLoc.directionId === null || trainLoc.routeId === null) return false;
-  const segment = routeIdToSegment(trainLoc.routeId);
-  const stationIds = stationIdsOnSegmentInDirection(
-    segment,
-    trainLoc.directionId,
-  );
-  return stopsTraveledAlongSegment(stationIds, trainLoc) !== null;
-};
-
 const trainWithStopsTraveled = (
   trainLoc: TrainLoc,
   stationIdsInOrder: StationId[],
+  stationMap: StationMap,
 ): TrainWithStopsTraveled | null => {
   // don't even check if the route or direction is missing
   if (trainLoc.routeId === null || trainLoc.directionId === null) {
@@ -100,12 +92,14 @@ const trainWithStopsTraveled = (
   const stopsTraveled: number | null = stopsTraveledAlongSegment(
     stationIdsInOrder,
     trainLoc,
+    stationMap,
   );
   if (stopsTraveled === null) {
     return null;
   } else {
     return {
       routeId: trainLoc.routeId,
+      routePatternId: trainLoc.routePatternId,
       consist: trainLoc.consist,
       directionId: trainLoc.directionId,
       trip: trainLoc.trip,
@@ -129,6 +123,7 @@ const trainWithStopsTraveled = (
 export const stopsTraveledAlongSegment = (
   stationIdsInOrder: StationId[],
   trainLoc: TrainLoc,
+  stationMap: StationMap,
 ): number | null => {
   if (trainLoc.stationId === null || trainLoc.routeId === null) return null;
   const stationIndex = stationIdsInOrder.indexOf(trainLoc.stationId);
@@ -146,8 +141,8 @@ export const stopsTraveledAlongSegment = (
     const prevStationIndex = stationIndex - 1;
     const prevStationId: StationId = stationIdsInOrder[prevStationIndex];
     const proportionBetweenPrevAndNext: number = proportionBetweenLatLngs(
-      stationLatLng(prevStationId),
-      stationLatLng(trainLoc.stationId),
+      stationLatLng(stationMap, prevStationId),
+      stationLatLng(stationMap, trainLoc.stationId),
       trainLoc.latLng,
     );
     /* Enforce a minimum distance from the nearest station, to make the difference
@@ -199,6 +194,7 @@ const trainWithDotPx = (
   stationSpacingRatiosTopToBottom: number[],
 ): TrainWithDotPx => ({
   routeId: train.routeId,
+  routePatternId: train.routePatternId,
   consist: train.consist,
   directionId: train.directionId,
   trip: train.trip,

@@ -1,13 +1,17 @@
 import {
   trainHeights,
   TrainWithHeights,
-  willTrainShowOnRouteLadder,
 } from "src/components/ladderPage/trainHeight";
 import { DirectionId } from "src/models/route";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { reverse } from "src/util/array";
 import { dateTimeFromUnix } from "src/util/dateTime";
 import { trainLocFactory } from "tests/testHelpers/factory";
+import {
+  DEMO_B_STATIONS,
+  DEMO_C_STATIONS,
+  byId,
+} from "tests/testHelpers/stops";
 
 const stationIdsWestbound = [
   "place-north",
@@ -43,6 +47,7 @@ describe("trainHeights", () => {
         0,
         stationIdsWestbound,
         stationSpacingRatios,
+        byId(DEMO_C_STATIONS),
       ),
     ).toEqual([]);
   });
@@ -60,6 +65,7 @@ describe("trainHeights", () => {
       0,
       stationIdsWestbound,
       stationSpacingRatios,
+      byId(DEMO_B_STATIONS),
     );
     expect(result.dotPx).toEqual(0);
   });
@@ -77,6 +83,7 @@ describe("trainHeights", () => {
       0,
       stationIdsWestbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toBeWithinRange(41, 79);
   });
@@ -94,6 +101,7 @@ describe("trainHeights", () => {
       0,
       stationIdsWestbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toEqual(80);
   });
@@ -111,6 +119,7 @@ describe("trainHeights", () => {
       0,
       stationIdsWestbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toBeWithinRange(81, 119);
   });
@@ -128,6 +137,7 @@ describe("trainHeights", () => {
       0,
       stationIdsWestbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -146,6 +156,7 @@ describe("trainHeights", () => {
         1,
         stationIdsEastbound,
         stationSpacingRatios,
+        byId(DEMO_C_STATIONS),
       ),
     ).toEqual([]);
   });
@@ -163,6 +174,7 @@ describe("trainHeights", () => {
       1,
       stationIdsEastboundM,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -180,6 +192,7 @@ describe("trainHeights", () => {
       1,
       stationIdsEastbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -197,6 +210,7 @@ describe("trainHeights", () => {
       1,
       stationIdsEastbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toBeWithinRange(81, 119);
   });
@@ -214,6 +228,7 @@ describe("trainHeights", () => {
       1,
       stationIdsEastbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toEqual(80);
   });
@@ -231,6 +246,7 @@ describe("trainHeights", () => {
       1,
       stationIdsEastbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toBeWithinRange(0, 39);
   });
@@ -248,6 +264,7 @@ describe("trainHeights", () => {
       1,
       stationIdsEastbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toEqual(0);
   });
@@ -275,6 +292,7 @@ describe("trainHeights", () => {
       0,
       stationIdsWestbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     const [train1, train2] =
       result[0].consist[0] === "3901" ? result : reverse(result);
@@ -316,6 +334,7 @@ describe("trainHeights", () => {
       1,
       stationIdsEastbound,
       stationSpacingRatios,
+      byId(DEMO_C_STATIONS),
     );
     const [train1, train2] =
       result[0].consist[0] === "3901" ? result : reverse(result);
@@ -332,55 +351,5 @@ describe("trainHeights", () => {
       dotPx: 80,
     });
     expect(train1.labelPx).toBeLessThan(train2.labelPx);
-  });
-});
-
-describe("willTrainShowOnRouteLadder", () => {
-  const factory = trainLocFactory.params({
-    consist: ["3901"],
-    routeId: "Green-B",
-    directionId: DirectionId.Westbound,
-  });
-
-  test("a normal train will", () => {
-    const train: TrainLoc = factory.build({
-      stationId: "place-hymnl",
-      stopStatus: StopStatus.InTransitTo,
-    });
-    expect(willTrainShowOnRouteLadder(train)).toBe(true);
-  });
-
-  test("a next-stop-unknown train won't", () => {
-    const train: TrainLoc = factory.build({
-      stationId: null,
-      stopStatus: StopStatus.InTransitTo,
-    });
-    expect(willTrainShowOnRouteLadder(train)).toBe(false);
-  });
-
-  test("a train before the start of its route won't", () => {
-    const train: TrainLoc = factory.build({
-      stationId: "place-gover",
-      stopStatus: StopStatus.InTransitTo,
-    });
-    expect(willTrainShowOnRouteLadder(train)).toBe(false);
-  });
-
-  test("a train at a stop with no position will", () => {
-    const train: TrainLoc = factory.build({
-      stationId: "place-hymnl",
-      stopStatus: StopStatus.StoppedAt,
-      latLng: null,
-    });
-    expect(willTrainShowOnRouteLadder(train)).toBe(true);
-  });
-
-  test("a train between stops with no position won't", () => {
-    const train: TrainLoc = factory.build({
-      stationId: "place-hymnl",
-      stopStatus: StopStatus.InTransitTo,
-      latLng: null,
-    });
-    expect(willTrainShowOnRouteLadder(train)).toBe(false);
   });
 });

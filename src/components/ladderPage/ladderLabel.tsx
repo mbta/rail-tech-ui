@@ -1,24 +1,24 @@
 import { ReactElement } from "react";
 import { Icon } from "src/components/icons";
 import { CarId, Consist } from "src/data";
-import { RouteId, routeLetter } from "src/models/route";
-import { routeColorClass } from "src/util/cssNaming";
 import { className } from "src/util/dom";
-
-export interface LadderLabelProps {
-  consist: Consist;
-  routeId: RouteId;
-  revenue: boolean;
-}
+import { LabelMode } from "./types";
 
 export const LadderLabel = ({
   consist,
-  routeId,
+  letter,
+  color,
+  labelMode,
   revenue,
   primaryColor = "route",
   routeOnRight,
   searchResult = false,
-}: LadderLabelProps & {
+}: {
+  consist: Consist;
+  letter: string;
+  color: string;
+  labelMode: LabelMode;
+  revenue: boolean;
   primaryColor?: "route" | "bg";
   routeOnRight?: boolean;
   searchResult?: boolean;
@@ -34,7 +34,7 @@ export const LadderLabel = ({
           : primaryColor === "bg"
             ? "light:border-glides-gray-500 light:bg-slate-100 border-2 border-solid dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
-        routeColorClass(routeId),
+        color,
         searchResult
           ? "ring-glides-branch/50 light:animate-train-label-search-result-light dark:animate-train-label-search-result ring-8"
           : primaryColor === "route"
@@ -46,11 +46,12 @@ export const LadderLabel = ({
         <>
           <TrainConsist
             consist={consist}
+            n={labelMode === "lead" ? 1 : undefined}
             primaryColor={revenue ? primaryColor : "nonrev"}
             searchResult={searchResult}
           />
           <RouteIcon
-            routeId={routeId}
+            letter={letter}
             iconStyle={revenue ? "letter" : "nonrev"}
             primaryColor={primaryColor}
             searchResult={searchResult}
@@ -59,13 +60,14 @@ export const LadderLabel = ({
       ) : (
         <>
           <RouteIcon
-            routeId={routeId}
+            letter={letter}
             iconStyle={revenue ? "letter" : "nonrev"}
             primaryColor={primaryColor}
             searchResult={searchResult}
           />
           <TrainConsist
             consist={consist}
+            n={labelMode === "lead" ? 1 : undefined}
             primaryColor={revenue ? primaryColor : "nonrev"}
             searchResult={searchResult}
           />
@@ -76,12 +78,12 @@ export const LadderLabel = ({
 };
 
 const RouteIcon = ({
-  routeId,
+  letter,
   primaryColor,
   iconStyle,
   searchResult,
 }: {
-  routeId: RouteId;
+  letter: string;
   primaryColor: "route" | "bg";
   iconStyle: "letter" | "nonrev";
   searchResult: boolean;
@@ -100,7 +102,7 @@ const RouteIcon = ({
             : null,
         ])}
       >
-        {routeLetter(routeId)}
+        {letter}
       </p>
     );
   } else {
@@ -116,10 +118,12 @@ const RouteIcon = ({
 
 const TrainConsist = ({
   consist,
+  n,
   primaryColor,
   searchResult,
 }: {
   consist: Consist;
+  n?: number;
   primaryColor: "route" | "bg" | "nonrev";
   searchResult: boolean;
 }): ReactElement => (
@@ -133,7 +137,7 @@ const TrainConsist = ({
           : "text-glides-blue-700",
     ])}
   >
-    {consist.map((carId: CarId, index) => (
+    {consist.slice(0, n).map((carId: CarId, index) => (
       <div
         className={className([
           index === 0 ? "font-semibold" : null,
