@@ -248,23 +248,46 @@ export default {
       "border-dark": "var(--ladder-pill-border-dark)",
     },
     "route-ladder-light": "var(--ladder-route-ladder-light)",
+    "branch-picker": {
+      "inactive-bg-light":
+        "rgb(var(--ladder-branch-picker-inactive-bg-light) / <alpha-value>)",
+      "active-bg-light":
+        "rgb(var(--ladder-branch-picker-active-bg-light) / <alpha-value>)",
+      "alewife-dot-light":
+        "rgb(var(--ladder-branch-picker-alewife-dot-light) / <alpha-value>)",
+      "active-dot-light":
+        "rgb(var(--ladder-branch-picker-active-dot-light) / <alpha-value>)",
+      "inactive-bg-dark":
+        "rgb(var(--ladder-branch-picker-inactive-bg-dark) / <alpha-value>)",
+      "active-bg-dark":
+        "rgb(var(--ladder-branch-picker-active-bg-dark) / <alpha-value>)",
+      "alewife-dot-dark":
+        "rgb(var(--ladder-branch-picker-alewife-dot-dark) / <alpha-value>)",
+      "active-dot-dark":
+        "rgb(var(--ladder-branch-picker-active-dot-dark) / <alpha-value>)",
+    },
+    "station-marker-light": "var(--ladder-station-marker-light)",
     text: {
       "primary-light": "var(--ladder-text-primary-light)",
       "secondary-light": "var(--ladder-text-secondary-light)",
-      "branch-picker-light":
-        "rgb(var(--ladder-text-branch-picker-light) / <alpha-value>)",
+      "unselected-branch-light":
+        "rgb(var(--ladder-text-unselected-branch-light) / <alpha-value>)",
+      "selected-branch-light":
+        "rgb(var(--ladder-text-selected-branch-light) / <alpha-value>)",
       "primary-dark": "rgb(var(--ladder-text-primary-dark) / <alpha-value>)",
       "secondary-dark":
         "rgb(var(--ladder-text-secondary-dark) / <alpha-value>)",
-      "branch-picker-dark":
-        "rgb(var(--ladder-text-branch-picker-dark) / <alpha-value>)",
+      "unselected-branch-dark":
+        "rgb(var(--ladder-text-unselected-branch-dark) / <alpha-value>)",
+      "selected-branch-dark":
+        "rgb(var(--ladder-text-selected-branch-dark) / <alpha-value>)",
     },
-    "station-marker-light": "var(--ladder-station-marker-light)",
-    "branch-picker": {
-      "background-light":
-        "rgb(var(--ladder-branch-picker-background-light) / <alpha-value>)",
-      "background-dark":
-        "rgb(var(--ladder-branch-picker-background-dark) / <alpha-value>)",
+    "search-result": {
+      "highlight-light": "var(--ladder-search-result-highlight-light)",
+      "text-light":
+        "rgb(var(--ladder-search-result-text-light) / <alpha-value>)",
+      "highlight-dark": "var(--ladder-search-result-highlight-dark)",
+      "text-dark": "var(--ladder-search-result-text-dark)",
     },
     "background-dark": "rgb(var(--ladder-background-dark) / <alpha-value>)",
     "route-ladder-dark": "rgb(var(--ladder-route-ladder-dark) / <alpha-value>)",
