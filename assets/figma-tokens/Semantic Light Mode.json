@@ -14,11 +14,7 @@
   "error-state": {
     "warning": {
       "$value": "{custom-colors.glides-mustard}",
-      "$type": "color",
-      "background": {
-        "$value": "{custom-colors.glides-mustard-sheer}",
-        "$type": "color"
-      }
+      "$type": "color"
     },
     "error": {
       "$value": "{custom-colors.glides-red}",
