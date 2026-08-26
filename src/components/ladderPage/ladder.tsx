@@ -9,7 +9,7 @@ import {
   useMemo,
 } from "react";
 import { LadderLabel } from "src/components/ladderPage/ladderLabel";
-import { Consist, consistEq, consistToString } from "src/data";
+import { CarId, Consist, consistEq, consistToString } from "src/data";
 import {
   DirectionId,
   directionIdToString,
@@ -67,6 +67,7 @@ export const Ladder = ({
   routeColorFn,
   trainsClickable,
   labelMode,
+  labelRemap,
   stationSelection,
   scrollToConsist,
   onSearchResultTimeout,
@@ -81,6 +82,7 @@ export const Ladder = ({
   trainsClickable: boolean;
   trainLocs: TrainLoc[];
   labelMode: LabelMode;
+  labelRemap?: (car: CarId) => CarId;
   stationSelection: StationSelection | null;
   scrollToConsist: Consist | null;
 
@@ -142,6 +144,7 @@ export const Ladder = ({
           zoom={zoom}
           directionId={0}
           labelMode={labelMode}
+          labelRemap={labelRemap}
           stationIdsInOrder={eastToWestStationIds}
           stationSpacingRatiosTopToBottom={eastToWestStationSpacingRatios}
           trainLocs={westboundTrainLocs}
@@ -155,6 +158,7 @@ export const Ladder = ({
           zoom={zoom}
           directionId={1}
           labelMode={labelMode}
+          labelRemap={labelRemap}
           stationIdsInOrder={westToEastStationIds}
           stationSpacingRatiosTopToBottom={eastToWestStationSpacingRatios}
           trainLocs={eastboundTrainLocs}
@@ -289,6 +293,7 @@ const TrainList = ({
   stationIdsInOrder,
   stationSpacingRatiosTopToBottom,
   labelMode,
+  labelRemap,
   trainLocs,
   letterFn,
   routeColorFn,
@@ -301,6 +306,7 @@ const TrainList = ({
   stationIdsInOrder: StationId[];
   stationSpacingRatiosTopToBottom: number[];
   labelMode: LabelMode;
+  labelRemap?: (car: CarId) => string;
   trainLocs: TrainLoc[];
   letterFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
   routeColorFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
@@ -333,6 +339,7 @@ const TrainList = ({
             clickable={trainsClickable}
             trainWithHeights={trainWithHeights}
             labelMode={labelMode}
+            labelRemap={labelRemap}
             onVehicleSelection={onVehicleSelection}
             letterFn={letterFn}
             routeColorFn={routeColorFn}
@@ -346,6 +353,7 @@ const TrainList = ({
 const Train = ({
   trainWithHeights,
   labelMode,
+  labelRemap,
   letterFn,
   routeColorFn,
   clickable,
@@ -353,6 +361,7 @@ const Train = ({
 }: {
   trainWithHeights: TrainWithHeights;
   labelMode: LabelMode;
+  labelRemap?: (car: CarId) => string;
   letterFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
   routeColorFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
   clickable: boolean;
@@ -394,6 +403,7 @@ const Train = ({
         trainWithHeights={trainWithHeights}
         isSearchResult={isSearchResult}
         onVehicleSelection={onVehicleSelection}
+        labelRemap={labelRemap}
       />
       <LineBetweenDotAndLabel
         color={color}
@@ -435,6 +445,7 @@ const LabelButton = ({
   buttonRef,
   isSearchResult,
   onVehicleSelection,
+  labelRemap,
 }: {
   trainWithHeights: TrainWithHeights;
   mode: LabelMode;
@@ -444,6 +455,7 @@ const LabelButton = ({
   buttonRef: React.RefObject<HTMLButtonElement | null>;
   isSearchResult: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
+  labelRemap?: (car: CarId) => string;
 }): ReactElement => {
   return (
     <button
@@ -477,6 +489,7 @@ const LabelButton = ({
         routeOnRight={trainWithHeights.directionId === DirectionId.Westbound}
         searchResult={isSearchResult}
         labelMode={mode}
+        labelRemap={labelRemap}
       />
     </button>
   );

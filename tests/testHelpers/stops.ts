@@ -155,6 +155,20 @@ export const DEMO_E_STATIONS = [
   buildStation("place-coecl", "Copley", 42.349974, -71.077447),
 ];
 
+export const DEMO_RL_STATIONS = [
+  buildStation("place-pktrm", "Park Street", 42.356395, -71.062424, "Park St"),
+  buildStation(
+    "place-dwnxg",
+    "Downtown Crossing",
+    42.355518,
+    -71.060225,
+    "Dwt Xing",
+  ),
+  buildStation("place-sstat", "South Station", 42.352271, -71.055242),
+  buildStation("place-brdwy", "Broadway", 42.342622, -71.056967),
+  buildStation("place-andrw", "Andrew", 42.330154, -71.057655),
+];
+
 export const byId = (
   stations: Station[],
 ): Partial<Record<StationId, Station>> => {

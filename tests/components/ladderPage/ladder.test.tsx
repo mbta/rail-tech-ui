@@ -1,5 +1,6 @@
 import { render, waitFor } from "@testing-library/react";
 import { Ladder } from "src/components/ladderPage/ladder";
+import { CarId } from "src/data";
 import { DirectionId } from "src/models/route";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { scrollTo } from "src/util/browser";
@@ -8,6 +9,7 @@ import {
   DEMO_B_STATIONS,
   DEMO_C_STATIONS,
   DEMO_E_STATIONS,
+  DEMO_RL_STATIONS,
 } from "tests/testHelpers/stops";
 
 jest.mock("src/util/browser", () => ({
@@ -106,6 +108,35 @@ describe("Ladder", () => {
     expect(view.getByRole("button", { name: /3703/ })).toBeContainedWithClass(
       eastboundClass,
     );
+  });
+
+  test("shows trains with consist remap", () => {
+    const view = render(
+      <Ladder
+        trainsClickable={true}
+        zoom={40}
+        labelMode="lead"
+        labelRemap={(car: CarId) => {
+          return "2" + car.slice(1);
+        }}
+        trainLocs={[
+          trainLocFactory.build({
+            consist: ["1747", "1746", "1732", "1733", "1507", "1506"],
+            directionId: DirectionId.Westbound,
+            stationId: "place-brdwy",
+          }),
+        ]}
+        stationSelection={null}
+        scrollToConsist={null}
+        onVehicleSelection={jest.fn()}
+        setStationSelection={jest.fn()}
+        eastToWestStations={DEMO_RL_STATIONS}
+        letterFn={() => "A"}
+        routeColorFn={() => "branch-color-heavy-rail-ashmont"}
+        getInitialPredictionsDirection={getInitialPredictionsDirection}
+      />,
+    );
+    expect(view.getByRole("button", { name: /2747/ })).toBeInTheDocument();
   });
 
   test("doesn't show train on other branch", () => {
