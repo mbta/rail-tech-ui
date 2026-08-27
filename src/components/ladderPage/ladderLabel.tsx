@@ -9,6 +9,7 @@ export const LadderLabel = ({
   letter,
   color,
   labelMode,
+  labelRemap,
   revenue,
   primaryColor = "route",
   routeOnRight,
@@ -18,6 +19,7 @@ export const LadderLabel = ({
   letter: string;
   color: string;
   labelMode: LabelMode;
+  labelRemap?: (car: CarId) => string;
   revenue: boolean;
   primaryColor?: "route" | "bg";
   routeOnRight?: boolean;
@@ -49,6 +51,7 @@ export const LadderLabel = ({
             n={labelMode === "lead" ? 1 : undefined}
             primaryColor={revenue ? primaryColor : "nonrev"}
             searchResult={searchResult}
+            labelRemap={labelRemap}
           />
           <RouteIcon
             letter={letter}
@@ -70,6 +73,7 @@ export const LadderLabel = ({
             n={labelMode === "lead" ? 1 : undefined}
             primaryColor={revenue ? primaryColor : "nonrev"}
             searchResult={searchResult}
+            labelRemap={labelRemap}
           />
         </>
       )}
@@ -121,11 +125,13 @@ const TrainConsist = ({
   n,
   primaryColor,
   searchResult,
+  labelRemap,
 }: {
   consist: Consist;
   n?: number;
   primaryColor: "route" | "bg" | "nonrev";
   searchResult: boolean;
+  labelRemap?: (car: CarId) => CarId;
 }): ReactElement => (
   <div
     className={className([
@@ -147,7 +153,7 @@ const TrainConsist = ({
         ])}
         key={index}
       >
-        {carId}
+        {labelRemap ? labelRemap(carId) : carId}
       </div>
     ))}
   </div>
