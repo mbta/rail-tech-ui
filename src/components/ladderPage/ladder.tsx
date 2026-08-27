@@ -221,7 +221,7 @@ const StationList = ({
               >
                 <DepArrow
                   className="mx-auto h-5 w-5"
-                  title="External Trainsheet"
+                  title="External trainsheet"
                 />
               </a>
             ) : null}

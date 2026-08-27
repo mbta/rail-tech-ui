@@ -11,7 +11,8 @@ const SvgComponent = ({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      aria-labelledby={id}
+      aria-labelledby={title !== null ? id : undefined}
+      role={title !== null ? "img" : "presentation"}
       viewBox="0 0 128 128"
       {...props}
     >
