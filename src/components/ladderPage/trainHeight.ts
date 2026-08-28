@@ -242,16 +242,12 @@ const avoidOverlapsTrains = (
   trainsWithDotPx: TrainWithDotPx[],
 ): TrainWithHeights[] =>
   avoidOverlaps(
-    trainsWithDotPx.map(
-      (train: TrainWithDotPx): Start<TrainWithDotPx> => ({
-        payload: train,
-        start: train.dotPx,
-      }),
-    ),
+    trainsWithDotPx.map((train: TrainWithDotPx): Start<TrainWithDotPx> => ({
+      payload: train,
+      start: train.dotPx,
+    })),
     minSpaceBetweenTrainLabels,
-  ).map(
-    (train: End<TrainWithDotPx>): TrainWithHeights => ({
-      ...train.payload,
-      labelPx: train.end,
-    }),
-  );
+  ).map((train: End<TrainWithDotPx>): TrainWithHeights => ({
+    ...train.payload,
+    labelPx: train.end,
+  }));
