@@ -23,6 +23,7 @@ import { scrollTo } from "src/util/browser";
 import { className } from "src/util/dom";
 import { LabelMode, StationSelection, VehicleSelection } from "./types";
 import { TrainWithHeights, trainHeights } from "./trainHeight";
+import { DepArrow } from "../icons/DepArrow";
 
 /**
  * x-component of the length of the connector between the dot and label.
@@ -212,6 +213,18 @@ const StationList = ({
             id={`id-ladder__station--${stationId}`}
             style={{ height: `${heightPx}px` }}
           >
+            {station.externalUrl ? (
+              <a
+                href={station.externalUrl}
+                className="absolute inset-0 -top-10 hidden text-ladder-text-primary-light md:block dark:text-ladder-text-primary-dark"
+                target="_blank"
+              >
+                <DepArrow
+                  className="mx-auto h-5 w-5"
+                  title="External trainsheet"
+                />
+              </a>
+            ) : null}
             <button
               className={className([
                 "-translate-y-1/2 rounded",
