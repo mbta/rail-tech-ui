@@ -123,4 +123,4 @@ jobs:
       - name: Jest
         run: npm run test
       - name: Prettier
-        run: npm run format
+        run: npm run test:format
