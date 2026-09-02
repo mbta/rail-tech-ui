@@ -26,7 +26,9 @@
   --card-header-dark: theme("colors.slate.600");
   --input-field-search-background-dark: theme("colors.slate.700");
   --input-field-search-border-dark: theme("colors.slate.600");
+  --tps-bg-dark: theme("colors.slate.50");
   --text-primary-dark: var(--custom-colors-glides-gray-200);
+  --text-tertiary-dark: var(--custom-colors-glides-blue-900);
   --text-accent-dark: var(--tailwind-colors-white);
   --error-state-warning-dark: var(--custom-colors-glides-mustard);
   --error-state-error-dark: var(--custom-colors-glides-red);
@@ -44,6 +46,9 @@
   --button-secondary-border-dark: var(--tailwind-colors-white);
   --ladder-background-dark: var(--custom-colors-glides-blue-700);
   --ladder-pill-background-dark: var(--custom-colors-glides-blue-900);
+  --ladder-pill-nonrev-border-dark: var(--custom-colors-glides-gray-400);
+  --ladder-pill-nonrev-background-dark: var(--custom-colors-glides-blue-700);
+  --ladder-pill-nonrev-text-dark: var(--custom-colors-glides-gray-400);
   --ladder-pill-text-b-dark: var(--light-rail-b-b-branch);
   --ladder-pill-text-c-dark: var(--light-rail-c-c-branch);
   --ladder-pill-text-d-dark: var(--light-rail-d-d-branch);
@@ -52,19 +57,16 @@
   --ladder-pill-text-ashmont-dark: var(--orbit-ashmont);
   --ladder-pill-text-blueline-dark: var(--orbit-blueline);
   --ladder-pill-text-orangeline-dark: var(--orbit-orangeline);
-  --ladder-pill-nonrev-border-dark: var(--custom-colors-glides-gray-400);
-  --ladder-pill-nonrev-background-dark: var(--custom-colors-glides-blue-700);
-  --ladder-pill-nonrev-text-dark: var(--custom-colors-glides-gray-400);
   --ladder-route-ladder-dark: var(--custom-colors-glides-blue-900);
+  --ladder-text-primary-dark: var(--custom-colors-glides-gray-200);
+  --ladder-text-secondary-dark: var(--custom-colors-glides-blue-200);
+  --ladder-text-unselected-branch-dark: var(--custom-colors-glides-gray-200);
+  --ladder-text-selected-branch-dark: var(--custom-colors-glides-blue-700);
   --ladder-branch-picker-inactive-bg-dark: var(--custom-colors-glides-blue-600);
   --ladder-branch-picker-active-bg-dark: var(--custom-colors-glides-blue-400);
   --ladder-branch-picker-alewife-dot-dark: var(--custom-colors-glides-blue-400);
   --ladder-branch-picker-active-dot-dark: var(--custom-colors-glides-blue-700);
   --ladder-station-marker-dark: var(--custom-colors-glides-blue-900);
-  --ladder-text-primary-dark: var(--custom-colors-glides-gray-200);
-  --ladder-text-secondary-dark: var(--custom-colors-glides-blue-200);
-  --ladder-text-unselected-branch-dark: var(--custom-colors-glides-gray-200);
-  --ladder-text-selected-branch-dark: var(--custom-colors-glides-blue-700);
   --drawer-exit-icon-dark: var(--custom-colors-glides-gray-200);
   --input-field-search-text-type-in-dark: var(--tailwind-colors-white);
   --input-field-search-text-placeholder-dark: var(

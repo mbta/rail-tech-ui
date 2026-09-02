@@ -132,6 +132,7 @@ export default {
   },
   textPrimaryDark: "rgb(var(--text-primary-dark) / <alpha-value>)",
   textSecondaryDark: "var(--text-secondary-dark)",
+  textTertiaryDark: "rgb(var(--text-tertiary-dark) / <alpha-value>)",
   textAccentDark: "rgb(var(--text-accent-dark) / <alpha-value>)",
   errorState: {
     "warning-dark": "rgb(var(--error-state-warning-dark) / <alpha-value>)",
@@ -160,6 +161,7 @@ export default {
   iconDark: "rgb(var(--icon-dark) / <alpha-value>)",
   textPrimaryLight: "var(--text-primary-light)",
   textSecondaryLight: "var(--text-secondary-light)",
+  textTertiaryLight: "rgb(var(--text-tertiary-light) / <alpha-value>)",
   textAccentLight: "var(--text-accent-light)",
   nonRevLight: "rgb(var(--non-rev-light) / <alpha-value>)",
   successLight: "rgb(var(--success-light) / <alpha-value>)",
@@ -210,6 +212,17 @@ export default {
       "background-light":
         "rgb(var(--ladder-pill-background-light) / <alpha-value>)",
       "border-light": "var(--ladder-pill-border-light)",
+      nonrev: {
+        "border-light":
+          "rgb(var(--ladder-pill-nonrev-border-light) / <alpha-value>)",
+        "background-light": "var(--ladder-pill-nonrev-background-light)",
+        "text-light": "var(--ladder-pill-nonrev-text-light)",
+        "border-dark":
+          "rgb(var(--ladder-pill-nonrev-border-dark) / <alpha-value>)",
+        "background-dark":
+          "rgb(var(--ladder-pill-nonrev-background-dark) / <alpha-value>)",
+        "text-dark": "rgb(var(--ladder-pill-nonrev-text-dark) / <alpha-value>)",
+      },
       text: {
         "b-light": "var(--ladder-pill-text-b-light)",
         "c-light": "var(--ladder-pill-text-c-light)",
@@ -232,22 +245,26 @@ export default {
         "orangeline-dark":
           "rgb(var(--ladder-pill-text-orangeline-dark) / <alpha-value>)",
       },
-      nonrev: {
-        "border-light":
-          "rgb(var(--ladder-pill-nonrev-border-light) / <alpha-value>)",
-        "background-light": "var(--ladder-pill-nonrev-background-light)",
-        "text-light": "var(--ladder-pill-nonrev-text-light)",
-        "border-dark":
-          "rgb(var(--ladder-pill-nonrev-border-dark) / <alpha-value>)",
-        "background-dark":
-          "rgb(var(--ladder-pill-nonrev-background-dark) / <alpha-value>)",
-        "text-dark": "rgb(var(--ladder-pill-nonrev-text-dark) / <alpha-value>)",
-      },
       "background-dark":
         "rgb(var(--ladder-pill-background-dark) / <alpha-value>)",
       "border-dark": "var(--ladder-pill-border-dark)",
     },
     "route-ladder-light": "var(--ladder-route-ladder-light)",
+    text: {
+      "primary-light": "var(--ladder-text-primary-light)",
+      "secondary-light": "var(--ladder-text-secondary-light)",
+      "unselected-branch-light":
+        "rgb(var(--ladder-text-unselected-branch-light) / <alpha-value>)",
+      "selected-branch-light":
+        "rgb(var(--ladder-text-selected-branch-light) / <alpha-value>)",
+      "primary-dark": "rgb(var(--ladder-text-primary-dark) / <alpha-value>)",
+      "secondary-dark":
+        "rgb(var(--ladder-text-secondary-dark) / <alpha-value>)",
+      "unselected-branch-dark":
+        "rgb(var(--ladder-text-unselected-branch-dark) / <alpha-value>)",
+      "selected-branch-dark":
+        "rgb(var(--ladder-text-selected-branch-dark) / <alpha-value>)",
+    },
     "branch-picker": {
       "inactive-bg-light":
         "rgb(var(--ladder-branch-picker-inactive-bg-light) / <alpha-value>)",
@@ -267,21 +284,6 @@ export default {
         "rgb(var(--ladder-branch-picker-active-dot-dark) / <alpha-value>)",
     },
     "station-marker-light": "var(--ladder-station-marker-light)",
-    text: {
-      "primary-light": "var(--ladder-text-primary-light)",
-      "secondary-light": "var(--ladder-text-secondary-light)",
-      "unselected-branch-light":
-        "rgb(var(--ladder-text-unselected-branch-light) / <alpha-value>)",
-      "selected-branch-light":
-        "rgb(var(--ladder-text-selected-branch-light) / <alpha-value>)",
-      "primary-dark": "rgb(var(--ladder-text-primary-dark) / <alpha-value>)",
-      "secondary-dark":
-        "rgb(var(--ladder-text-secondary-dark) / <alpha-value>)",
-      "unselected-branch-dark":
-        "rgb(var(--ladder-text-unselected-branch-dark) / <alpha-value>)",
-      "selected-branch-dark":
-        "rgb(var(--ladder-text-selected-branch-dark) / <alpha-value>)",
-    },
     "search-result": {
       "highlight-light": "var(--ladder-search-result-highlight-light)",
       "text-light":
@@ -342,6 +344,8 @@ export default {
     "background-light": "rgb(var(--popup-background-light) / <alpha-value>)",
     "background-dark": "rgb(var(--popup-background-dark) / <alpha-value>)",
   },
+  tpsBgLight: "var(--tps-bg-light)",
+  tpsBgDark: "var(--tps-bg-dark)",
   xs: {
     regular: "var(--xs-regular)",
     semibold: "var(--xs-semibold)",

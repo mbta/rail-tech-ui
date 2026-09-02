@@ -15,6 +15,8 @@
   --button-tertiary-background-light: rgba(255, 255, 255, 0);
   --ladder-background-light: theme("colors.slate.100");
   --ladder-pill-border-light: theme("colors.slate.300");
+  --ladder-pill-nonrev-background-light: theme("colors.slate.100");
+  --ladder-pill-nonrev-text-light: theme("colors.slate.800");
   --ladder-pill-text-b-light: theme("colors.slate.800");
   --ladder-pill-text-c-light: theme("colors.slate.800");
   --ladder-pill-text-d-light: theme("colors.slate.800");
@@ -23,13 +25,11 @@
   --ladder-pill-text-ashmont-light: theme("colors.slate.800");
   --ladder-pill-text-blueline-light: theme("colors.slate.800");
   --ladder-pill-text-orangeline-light: theme("colors.slate.800");
-  --ladder-pill-nonrev-background-light: theme("colors.slate.100");
-  --ladder-pill-nonrev-text-light: theme("colors.slate.800");
   --ladder-route-ladder-light: theme("colors.slate.200");
+  --ladder-text-primary-light: theme("colors.slate.800");
+  --ladder-text-secondary-light: theme("colors.slate.500");
   --ladder-branch-picker-inactive-bg-light: 42 67 101;
   --ladder-station-marker-light: theme("colors.slate.300");
-  --ladder-text-primary-light: theme("colors.slate.800");
-  --ladder-text-secondary-light: theme("colors.gray.200");
   --ladder-search-result-highlight-light: theme("colors.slate.700");
   --trainsheet-background-light: theme("colors.slate.100");
   --trainsheet-now-zone-background-light: theme("colors.slate.300");
@@ -40,6 +40,8 @@
   --card-header-light: theme("colors.gray.200");
   --input-field-search-background-light: theme("colors.slate.700");
   --input-field-search-border-light: theme("colors.slate.600");
+  --tps-bg-light: theme("colors.slate.800");
+  --text-tertiary-light: var(--tailwind-colors-white);
   --error-state-warning-light: var(--custom-colors-glides-mustard);
   --error-state-error-light: var(--custom-colors-glides-red);
   --error-state-warning-bg-light: var(--custom-colors-glides-mustard-sheer);
@@ -58,13 +60,13 @@
   --button-tertiary-border-light: var(--custom-colors-alt-blue-700);
   --ladder-pill-background-light: var(--tailwind-colors-white);
   --ladder-pill-nonrev-border-light: var(--custom-colors-glides-gray-500);
+  --ladder-text-unselected-branch-light: var(--tailwind-colors-white);
+  --ladder-text-selected-branch-light: var(--custom-colors-glides-blue-700);
   --ladder-branch-picker-active-bg-light: var(--custom-colors-glides-blue-400);
   --ladder-branch-picker-alewife-dot-light: var(
     --custom-colors-glides-blue-400
   );
   --ladder-branch-picker-active-dot-light: var(--custom-colors-glides-blue-700);
-  --ladder-text-unselected-branch-light: var(--tailwind-colors-white);
-  --ladder-text-selected-branch-light: var(--custom-colors-glides-blue-700);
   --ladder-search-result-text-light: var(--custom-colors-glides-gray-200);
   --drawer-background-light: var(--tailwind-colors-white);
   --card-background-light: var(--tailwind-colors-white);
