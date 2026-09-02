@@ -7,6 +7,10 @@
     "$value": "{tailwind-colors.slate.400}",
     "$type": "color"
   },
+  "text-tertiary": {
+    "$value": "{custom-colors.glides-blue.900}",
+    "$type": "color"
+  },
   "text-accent": {
     "$value": "{tailwind-colors.white}",
     "$type": "color"

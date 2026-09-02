@@ -39,6 +39,8 @@ const railTechUITheme = {
         "text-primary-dark": figmaTokens.textPrimaryDark,
         "text-secondary-light": figmaTokens.textSecondaryLight,
         "text-secondary-dark": figmaTokens.textSecondaryDark,
+        "text-tertiary-light": figmaTokens.textTertiaryLight,
+        "text-tertiary-dark": figmaTokens.textTertiaryDark,
         "text-accent-light": figmaTokens.textAccentLight,
         "text-accent-dark": figmaTokens.textAccentDark,
         "error-state": {
@@ -231,6 +233,10 @@ const railTechUITheme = {
         popup: {
           "background-light": figmaTokens.popup["background-light"],
           "background-dark": figmaTokens.popup["background-dark"],
+        },
+        tps: {
+          "background-light": figmaTokens.tpsBgLight,
+          "background-dark": figmaTokens.tpsBgDark,
         },
       },
     },

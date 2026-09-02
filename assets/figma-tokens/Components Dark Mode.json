@@ -73,6 +73,20 @@
         "$value": "#ffffff00",
         "$type": "color"
       },
+      "nonrev": {
+        "border": {
+          "$value": "{custom-colors.glides-gray.400}",
+          "$type": "color"
+        },
+        "background": {
+          "$value": "{custom-colors.glides-blue.700}",
+          "$type": "color"
+        },
+        "text": {
+          "$value": "{custom-colors.glides-gray.400}",
+          "$type": "color"
+        }
+      },
       "text": {
         "b": {
           "$value": "{Light-Rail.B.b-branch}",
@@ -106,25 +120,29 @@
           "$value": "{Orbit.orangeline}",
           "$type": "color"
         }
-      },
-      "nonrev": {
-        "border": {
-          "$value": "{custom-colors.glides-gray.400}",
-          "$type": "color"
-        },
-        "background": {
-          "$value": "{custom-colors.glides-blue.700}",
-          "$type": "color"
-        },
-        "text": {
-          "$value": "{custom-colors.glides-gray.400}",
-          "$type": "color"
-        }
       }
     },
     "route ladder": {
       "$value": "{custom-colors.glides-blue.900}",
       "$type": "color"
+    },
+    "text": {
+      "primary": {
+        "$value": "{custom-colors.glides-gray.200}",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "{custom-colors.glides-blue.200}",
+        "$type": "color"
+      },
+      "unselected branch": {
+        "$value": "{custom-colors.glides-gray.200}",
+        "$type": "color"
+      },
+      "selected branch": {
+        "$value": "{custom-colors.glides-blue.700}",
+        "$type": "color"
+      }
     },
     "branch picker": {
       "inactive-bg": {
@@ -147,24 +165,6 @@
     "station marker": {
       "$value": "{custom-colors.glides-blue.900}",
       "$type": "color"
-    },
-    "text": {
-      "primary": {
-        "$value": "{custom-colors.glides-gray.200}",
-        "$type": "color"
-      },
-      "secondary": {
-        "$value": "{custom-colors.glides-blue.200}",
-        "$type": "color"
-      },
-      "unselected branch": {
-        "$value": "{custom-colors.glides-gray.200}",
-        "$type": "color"
-      },
-      "selected branch": {
-        "$value": "{custom-colors.glides-blue.700}",
-        "$type": "color"
-      }
     },
     "search result": {
       "highlight": {
@@ -248,5 +248,9 @@
       "$value": "{tailwind-colors.white}",
       "$type": "color"
     }
+  },
+  "TPS-bg": {
+    "$value": "{tailwind-colors.slate.50}",
+    "$type": "color"
   }
 }
