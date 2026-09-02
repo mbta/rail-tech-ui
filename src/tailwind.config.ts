@@ -235,8 +235,8 @@ const railTechUITheme = {
           "background-dark": figmaTokens.popup["background-dark"],
         },
         tps: {
-          "bg-light": figmaTokens.tpsBgLight,
-          "bg-dark": figmaTokens.tpsBgDark,
+          "background-light": figmaTokens.tpsBgLight,
+          "background-dark": figmaTokens.tpsBgDark,
         },
       },
     },
