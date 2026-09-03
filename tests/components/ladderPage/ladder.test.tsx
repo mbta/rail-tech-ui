@@ -29,6 +29,7 @@ describe("Ladder", () => {
         trainLocs={[]}
         stationSelection={null}
         scrollToConsist={null}
+        highlight={null}
         onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_C_STATIONS}
@@ -52,6 +53,7 @@ describe("Ladder", () => {
           directionId: DirectionId.Westbound,
         }}
         scrollToConsist={null}
+        highlight={null}
         onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_C_STATIONS}
@@ -92,6 +94,7 @@ describe("Ladder", () => {
         ]}
         stationSelection={null}
         scrollToConsist={null}
+        highlight={null}
         onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_E_STATIONS}
@@ -128,6 +131,7 @@ describe("Ladder", () => {
         ]}
         stationSelection={null}
         scrollToConsist={null}
+        highlight={null}
         onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_RL_STATIONS}
@@ -154,6 +158,7 @@ describe("Ladder", () => {
         ]}
         stationSelection={null}
         scrollToConsist={null}
+        highlight={null}
         onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
         eastToWestStations={DEMO_B_STATIONS}
@@ -190,6 +195,7 @@ describe("Ladder", () => {
         trainLocs={trainLocs}
         stationSelection={null}
         scrollToConsist={["3701", "3702"]}
+        highlight={null}
         onSearchResultTimeout={onSearchResultTimeout}
         onVehicleSelection={jest.fn()}
         setStationSelection={jest.fn()}
@@ -201,5 +207,42 @@ describe("Ladder", () => {
     );
     await waitFor(() => expect(scrollTo).toHaveBeenCalledTimes(1));
     expect(onSearchResultTimeout).not.toHaveBeenCalled();
+  });
+
+  test("highlights trains", () => {
+    const trainLocs: TrainLoc[] = [
+      trainLocFactory.build({
+        consist: ["3701", "3802"],
+        routeId: "Green-E",
+        stationId: "place-gover",
+      }),
+      trainLocFactory.build({
+        consist: ["3900", "3901"],
+        routeId: "Green-E",
+        stationId: "place-pktrm",
+      }),
+    ];
+    const view = render(
+      <Ladder
+        trainsClickable={true}
+        zoom={80}
+        labelMode="lead"
+        trainLocs={trainLocs}
+        stationSelection={null}
+        scrollToConsist={null}
+        highlight={["3701", "3802"]}
+        onSearchResultTimeout={jest.fn()}
+        onVehicleSelection={jest.fn()}
+        setStationSelection={jest.fn()}
+        eastToWestStations={DEMO_E_STATIONS}
+        letterFn={() => "E"}
+        routeColorFn={() => "branch-color-light-rail-e-branch"}
+        getInitialPredictionsDirection={getInitialPredictionsDirection}
+      />,
+    );
+    expect(view.getByRole("button", { name: /3900/ })).not.toHaveClass(
+      "z-object",
+    );
+    expect(view.getByRole("button", { name: /3701/ })).toHaveClass("z-object");
   });
 });

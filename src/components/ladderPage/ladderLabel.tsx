@@ -13,7 +13,7 @@ export const LadderLabel = ({
   revenue,
   primaryColor = "route",
   routeOnRight,
-  searchResult = false,
+  highlight = false,
 }: {
   consist: Consist;
   letter: string;
@@ -23,7 +23,7 @@ export const LadderLabel = ({
   revenue: boolean;
   primaryColor?: "route" | "bg";
   routeOnRight?: boolean;
-  searchResult?: boolean;
+  highlight?: boolean;
 }): ReactElement => {
   return (
     <div
@@ -37,7 +37,7 @@ export const LadderLabel = ({
             ? "light:border-glides-gray-500 light:bg-slate-100 border-2 border-solid dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
         color,
-        searchResult
+        highlight
           ? "ring-glides-branch/50 light:animate-train-label-search-result-light dark:animate-train-label-search-result ring-8"
           : primaryColor === "route"
             ? "light:ring-1 light:ring-inset light:ring-black/30"
@@ -50,14 +50,14 @@ export const LadderLabel = ({
             consist={consist}
             n={labelMode === "lead" ? 1 : undefined}
             primaryColor={revenue ? primaryColor : "nonrev"}
-            searchResult={searchResult}
+            highlight={highlight}
             labelRemap={labelRemap}
           />
           <RouteIcon
             letter={letter}
             iconStyle={revenue ? "letter" : "nonrev"}
             primaryColor={primaryColor}
-            searchResult={searchResult}
+            highlight={highlight}
           />
         </>
       ) : (
@@ -66,13 +66,13 @@ export const LadderLabel = ({
             letter={letter}
             iconStyle={revenue ? "letter" : "nonrev"}
             primaryColor={primaryColor}
-            searchResult={searchResult}
+            highlight={highlight}
           />
           <TrainConsist
             consist={consist}
             n={labelMode === "lead" ? 1 : undefined}
             primaryColor={revenue ? primaryColor : "nonrev"}
-            searchResult={searchResult}
+            highlight={highlight}
             labelRemap={labelRemap}
           />
         </>
@@ -85,12 +85,12 @@ const RouteIcon = ({
   letter,
   primaryColor,
   iconStyle,
-  searchResult,
+  highlight,
 }: {
   letter: string;
   primaryColor: "route" | "bg";
   iconStyle: "letter" | "nonrev";
-  searchResult: boolean;
+  highlight: boolean;
 }): ReactElement => {
   if (iconStyle === "letter") {
     return (
@@ -101,7 +101,7 @@ const RouteIcon = ({
             ? "bg-glides-branch light:text-slate-800 dark:text-glides-blue-900"
             : "text-glides-branch light:bg-slate-800 dark:bg-glides-blue-700",
           "h-[1.875rem] w-[1.875rem]",
-          searchResult
+          highlight
             ? "light:animate-train-label-search-result-light-branch dark:animate-train-label-search-result-branch"
             : null,
         ])}
@@ -124,13 +124,13 @@ const TrainConsist = ({
   consist,
   n,
   primaryColor,
-  searchResult,
+  highlight,
   labelRemap,
 }: {
   consist: Consist;
   n?: number;
   primaryColor: "route" | "bg" | "nonrev";
-  searchResult: boolean;
+  highlight: boolean;
   labelRemap?: (car: CarId) => CarId;
 }): ReactElement => (
   <div
@@ -149,7 +149,7 @@ const TrainConsist = ({
           index === 0 ? "font-semibold" : null,
           "leading-none",
           index === 0 ? "text-base" : "text-sm",
-          searchResult ? "animate-train-label-search-result-car-id" : null,
+          highlight ? "animate-train-label-search-result-car-id" : null,
         ])}
         key={index}
       >
