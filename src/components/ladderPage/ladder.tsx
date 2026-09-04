@@ -51,12 +51,14 @@ const connectorWidth = 3;
  */
 const routeLetterRadius = 12;
 
-type SearchResultContextValue = {
+type FocusContextValue = {
+  highlight: Consist | null;
   scrollToConsist: Consist | null;
   onSearchResultTimeout: (() => void) | null;
 };
 
-const SearchResultContext = createContext<SearchResultContextValue>({
+const FocusContext = createContext<FocusContextValue>({
+  highlight: null,
   scrollToConsist: null,
   onSearchResultTimeout: null,
 });
@@ -71,6 +73,7 @@ export const Ladder = ({
   labelRemap,
   stationSelection,
   scrollToConsist,
+  highlight,
   onSearchResultTimeout,
   onVehicleSelection,
   setStationSelection,
@@ -86,6 +89,7 @@ export const Ladder = ({
   labelRemap?: (car: CarId) => CarId;
   stationSelection: StationSelection | null;
   scrollToConsist: Consist | null;
+  highlight: Consist | null;
 
   // Called 5s after a search result has been scrolled into view so a consumer
   //  can choose to clear e.g. a URL state
@@ -122,16 +126,17 @@ export const Ladder = ({
     [eastToWestStations],
   );
 
-  const searchResultContextValue = useMemo<SearchResultContextValue>(
+  const focusContextValue = useMemo<FocusContextValue>(
     () => ({
+      highlight,
       scrollToConsist,
       onSearchResultTimeout: onSearchResultTimeout ?? null,
     }),
-    [scrollToConsist, onSearchResultTimeout],
+    [highlight, scrollToConsist, onSearchResultTimeout],
   );
 
   return (
-    <SearchResultContext.Provider value={searchResultContextValue}>
+    <FocusContext.Provider value={focusContextValue}>
       <div className="relative pb-20 sm:pb-0">
         <StationList
           zoom={zoom}
@@ -169,7 +174,7 @@ export const Ladder = ({
           onVehicleSelection={onVehicleSelection}
         />
       </div>
-    </SearchResultContext.Provider>
+    </FocusContext.Provider>
   );
 };
 
@@ -380,20 +385,23 @@ const Train = ({
   clickable: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
 }): ReactElement => {
-  const { scrollToConsist, onSearchResultTimeout } =
-    useContext(SearchResultContext);
-  const isSearchResult =
-    scrollToConsist !== null &&
+  const { highlight, scrollToConsist, onSearchResultTimeout } =
+    useContext(FocusContext);
+  const shouldHighlight =
+    highlight !== null &&
+    consistEq(highlight, trainWithHeights.consist, "exact");
+  const shouldScrollTo =
+    scrollToConsist != null &&
     consistEq(scrollToConsist, trainWithHeights.consist, "exact");
   const labelButtonRef = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
-    if (isSearchResult && labelButtonRef.current !== null) {
+    if (shouldScrollTo && labelButtonRef.current !== null) {
       scrollTo(labelButtonRef.current, "center", false);
       if (onSearchResultTimeout === null) return;
       const timeout = setTimeout(onSearchResultTimeout, 5000);
       return () => clearTimeout(timeout);
     }
-  }, [isSearchResult, labelButtonRef, onSearchResultTimeout]);
+  }, [shouldScrollTo, labelButtonRef, onSearchResultTimeout]);
 
   const letter = useMemo(() => {
     return letterFn(trainWithHeights.routeId, trainWithHeights.routePatternId);
@@ -414,7 +422,7 @@ const Train = ({
         color={color}
         buttonRef={labelButtonRef}
         trainWithHeights={trainWithHeights}
-        isSearchResult={isSearchResult}
+        highlight={shouldHighlight || shouldScrollTo}
         onVehicleSelection={onVehicleSelection}
         labelRemap={labelRemap}
       />
@@ -456,7 +464,7 @@ const LabelButton = ({
   color,
   clickable,
   buttonRef,
-  isSearchResult,
+  highlight,
   onVehicleSelection,
   labelRemap,
 }: {
@@ -466,7 +474,7 @@ const LabelButton = ({
   color: string;
   clickable: boolean;
   buttonRef: React.RefObject<HTMLButtonElement | null>;
-  isSearchResult: boolean;
+  highlight: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
   labelRemap?: (car: CarId) => string;
 }): ReactElement => {
@@ -476,7 +484,7 @@ const LabelButton = ({
       ref={buttonRef}
       className={className([
         "absolute mx-[-21px] -translate-y-1/2",
-        isSearchResult ? "z-object" : null,
+        highlight ? "z-object" : null,
       ])}
       onClick={(e) => {
         e.stopPropagation();
@@ -497,10 +505,10 @@ const LabelButton = ({
         consist={trainWithHeights.consist}
         letter={letter}
         color={color}
-        primaryColor={isSearchResult ? "route" : "bg"}
+        primaryColor={highlight ? "route" : "bg"}
         revenue={isTripRevenue(trainWithHeights.trip)}
         routeOnRight={trainWithHeights.directionId === DirectionId.Westbound}
-        searchResult={isSearchResult}
+        highlight={highlight}
         labelMode={mode}
         labelRemap={labelRemap}
       />
