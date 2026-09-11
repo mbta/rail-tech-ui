@@ -50,7 +50,7 @@ const connectorWidth = 3;
  * If it's too small, the connector will overlap the route letter.
  * If it's too big, there could be a gap between the connector and the route cirlce.
  */
-const routeLetterRadius = 12;
+const routeLetterRadius = 10;
 
 type FocusContextValue = {
   highlight: Consist | null;
@@ -466,7 +466,7 @@ const Dot = ({
       "bg-glides-branch ring-glides-branch/[.33] pointer-events-none absolute mx-[-5px] h-[10px] w-[10px] -translate-y-1/2 rounded-full ring-4",
       isTripRevenue(trainWithHeights.trip)
         ? color
-        : "bg-glides-gray-400 ring-glides-gray-400/[.33]",
+        : "bg-glides-gray-300 ring-glides-gray-300/[.33]",
     ])}
     style={{
       top: `${trainWithHeights.dotPx}px`,
@@ -597,7 +597,7 @@ const LineBetweenDotAndLabel = ({
         strokeWidth={connectorWidth}
         className={className([
           "text-glides-branch stroke-current",
-          isTripRevenue(trip) ? color : "text-glides-gray-400",
+          isTripRevenue(trip) ? color : "text-glides-gray-300",
         ])}
       />
     </svg>
