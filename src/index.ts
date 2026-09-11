@@ -1,4 +1,8 @@
 export { Ladder } from "./components/ladderPage/ladder";
+export type {
+  PillAccessoryRenderProp,
+  PillRenderData,
+} from "./components/ladderPage/ladder";
 export type { LatLng } from "./models/latLng";
 export type { Station, StationId } from "./models/stop";
 export { default as railTechUITheme } from "./tailwind.config";

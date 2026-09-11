@@ -14,6 +14,7 @@ export const LadderLabel = ({
   primaryColor = "route",
   routeOnRight,
   highlight = false,
+  renderAccessory,
 }: {
   consist: Consist;
   letter: string;
@@ -49,6 +50,7 @@ export const LadderLabel = ({
     >
       {routeOnRight ? (
         <>
+          {renderAccessory !== undefined && renderAccessory()}
           <TrainConsist
             consist={consist}
             n={labelMode === "lead" ? 1 : undefined}
@@ -78,6 +80,7 @@ export const LadderLabel = ({
             highlight={highlight}
             labelRemap={labelRemap}
           />
+          {renderAccessory !== undefined && renderAccessory()}
         </>
       )}
     </div>

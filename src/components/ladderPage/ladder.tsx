@@ -7,6 +7,7 @@ import {
   SetStateAction,
   Dispatch,
   useMemo,
+  useCallback,
 } from "react";
 import { LadderLabel } from "src/components/ladderPage/ladderLabel";
 import { CarId, Consist, consistEq, consistToString } from "src/data";
@@ -63,6 +64,15 @@ const FocusContext = createContext<FocusContextValue>({
   onSearchResultTimeout: null,
 });
 
+export interface PillRenderData {
+  trainLoc: TrainLoc;
+  directionId: DirectionId;
+}
+
+export type PillAccessoryRenderProp = (
+  renderData: PillRenderData,
+) => ReactElement | null;
+
 export const Ladder = ({
   zoom,
   trainLocs,
@@ -79,6 +89,7 @@ export const Ladder = ({
   setStationSelection,
   eastToWestStations,
   getInitialPredictionsDirection,
+  renderAccessoryForTrainLoc,
 }: {
   zoom: number;
   letterFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
@@ -99,6 +110,7 @@ export const Ladder = ({
   setStationSelection: Dispatch<StationSelection | null>;
   eastToWestStations: Station[];
   getInitialPredictionsDirection: () => DirectionId;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderProp;
 }): ReactElement => {
   const westboundTrainLocs = trainLocs.filter(
     (trainLoc) => trainLoc.directionId === DirectionId.Westbound,
@@ -158,6 +170,7 @@ export const Ladder = ({
           routeColorFn={routeColorFn}
           stationMap={stationMap}
           onVehicleSelection={onVehicleSelection}
+          renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
         />
         <TrainList
           trainsClickable={trainsClickable}
@@ -172,6 +185,7 @@ export const Ladder = ({
           routeColorFn={routeColorFn}
           stationMap={stationMap}
           onVehicleSelection={onVehicleSelection}
+          renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
         />
       </div>
     </FocusContext.Provider>
@@ -318,6 +332,7 @@ const TrainList = ({
   trainsClickable,
   stationMap,
   onVehicleSelection,
+  renderAccessoryForTrainLoc,
 }: {
   zoom: number;
   directionId: DirectionId;
@@ -331,6 +346,7 @@ const TrainList = ({
   trainsClickable: boolean;
   stationMap: StationMap;
   onVehicleSelection: (selection: VehicleSelection) => void;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderProp;
 }): ReactElement => {
   const trainsWithHeights: TrainWithHeights[] = trainHeights(
     trainLocs,
@@ -361,6 +377,7 @@ const TrainList = ({
             onVehicleSelection={onVehicleSelection}
             letterFn={letterFn}
             routeColorFn={routeColorFn}
+            renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
           />
         </li>
       ))}
@@ -376,6 +393,7 @@ const Train = ({
   routeColorFn,
   clickable,
   onVehicleSelection,
+  renderAccessoryForTrainLoc,
 }: {
   trainWithHeights: TrainWithHeights;
   labelMode: LabelMode;
@@ -384,6 +402,7 @@ const Train = ({
   routeColorFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
   clickable: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderProp;
 }): ReactElement => {
   const { highlight, scrollToConsist, onSearchResultTimeout } =
     useContext(FocusContext);
@@ -425,6 +444,7 @@ const Train = ({
         highlight={shouldHighlight || shouldScrollTo}
         onVehicleSelection={onVehicleSelection}
         labelRemap={labelRemap}
+        renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
       />
       <LineBetweenDotAndLabel
         color={color}
@@ -467,6 +487,7 @@ const LabelButton = ({
   highlight,
   onVehicleSelection,
   labelRemap,
+  renderAccessoryForTrainLoc,
 }: {
   trainWithHeights: TrainWithHeights;
   mode: LabelMode;
@@ -477,7 +498,18 @@ const LabelButton = ({
   highlight: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
   labelRemap?: (car: CarId) => string;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderProp;
 }): ReactElement => {
+  const renderAccessory = useCallback(
+    () =>
+      renderAccessoryForTrainLoc == undefined
+        ? null
+        : renderAccessoryForTrainLoc({
+            trainLoc: trainWithHeights.trainLoc,
+            directionId: trainWithHeights.directionId,
+          }),
+    [renderAccessoryForTrainLoc, trainWithHeights.trainLoc],
+  );
   return (
     <button
       disabled={!clickable}
@@ -511,6 +543,7 @@ const LabelButton = ({
         highlight={highlight}
         labelMode={mode}
         labelRemap={labelRemap}
+        renderAccessory={renderAccessory}
       />
     </button>
   );
