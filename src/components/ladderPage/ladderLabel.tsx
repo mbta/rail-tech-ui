@@ -38,7 +38,7 @@ export const LadderLabel = ({
             ? "light:bg-white dark:bg-glides-blue-900"
             : "bg-glides-branch"
           : primaryColor === "bg"
-            ? "light:border-glides-gray-500 light:bg-slate-100 border-solid border border-2 dark:border-glides-gray-400"
+            ? "light:border-glides-gray-500 light:bg-slate-100 border border-2 border-solid dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
         color,
         highlight
