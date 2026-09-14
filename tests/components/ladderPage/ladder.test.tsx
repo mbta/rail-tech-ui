@@ -1,5 +1,5 @@
 import { render, waitFor } from "@testing-library/react";
-import { Ladder } from "src/components/ladderPage/ladder";
+import { Ladder, PillAccessoryProps } from "src/components/ladderPage/ladder";
 import { CarId } from "src/data";
 import { DirectionId } from "src/models/route";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
@@ -244,5 +244,47 @@ describe("Ladder", () => {
       "z-object",
     );
     expect(view.getByRole("button", { name: /3701/ })).toHaveClass("z-object");
+  });
+
+  test("renders customizable accessories on applicable trains", () => {
+    const trainLocs: TrainLoc[] = [
+      trainLocFactory.build({
+        consist: ["3701", "3802"],
+        routeId: "Green-E",
+        stationId: "place-gover",
+      }),
+      trainLocFactory.build({
+        consist: ["3900", "3901"],
+        routeId: "Green-E",
+        stationId: "place-pktrm",
+      }),
+    ];
+    const renderAccessory = ({ trainLoc }: PillAccessoryProps) => {
+      if (trainLoc.consist.includes("3701")) {
+        return <div>{trainLoc.stationId}</div>;
+      }
+      return null;
+    };
+    const view = render(
+      <Ladder
+        trainsClickable={true}
+        zoom={80}
+        labelMode="lead"
+        trainLocs={trainLocs}
+        stationSelection={null}
+        scrollToConsist={null}
+        highlight={["3701", "3802"]}
+        onSearchResultTimeout={jest.fn()}
+        onVehicleSelection={jest.fn()}
+        setStationSelection={jest.fn()}
+        eastToWestStations={DEMO_E_STATIONS}
+        letterFn={() => "E"}
+        routeColorFn={() => "branch-color-light-rail-e-branch"}
+        getInitialPredictionsDirection={getInitialPredictionsDirection}
+        renderAccessoryForTrainLoc={renderAccessory}
+      />,
+    );
+    expect(view.getByText("place-gover")).toBeInTheDocument();
+    expect(view.queryByText("place-pktrm")).not.toBeInTheDocument();
   });
 });

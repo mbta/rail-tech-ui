@@ -1,5 +1,6 @@
 import {
   ReactElement,
+  ReactNode,
   createContext,
   useContext,
   useRef,
@@ -7,6 +8,7 @@ import {
   SetStateAction,
   Dispatch,
   useMemo,
+  useCallback,
 } from "react";
 import { LadderLabel } from "src/components/ladderPage/ladderLabel";
 import { CarId, Consist, consistEq, consistToString } from "src/data";
@@ -49,7 +51,7 @@ const connectorWidth = 3;
  * If it's too small, the connector will overlap the route letter.
  * If it's too big, there could be a gap between the connector and the route cirlce.
  */
-const routeLetterRadius = 12;
+const routeLetterRadius = 10;
 
 type FocusContextValue = {
   highlight: Consist | null;
@@ -62,6 +64,15 @@ const FocusContext = createContext<FocusContextValue>({
   scrollToConsist: null,
   onSearchResultTimeout: null,
 });
+
+export interface PillAccessoryProps {
+  trainLoc: TrainLoc;
+  directionId: DirectionId;
+}
+
+export type PillAccessoryRenderer = (
+  renderData: PillAccessoryProps,
+) => ReactNode;
 
 export const Ladder = ({
   zoom,
@@ -79,6 +90,7 @@ export const Ladder = ({
   setStationSelection,
   eastToWestStations,
   getInitialPredictionsDirection,
+  renderAccessoryForTrainLoc,
 }: {
   zoom: number;
   letterFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
@@ -99,6 +111,7 @@ export const Ladder = ({
   setStationSelection: Dispatch<StationSelection | null>;
   eastToWestStations: Station[];
   getInitialPredictionsDirection: () => DirectionId;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const westboundTrainLocs = trainLocs.filter(
     (trainLoc) => trainLoc.directionId === DirectionId.Westbound,
@@ -158,6 +171,7 @@ export const Ladder = ({
           routeColorFn={routeColorFn}
           stationMap={stationMap}
           onVehicleSelection={onVehicleSelection}
+          renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
         />
         <TrainList
           trainsClickable={trainsClickable}
@@ -172,6 +186,7 @@ export const Ladder = ({
           routeColorFn={routeColorFn}
           stationMap={stationMap}
           onVehicleSelection={onVehicleSelection}
+          renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
         />
       </div>
     </FocusContext.Provider>
@@ -318,6 +333,7 @@ const TrainList = ({
   trainsClickable,
   stationMap,
   onVehicleSelection,
+  renderAccessoryForTrainLoc,
 }: {
   zoom: number;
   directionId: DirectionId;
@@ -331,6 +347,7 @@ const TrainList = ({
   trainsClickable: boolean;
   stationMap: StationMap;
   onVehicleSelection: (selection: VehicleSelection) => void;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const trainsWithHeights: TrainWithHeights[] = trainHeights(
     trainLocs,
@@ -361,6 +378,7 @@ const TrainList = ({
             onVehicleSelection={onVehicleSelection}
             letterFn={letterFn}
             routeColorFn={routeColorFn}
+            renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
           />
         </li>
       ))}
@@ -376,6 +394,7 @@ const Train = ({
   routeColorFn,
   clickable,
   onVehicleSelection,
+  renderAccessoryForTrainLoc,
 }: {
   trainWithHeights: TrainWithHeights;
   labelMode: LabelMode;
@@ -384,6 +403,7 @@ const Train = ({
   routeColorFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
   clickable: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const { highlight, scrollToConsist, onSearchResultTimeout } =
     useContext(FocusContext);
@@ -425,6 +445,7 @@ const Train = ({
         highlight={shouldHighlight || shouldScrollTo}
         onVehicleSelection={onVehicleSelection}
         labelRemap={labelRemap}
+        renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
       />
       <LineBetweenDotAndLabel
         color={color}
@@ -446,7 +467,7 @@ const Dot = ({
       "bg-glides-branch ring-glides-branch/[.33] pointer-events-none absolute mx-[-5px] h-[10px] w-[10px] -translate-y-1/2 rounded-full ring-4",
       isTripRevenue(trainWithHeights.trip)
         ? color
-        : "bg-glides-gray-400 ring-glides-gray-400/[.33]",
+        : "bg-glides-gray-300 ring-glides-gray-300/[.33]",
     ])}
     style={{
       top: `${trainWithHeights.dotPx}px`,
@@ -467,6 +488,7 @@ const LabelButton = ({
   highlight,
   onVehicleSelection,
   labelRemap,
+  renderAccessoryForTrainLoc,
 }: {
   trainWithHeights: TrainWithHeights;
   mode: LabelMode;
@@ -477,7 +499,18 @@ const LabelButton = ({
   highlight: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
   labelRemap?: (car: CarId) => string;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
+  const renderAccessory = useCallback(
+    () =>
+      renderAccessoryForTrainLoc == undefined
+        ? null
+        : renderAccessoryForTrainLoc({
+            trainLoc: trainWithHeights.trainLoc,
+            directionId: trainWithHeights.directionId,
+          }),
+    [renderAccessoryForTrainLoc, trainWithHeights.trainLoc],
+  );
   return (
     <button
       disabled={!clickable}
@@ -511,6 +544,7 @@ const LabelButton = ({
         highlight={highlight}
         labelMode={mode}
         labelRemap={labelRemap}
+        renderAccessory={renderAccessory}
       />
     </button>
   );
@@ -564,7 +598,7 @@ const LineBetweenDotAndLabel = ({
         strokeWidth={connectorWidth}
         className={className([
           "text-glides-branch stroke-current",
-          isTripRevenue(trip) ? color : "text-glides-gray-400",
+          isTripRevenue(trip) ? color : "text-glides-gray-300",
         ])}
       />
     </svg>

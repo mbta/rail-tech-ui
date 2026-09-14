@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import { Icon } from "src/components/icons";
 import { CarId, Consist } from "src/data";
 import { className } from "src/util/dom";
@@ -14,6 +14,7 @@ export const LadderLabel = ({
   primaryColor = "route",
   routeOnRight,
   highlight = false,
+  renderAccessory,
 }: {
   consist: Consist;
   letter: string;
@@ -24,17 +25,20 @@ export const LadderLabel = ({
   primaryColor?: "route" | "bg";
   routeOnRight?: boolean;
   highlight?: boolean;
+  renderAccessory?: () => ReactNode;
 }): ReactElement => {
   return (
     <div
       className={className([
-        "rounded-4xl light:border light:border-slate-300 light:shadow-sm flex h-[2.625rem] w-24 p-1.5",
+        "flex items-center",
+        "h-[2.625rem] p-1.5",
+        "rounded-4xl light:border light:border-slate-300 light:shadow-sm",
         revenue
           ? primaryColor === "bg"
             ? "light:bg-white dark:bg-glides-blue-900"
             : "bg-glides-branch"
           : primaryColor === "bg"
-            ? "light:border-glides-gray-500 light:bg-slate-100 border-2 border-solid dark:border-glides-gray-400"
+            ? "light:border-glides-gray-500 light:bg-slate-100 border border-2 border-solid dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
         color,
         highlight
@@ -46,6 +50,7 @@ export const LadderLabel = ({
     >
       {routeOnRight ? (
         <>
+          {renderAccessory !== undefined && renderAccessory()}
           <TrainConsist
             consist={consist}
             n={labelMode === "lead" ? 1 : undefined}
@@ -75,6 +80,7 @@ export const LadderLabel = ({
             highlight={highlight}
             labelRemap={labelRemap}
           />
+          {renderAccessory !== undefined && renderAccessory()}
         </>
       )}
     </div>
@@ -96,7 +102,7 @@ const RouteIcon = ({
     return (
       <p
         className={className([
-          "flex basis-auto items-center justify-center rounded-full text-center font-semibold",
+          "s-[0.9375rem] flex items-center justify-center rounded-full text-center font-semibold",
           primaryColor === "bg"
             ? "bg-glides-branch light:text-slate-800 dark:text-glides-blue-900"
             : "text-glides-branch light:bg-slate-800 dark:bg-glides-blue-700",
@@ -114,7 +120,7 @@ const RouteIcon = ({
       <Icon
         name="ban"
         title={"Non-revenue"}
-        className="mx-auto w-7 fill-glides-gray-300"
+        className="m-0.5 size-7 fill-glides-gray-300"
       />
     );
   }
@@ -135,7 +141,8 @@ const TrainConsist = ({
 }): ReactElement => (
   <div
     className={className([
-      "flex flex-auto flex-col items-center justify-center",
+      "flex flex-none flex-col items-center justify-center",
+      "w-[3.1875rem]",
       primaryColor === "bg"
         ? "light:text-slate-800 dark:text-glides-branch"
         : primaryColor === "nonrev"

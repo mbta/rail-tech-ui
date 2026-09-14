@@ -13,39 +13,34 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
-export interface TrainWithHeights {
-  routeId: RouteId;
-  routePatternId?: RoutePatternId;
-  consist: Consist;
-  directionId: DirectionId;
-  dotPx: number;
-  labelPx: number;
-  trip: TripEnd | null;
-}
-
-/**
- * The closest two train labels are allowed to be on the ladder
- */
-const minSpaceBetweenTrainLabels = 44;
-
 interface TrainWithStopsTraveled {
+  trainLoc: TrainLoc;
+
+  // TODO: Some of these properties are redundant w.r.t. the
+  // underlying TrainLoc, although with differences in nullability.
+  // Consider ways to clean this up.
   routeId: RouteId;
   routePatternId?: RoutePatternId;
   consist: Consist;
   directionId: DirectionId;
   trip: TripEnd | null;
   timestamp: DateTime | null;
+
   stopsTraveled: number;
 }
 
-interface TrainWithDotPx {
-  routeId: RouteId;
-  routePatternId?: RoutePatternId;
-  consist: Consist;
-  directionId: DirectionId;
-  trip: TripEnd | null;
+interface TrainWithDotPx extends TrainWithStopsTraveled {
   dotPx: number;
 }
+
+export interface TrainWithHeights extends TrainWithDotPx {
+  labelPx: number;
+}
+
+/**
+ * The closest two train labels are allowed to be on the ladder
+ */
+const minSpaceBetweenTrainLabels = 44;
 
 /**
  * Calculations for where to display each train on the ladder.
@@ -98,6 +93,7 @@ const trainWithStopsTraveled = (
     return null;
   } else {
     return {
+      trainLoc,
       routeId: trainLoc.routeId,
       routePatternId: trainLoc.routePatternId,
       consist: trainLoc.consist,
@@ -193,11 +189,7 @@ const trainWithDotPx = (
   zoom: number,
   stationSpacingRatiosTopToBottom: number[],
 ): TrainWithDotPx => ({
-  routeId: train.routeId,
-  routePatternId: train.routePatternId,
-  consist: train.consist,
-  directionId: train.directionId,
-  trip: train.trip,
+  ...train,
   dotPx: stopsTraveledToPixelsFromTop(
     train.stopsTraveled,
     train.directionId,
