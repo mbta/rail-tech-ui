@@ -1,5 +1,5 @@
 import { render, waitFor } from "@testing-library/react";
-import { Ladder, PillRenderData } from "src/components/ladderPage/ladder";
+import { Ladder, PillAccessoryProps } from "src/components/ladderPage/ladder";
 import { CarId } from "src/data";
 import { DirectionId } from "src/models/route";
 import { StopStatus, TrainLoc } from "src/models/trainLocation";
@@ -259,7 +259,7 @@ describe("Ladder", () => {
         stationId: "place-pktrm",
       }),
     ];
-    const renderAccessory = ({ trainLoc }: PillRenderData) => {
+    const renderAccessory = ({ trainLoc }: PillAccessoryProps) => {
       if (trainLoc.consist.includes("3701")) {
         return <div>{trainLoc.stationId}</div>;
       }

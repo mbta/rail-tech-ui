@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import { Icon } from "src/components/icons";
 import { CarId, Consist } from "src/data";
 import { className } from "src/util/dom";
@@ -25,7 +25,7 @@ export const LadderLabel = ({
   primaryColor?: "route" | "bg";
   routeOnRight?: boolean;
   highlight?: boolean;
-  renderAccessory?: () => ReactElement | null;
+  renderAccessory?: () => ReactNode;
 }): ReactElement => {
   return (
     <div
@@ -38,7 +38,7 @@ export const LadderLabel = ({
             ? "light:bg-white dark:bg-glides-blue-900"
             : "bg-glides-branch"
           : primaryColor === "bg"
-            ? "light:border-glides-gray-500 light:bg-slate-100 border border-2 border-solid dark:border-glides-gray-400"
+            ? "light:border-glides-gray-500 light:bg-slate-100 border-solid border border-2 dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
         color,
         highlight

@@ -1,5 +1,6 @@
 import {
   ReactElement,
+  ReactNode,
   createContext,
   useContext,
   useRef,
@@ -64,14 +65,14 @@ const FocusContext = createContext<FocusContextValue>({
   onSearchResultTimeout: null,
 });
 
-export interface PillRenderData {
+export interface PillAccessoryProps {
   trainLoc: TrainLoc;
   directionId: DirectionId;
 }
 
-export type PillAccessoryRenderProp = (
-  renderData: PillRenderData,
-) => ReactElement | null;
+export type PillAccessoryRenderer = (
+  renderData: PillAccessoryProps,
+) => ReactNode;
 
 export const Ladder = ({
   zoom,
@@ -110,7 +111,7 @@ export const Ladder = ({
   setStationSelection: Dispatch<StationSelection | null>;
   eastToWestStations: Station[];
   getInitialPredictionsDirection: () => DirectionId;
-  renderAccessoryForTrainLoc?: PillAccessoryRenderProp;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const westboundTrainLocs = trainLocs.filter(
     (trainLoc) => trainLoc.directionId === DirectionId.Westbound,
@@ -346,7 +347,7 @@ const TrainList = ({
   trainsClickable: boolean;
   stationMap: StationMap;
   onVehicleSelection: (selection: VehicleSelection) => void;
-  renderAccessoryForTrainLoc?: PillAccessoryRenderProp;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const trainsWithHeights: TrainWithHeights[] = trainHeights(
     trainLocs,
@@ -402,7 +403,7 @@ const Train = ({
   routeColorFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
   clickable: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
-  renderAccessoryForTrainLoc?: PillAccessoryRenderProp;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const { highlight, scrollToConsist, onSearchResultTimeout } =
     useContext(FocusContext);
@@ -498,7 +499,7 @@ const LabelButton = ({
   highlight: boolean;
   onVehicleSelection: (selection: VehicleSelection) => void;
   labelRemap?: (car: CarId) => string;
-  renderAccessoryForTrainLoc?: PillAccessoryRenderProp;
+  renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const renderAccessory = useCallback(
     () =>
