@@ -236,6 +236,16 @@ const StationList = ({
             {station.arrowLeft === "down" && (
               <div className="absolute bottom-0 left-[-18px] h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-ladder-background-dark border-r-ladder-background-dark border-t-glides-blue-900" />
             )}
+            {station.arrowLeft === "up" && (
+              <div className="absolute bottom-0 left-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] border-b-glides-blue-900 border-l-ladder-background-dark border-r-ladder-background-dark" />
+            )}
+
+            {station.arrowRight === "down" && (
+              <div className="absolute bottom-0 right-[-18px] h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-ladder-background-dark border-r-ladder-background-dark border-t-glides-blue-900" />
+            )}
+            {station.arrowRight === "up" && (
+              <div className="absolute bottom-0 right-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] border-b-glides-blue-900 border-l-ladder-background-dark border-r-ladder-background-dark" />
+            )}
 
             {station.externalUrl ? (
               <a
