@@ -233,6 +233,32 @@ const StationList = ({
             id={`id-ladder__station--${stationId}`}
             style={{ height: `${heightPx}px` }}
           >
+            {station.arrowLeft === "down" && (
+              <div
+                data-testid="ladder-station-arrow-left-down"
+                className="absolute bottom-0 left-[-18px] h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-ladder-background-dark border-r-ladder-background-dark border-t-glides-blue-900"
+              />
+            )}
+            {station.arrowLeft === "up" && (
+              <div
+                data-testid="ladder-station-arrow-left-up"
+                className="absolute bottom-0 left-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] border-b-glides-blue-900 border-l-ladder-background-dark border-r-ladder-background-dark"
+              />
+            )}
+
+            {station.arrowRight === "down" && (
+              <div
+                data-testid="ladder-station-arrow-right-down"
+                className="absolute bottom-0 right-[-18px] h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-ladder-background-dark border-r-ladder-background-dark border-t-glides-blue-900"
+              />
+            )}
+            {station.arrowRight === "up" && (
+              <div
+                data-testid="ladder-station-arrow-right-up"
+                className="absolute bottom-0 right-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] border-b-glides-blue-900 border-l-ladder-background-dark border-r-ladder-background-dark"
+              />
+            )}
+
             {station.externalUrl ? (
               <a
                 href={station.externalUrl}
@@ -252,6 +278,7 @@ const StationList = ({
                   ? "light:-ml-7 light:w-[calc(100%+3.5rem)] light:rounded-full light:border light:border-slate-300 light:bg-white light:py-2 light:text-slate-900 light:outline light:outline-2 light:outline-offset-2 light:outline-alt-blue-700 dark:w-full dark:bg-glides-gray-200 dark:text-glides-blue-700"
                   : "light:text-slate-800 mx-auto w-full dark:text-glides-gray-200",
               ])}
+              disabled={station.showName === false}
               onClick={() => {
                 if (isSelected) {
                   setStationSelection(null);
@@ -265,54 +292,61 @@ const StationList = ({
                 }
               }}
             >
-              {station.shortName}
+              {station.showName === false ? "" : station.shortName}
             </button>
-            <button
-              className={className([
-                stopClass,
-                "left-[-12.6px]",
-                isSelected &&
-                stationSelection.directionId === DirectionId.Westbound
-                  ? selectedStopClass
-                  : unselectedStopClass,
-              ])}
-              onClick={() => {
-                if (
-                  isSelected &&
-                  stationSelection.directionId === DirectionId.Westbound
-                ) {
-                  setStationSelection(null);
-                } else {
-                  setStationSelection({
-                    stationId,
-                    directionId: DirectionId.Westbound,
-                  });
-                }
-              }}
-            />
-            <button
-              className={className([
-                stopClass,
-                "right-[-12.6px]",
-                isSelected &&
-                stationSelection.directionId === DirectionId.Eastbound
-                  ? selectedStopClass
-                  : unselectedStopClass,
-              ])}
-              onClick={() => {
-                if (
-                  isSelected &&
-                  stationSelection.directionId === DirectionId.Eastbound
-                ) {
-                  setStationSelection(null);
-                } else {
-                  setStationSelection({
-                    stationId,
-                    directionId: DirectionId.Eastbound,
-                  });
-                }
-              }}
-            />
+            {station.showDots !== false && (
+              <>
+                {" "}
+                <button
+                  data-testid="ladder-station-dot-westbound"
+                  className={className([
+                    stopClass,
+                    "left-[-12.6px]",
+                    isSelected &&
+                    stationSelection.directionId === DirectionId.Westbound
+                      ? selectedStopClass
+                      : unselectedStopClass,
+                  ])}
+                  onClick={() => {
+                    if (
+                      isSelected &&
+                      stationSelection.directionId === DirectionId.Westbound
+                    ) {
+                      setStationSelection(null);
+                    } else {
+                      setStationSelection({
+                        stationId,
+                        directionId: DirectionId.Westbound,
+                      });
+                    }
+                  }}
+                />
+                <button
+                  data-testid="ladder-station-dot-eastbound"
+                  className={className([
+                    stopClass,
+                    "right-[-12.6px]",
+                    isSelected &&
+                    stationSelection.directionId === DirectionId.Eastbound
+                      ? selectedStopClass
+                      : unselectedStopClass,
+                  ])}
+                  onClick={() => {
+                    if (
+                      isSelected &&
+                      stationSelection.directionId === DirectionId.Eastbound
+                    ) {
+                      setStationSelection(null);
+                    } else {
+                      setStationSelection({
+                        stationId,
+                        directionId: DirectionId.Eastbound,
+                      });
+                    }
+                  }}
+                />
+              </>
+            )}
           </li>
         );
       })}
