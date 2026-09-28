@@ -133,14 +133,12 @@ export const stopsTraveledAlongSegment = (
     return stationIndex;
   } else {
     if (trainLoc.latLng === null) return null;
-    if (stationIndex === 0) {
-      // if approaching an arrow,
-      // return 0 stops traveled and manually provide height later on
-      if (stationIdsInOrder[0] === "arrow") {
-        return 0;
-      }
-      // otherwise, it's not on the ladder
-      return null;
+    // if it's approaching the first station, it's not on the ladder
+    if (stationIndex === 0) return null;
+    // if in transit to first station past an arrow,
+    // return 0 stops traveled and manually provide height later on
+    if (stationIndex === 1 && stationIdsInOrder[0] === "arrow") {
+      return 0;
     }
 
     // approximate distance between stations by looking at latlngs
@@ -250,7 +248,7 @@ const stopsTraveledToPixelsFromTop = (
     directionId === DirectionId.Eastbound &&
     stopStatus === StopStatus.InTransitTo
   ) {
-    return pixelsFromTop + 45;
+    return pixelsFromTop - 45;
   }
 
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
