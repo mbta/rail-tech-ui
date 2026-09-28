@@ -10,6 +10,7 @@ import { trainLocFactory } from "tests/testHelpers/factory";
 import {
   DEMO_B_STATIONS,
   DEMO_C_STATIONS,
+  buildStation,
   byId,
 } from "tests/testHelpers/stops";
 
@@ -142,6 +143,33 @@ describe("trainHeights", () => {
     expect(result.dotPx).toEqual(120);
   });
 
+  test("westbound above an arrow", () => {
+    const stationIdsWestboundWithArrows = [
+      "arrow",
+      ...stationIdsWestbound,
+      "arrow",
+    ];
+    const trainLoc: TrainLoc = cTrainFactory.build({
+      consist: ["3900"],
+      directionId: DirectionId.Westbound,
+      stationId: "place-north",
+      stopStatus: StopStatus.InTransitTo,
+    });
+    const [result]: TrainWithHeights[] = trainHeights(
+      [trainLoc],
+      40,
+      1,
+      stationIdsWestboundWithArrows,
+      stationSpacingRatios,
+      byId([
+        buildStation("arrow", "top arrow", 42.367858, -71.064144),
+        ...DEMO_C_STATIONS,
+        buildStation("arrow", "bottom arrow", 42.336032, -71.149841),
+      ]),
+    );
+    expect(result.dotPx).toEqual(45);
+  });
+
   test("eastbound before bottom station doesn't show", () => {
     const trainLoc: TrainLoc = cTrainFactory.build({
       consist: ["3900"],
@@ -267,6 +295,34 @@ describe("trainHeights", () => {
       byId(DEMO_C_STATIONS),
     );
     expect(result.dotPx).toEqual(0);
+  });
+
+  test("eastbound underneath an arrow", () => {
+    const stationIdsEastboundWithArrows = [
+      "arrow",
+      ...stationIdsEastbound,
+      "arrow",
+    ];
+    const trainLoc: TrainLoc = cTrainFactory.build({
+      consist: ["3900"],
+      directionId: DirectionId.Eastbound,
+      stationId: "place-clmnl",
+      stopStatus: StopStatus.InTransitTo,
+    });
+    const [result]: TrainWithHeights[] = trainHeights(
+      [trainLoc],
+      40,
+      1,
+      stationIdsEastboundWithArrows,
+      stationSpacingRatios,
+      byId([
+        buildStation("arrow", "top arrow", 42.367858, -71.064144),
+        ...DEMO_C_STATIONS,
+        buildStation("arrow", "bottom arrow", 42.336032, -71.149841),
+      ]),
+    );
+    // 40 (zoom) * 4.0 (1.0 spacing ratio for 4 stations) - 45 (manual adjustment in stopsTraveledToPixelsFromTop())
+    expect(result.dotPx).toEqual(115);
   });
 
   test("westbound overlapping trains are sorted by timestamp", () => {
