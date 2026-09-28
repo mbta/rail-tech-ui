@@ -116,6 +116,8 @@ const trainWithStopsTraveled = (
  * Fails if the train is approaching the first stop in the list.
  * Fails if the vehiclePosition doesn't have enough information to determine where it is.
  */
+
+// TODO: consider how the below will support Glides, without the extra arrow rungs?
 export const stopsTraveledAlongSegment = (
   stationIdsInOrder: StationId[],
   trainLoc: TrainLoc,
@@ -131,8 +133,11 @@ export const stopsTraveledAlongSegment = (
     return stationIndex;
   } else {
     if (trainLoc.latLng === null) return null;
-    // if it's approaching the first station, it's not on the ladder
-    if (stationIndex === 0) return null;
+    // if approaching the first rung we manually adjust spacing later on
+    if (stationIndex === 1) {
+      return 0;
+    }
+
     // approximate distance between stations by looking at latlngs
     const prevStationIndex = stationIndex - 1;
     const prevStationId: StationId = stationIdsInOrder[prevStationIndex];
@@ -193,6 +198,7 @@ const trainWithDotPx = (
   dotPx: stopsTraveledToPixelsFromTop(
     train.stopsTraveled,
     train.directionId,
+    train.trainLoc.stopStatus,
     stopsOnSegment,
     zoom,
     stationSpacingRatiosTopToBottom,
@@ -202,11 +208,23 @@ const trainWithDotPx = (
 const stopsTraveledToPixelsFromTop = (
   stopsTraveled: number,
   directionId: DirectionId,
+  stopStatus: StopStatus,
   stopsOnSegment: number,
   zoom: number,
   stationSpacingRatiosTopToBottom: number[],
 ): number => {
-  // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
+  // If approaching first station on segment from westbound direction
+  // hardcode above the first station
+  if (
+    directionId === DirectionId.Westbound &&
+    stopsTraveled === 0 &&
+    stopStatus === StopStatus.InTransitTo
+  ) {
+    return 45;
+  }
+
+  // Makes assumption there are "arrow" rungs at the top and bottom of the ladder
+  // at those indexes. Below the top arrow (index 1) is the eastern-most stop on the segment.
   const stopsFromTop =
     directionId === DirectionId.Westbound
       ? stopsTraveled
@@ -224,7 +242,18 @@ const stopsTraveledToPixelsFromTop = (
       zoom
     );
   }
-  return sumOfStationRatiosForFullStopsAwayFromTop * zoom;
+  const pixelsFromTop = sumOfStationRatiosForFullStopsAwayFromTop * zoom;
+
+  // If approaching first station on segment from eastbound direction
+  // hardcode below first station
+  if (
+    directionId === DirectionId.Eastbound &&
+    stopsTraveled === 0 &&
+    stopStatus === StopStatus.InTransitTo
+  ) {
+    return pixelsFromTop - 50;
+  }
+  return pixelsFromTop;
 };
 
 /**

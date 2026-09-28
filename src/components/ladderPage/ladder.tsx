@@ -255,7 +255,7 @@ const StationList = ({
             {station.arrowRight === "up" && (
               <div
                 data-testid="ladder-station-arrow-right-up"
-                className="absolute bottom-0 right-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] border-b-glides-blue-900 border-l-ladder-background-dark border-r-ladder-background-dark"
+                className="absolute right-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] border-b-glides-blue-900 border-l-ladder-background-dark border-r-ladder-background-dark"
               />
             )}
 
