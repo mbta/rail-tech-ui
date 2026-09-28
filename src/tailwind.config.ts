@@ -74,10 +74,8 @@ const railTechUITheme = {
           button: {
             "default-light": figmaTokens.menu.button["default-light"],
             "active-light": figmaTokens.menu.button["active-light"],
-            "hover-light": figmaTokens.menu.button["hover-light"],
             "default-dark": figmaTokens.menu.button["default-dark"],
             "active-dark": figmaTokens.menu.button["active-dark"],
-            "hover-dark": figmaTokens.menu.button["hover-dark"],
           },
           "background-dark": figmaTokens.menu["background-dark"],
         },
