@@ -65,7 +65,7 @@ export const trainHeights = (
   const trainsWithDotPx: TrainWithDotPx[] = trainsTopToBottom.map((train) =>
     trainWithDotPx(
       train,
-      stationIdsInOrder.length,
+      stationIdsInOrder,
       zoom,
       stationSpacingRatiosTopToBottom,
     ),
@@ -133,9 +133,14 @@ export const stopsTraveledAlongSegment = (
     return stationIndex;
   } else {
     if (trainLoc.latLng === null) return null;
-    // if approaching the first rung we manually adjust spacing later on
-    if (stationIndex === 1) {
-      return 0;
+    if (stationIndex === 0) {
+      // if approaching an arrow,
+      // return 0 stops traveled and manually provide height later on
+      if (stationIdsInOrder[0] === "arrow") {
+        return 0;
+      }
+      // otherwise, it's not on the ladder
+      return null;
     }
 
     // approximate distance between stations by looking at latlngs
@@ -190,7 +195,7 @@ const sortTrainsTopToBottom = (
 
 const trainWithDotPx = (
   train: TrainWithStopsTraveled,
-  stopsOnSegment: number,
+  stationIdsInOrder: StationId[],
   zoom: number,
   stationSpacingRatiosTopToBottom: number[],
 ): TrainWithDotPx => ({
@@ -199,7 +204,7 @@ const trainWithDotPx = (
     train.stopsTraveled,
     train.directionId,
     train.trainLoc.stopStatus,
-    stopsOnSegment,
+    stationIdsInOrder,
     zoom,
     stationSpacingRatiosTopToBottom,
   ),
@@ -209,22 +214,24 @@ const stopsTraveledToPixelsFromTop = (
   stopsTraveled: number,
   directionId: DirectionId,
   stopStatus: StopStatus,
-  stopsOnSegment: number,
+  stationIdsInOrder: StationId[],
   zoom: number,
   stationSpacingRatiosTopToBottom: number[],
 ): number => {
-  // If approaching first station on segment from westbound direction
+  const stopsOnSegment = stationIdsInOrder.length;
+
+  // If approaching first station under an arrow from westbound direction
   // hardcode above the first station
   if (
+    stationIdsInOrder[0] === "arrow" &&
+    stopsTraveled < 1.0 &&
     directionId === DirectionId.Westbound &&
-    stopsTraveled === 0 &&
     stopStatus === StopStatus.InTransitTo
   ) {
     return 45;
   }
 
-  // Makes assumption there are "arrow" rungs at the top and bottom of the ladder
-  // at those indexes. Below the top arrow (index 1) is the eastern-most stop on the segment.
+  // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
   const stopsFromTop =
     directionId === DirectionId.Westbound
       ? stopsTraveled
@@ -233,6 +240,19 @@ const stopsTraveledToPixelsFromTop = (
     stationSpacingRatiosTopToBottom
       .slice(0, stopsFromTop)
       .reduce((acc, current) => acc + current, 0);
+  const pixelsFromTop = sumOfStationRatiosForFullStopsAwayFromTop * zoom;
+
+  // If approaching first station above an arrow from eastbound direction
+  // hardcode below first station
+  if (
+    stationIdsInOrder[0] === "arrow" &&
+    stopsTraveled < 1.0 &&
+    directionId === DirectionId.Eastbound &&
+    stopStatus === StopStatus.InTransitTo
+  ) {
+    return pixelsFromTop + 45;
+  }
+
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
   if (partialDistance !== 0) {
     return (
@@ -241,17 +261,6 @@ const stopsTraveledToPixelsFromTop = (
           stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
       zoom
     );
-  }
-  const pixelsFromTop = sumOfStationRatiosForFullStopsAwayFromTop * zoom;
-
-  // If approaching first station on segment from eastbound direction
-  // hardcode below first station
-  if (
-    directionId === DirectionId.Eastbound &&
-    stopsTraveled === 0 &&
-    stopStatus === StopStatus.InTransitTo
-  ) {
-    return pixelsFromTop - 50;
   }
   return pixelsFromTop;
 };
