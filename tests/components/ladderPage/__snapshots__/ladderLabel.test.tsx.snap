@@ -4,6 +4,23 @@ exports[`LadderLabel non-revenue train 1`] = `
 <div
   class="flex items-center h-[2.625rem] p-1.5 rounded-4xl light:border light:border-slate-300 light:shadow-sm light:bg-white dark:bg-glides-blue-900 branch-color-light-rail-e-branch light:ring-1 light:ring-inset light:ring-black/30"
 >
+  <svg
+    aria-labelledby="_r_0_"
+    class="m-0.5 size-7 fill-glides-gray-300"
+    fill="none"
+    role="img"
+    viewBox="0 0 512 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title
+      id="_r_0_"
+    >
+      Non-revenue
+    </title>
+    <path
+      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+    />
+  </svg>
   <div
     class="flex flex-none flex-col items-center justify-center w-[3.1875rem] light:text-gray-600 dark:text-glides-gray-200"
   >

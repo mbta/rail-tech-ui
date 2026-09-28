@@ -1,8 +1,8 @@
 import { ReactElement, ReactNode } from "react";
-import { Icon } from "src/components/icons";
 import { CarId, Consist } from "src/data";
 import { className } from "src/util/dom";
 import { LabelMode } from "./types";
+import { BanSvg } from "../icons/Ban";
 
 export const LadderLabel = ({
   consist,
@@ -117,8 +117,7 @@ const RouteIcon = ({
     );
   } else {
     return (
-      <Icon
-        name="ban"
+      <BanSvg
         title={"Non-revenue"}
         className="m-0.5 size-7 fill-glides-gray-300"
       />
