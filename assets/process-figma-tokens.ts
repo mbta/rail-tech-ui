@@ -1,5 +1,10 @@
 import { StyleDictionary } from "style-dictionary-utils";
-import type { ParserOptions, DesignTokens } from "style-dictionary/types";
+import { isSource } from "style-dictionary-utils/filter/isSource.js";
+import type {
+  ParserOptions,
+  DesignTokens,
+  TransformedToken,
+} from "style-dictionary/types";
 
 // heavily inspired by github.com/mbta/mbta_metro/blob/main/assets/process-figma-tokens.js
 // logic modified for glorbit figma tokens
@@ -99,7 +104,6 @@ function traverseTree(
     } else {
       const val = dict[key];
       if (isLeaf(val)) {
-        // append "-{theme}" suffix directly to key in order to avoid token collision
         output[`${key}${themeSuffix}`] = parseLeaf(val);
       } else {
         output[key] = traverseTree(val, theme);
@@ -196,6 +200,26 @@ StyleDictionary.registerTransform({
   },
 });
 
+// Define a filter to omit hover-specific color tokens.
+//
+// This is because design has defined hover states in Figma that specify opacity changes for
+// pre-existing colors. We prefer to implement these by applying those same opacity changes,
+// and do not want them instead to be exported as new colors.
+//
+// Note also that StyleDictionary provides a way for us to register the function as a named
+// filter, so that it can be referenced by name in the file-specific configs below. But since
+// some files already use the `isSource` filter, and since the named filter API doesn't allow us
+// to combine multiple filters, it is easier to just pass in a function directly.
+const isNotHoverColor = (token: TransformedToken): boolean => {
+  const isHoverColor =
+    token.$type === "color" &&
+    token.path?.some(
+      (key: string) =>
+        key === "hover-light" || key === "hover-dark" || key === "hover",
+    );
+  return !isHoverColor;
+};
+
 const baseConfig = {
   parsers: ["custom-parser"],
   source: [`${SRC_DIR}/Base Mode 1.json`, `${SRC_DIR}/Text Styles.json`],
@@ -215,6 +239,7 @@ const baseConfig = {
           destination: "css/variables.base.css",
           format: "css/variables",
           options: { outputReferences: true },
+          filter: isNotHoverColor,
         },
       ],
       options: {
@@ -242,6 +267,7 @@ const opsConfig = {
           destination: "css/variables.ops.css",
           format: "css/variables",
           options: { outputReferences: true },
+          filter: isNotHoverColor,
         },
       ],
       options: {
@@ -267,7 +293,8 @@ const themeConfigs = ["Light", "Dark"].map((theme) => ({
         {
           destination: `css/variables.${theme.toLowerCase()}.css`,
           format: "css/variables",
-          filter: "isSource",
+          filter: (token: TransformedToken) =>
+            isSource(token) && isNotHoverColor(token),
           options: {
             outputReferences: true,
           },
@@ -304,6 +331,7 @@ const tailwindConfig = {
           options: {
             outputReferences: true,
           },
+          filter: isNotHoverColor,
         },
       ],
     },

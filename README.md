@@ -28,9 +28,10 @@ npm run watch
 
 1. Unzip the `design-tokens.zip` file previously downloaded
 1. Copy the contents above to `assets/figma-tokens/` (overwriting existing files)
-1. _TEMP: check for any "hover" states in the JSON files and manually delete them (temporary workaround)_
 1. Run `npm run process-tokens` to invoke `process-figma-tokens.ts`, which will generate `variables.*.css` stylesheets in `assets/css/`, as well as `tokens.js`, which will be used to build the Tailwind theme
 1. Manually update `tailwind.config.ts` following the hierarchy and casing conventions for keys, using the values defined in `tokens.js`
+
+**Note**: Running `npm run process-tokens` may result in warnings complaining that "filtered out token references were found". These are generally safe to ignore.
 
 ### Important about `npm link`
 

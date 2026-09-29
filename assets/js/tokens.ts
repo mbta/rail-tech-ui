@@ -173,10 +173,8 @@ export default {
     button: {
       "default-light": "rgb(var(--menu-button-default-light) / <alpha-value>)",
       "active-light": "rgb(var(--menu-button-active-light) / <alpha-value>)",
-      "hover-light": "rgb(var(--menu-button-hover-light) / <alpha-value>)",
       "default-dark": "rgb(var(--menu-button-default-dark) / <alpha-value>)",
       "active-dark": "rgb(var(--menu-button-active-dark) / <alpha-value>)",
-      "hover-dark": "rgb(var(--menu-button-hover-dark) / <alpha-value>)",
     },
     "background-dark": "rgb(var(--menu-background-dark) / <alpha-value>)",
   },
