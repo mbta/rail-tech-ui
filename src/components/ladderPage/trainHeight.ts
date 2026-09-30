@@ -13,6 +13,8 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
+const halfwayBetweenArrowAndStation = 45;
+
 interface TrainWithStopsTraveled {
   trainLoc: TrainLoc;
 
@@ -135,6 +137,8 @@ export const stopsTraveledAlongSegment = (
     if (trainLoc.latLng === null) return null;
     // if it's approaching the first station, it's not on the ladder
     if (stationIndex === 0) return null;
+
+    // TODO: remove once interpolating between ladders in: https://app.asana.com/1/15492006741476/project/1200882337457260/task/1210266614781194
     // if in transit to first station past an arrow,
     // return 0 stops traveled and manually provide height later on
     if (stationIndex === 1 && stationIdsInOrder[0] === "arrow") {
@@ -226,7 +230,7 @@ const stopsTraveledToPixelsFromTop = (
     directionId === DirectionId.Westbound &&
     stopStatus === StopStatus.InTransitTo
   ) {
-    return 45;
+    return halfwayBetweenArrowAndStation;
   }
 
   // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
@@ -248,7 +252,7 @@ const stopsTraveledToPixelsFromTop = (
     directionId === DirectionId.Eastbound &&
     stopStatus === StopStatus.InTransitTo
   ) {
-    return pixelsFromTop - 45;
+    return pixelsFromTop - halfwayBetweenArrowAndStation;
   }
 
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
