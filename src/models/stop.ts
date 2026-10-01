@@ -11,6 +11,11 @@ export interface Station {
   latLng: LatLng;
   spacingRatio: number;
   externalUrl?: string;
+
+  showName?: boolean;
+  showDots?: boolean;
+  arrowLeft?: "up" | "down";
+  arrowRight?: "up" | "down";
 }
 
 export type StationMap = Readonly<Partial<Record<StationId, Station>>>;

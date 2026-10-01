@@ -13,6 +13,8 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
+const HALF_DISTANCE_PX = 45;
+
 interface TrainWithStopsTraveled {
   trainLoc: TrainLoc;
 
@@ -65,7 +67,7 @@ export const trainHeights = (
   const trainsWithDotPx: TrainWithDotPx[] = trainsTopToBottom.map((train) =>
     trainWithDotPx(
       train,
-      stationIdsInOrder.length,
+      stationIdsInOrder,
       zoom,
       stationSpacingRatiosTopToBottom,
     ),
@@ -116,6 +118,8 @@ const trainWithStopsTraveled = (
  * Fails if the train is approaching the first stop in the list.
  * Fails if the vehiclePosition doesn't have enough information to determine where it is.
  */
+
+// TODO: consider how the below will support Glides, without the extra arrow rungs?
 export const stopsTraveledAlongSegment = (
   stationIdsInOrder: StationId[],
   trainLoc: TrainLoc,
@@ -133,6 +137,14 @@ export const stopsTraveledAlongSegment = (
     if (trainLoc.latLng === null) return null;
     // if it's approaching the first station, it's not on the ladder
     if (stationIndex === 0) return null;
+
+    // TODO: remove once interpolating between ladders in: https://app.asana.com/1/15492006741476/project/1200882337457260/task/1210266614781194
+    // if in transit to first station past an arrow,
+    // return 0 stops traveled and manually provide height later on
+    if (stationIndex === 1 && stationIdsInOrder[0] === "arrow") {
+      return 0;
+    }
+
     // approximate distance between stations by looking at latlngs
     const prevStationIndex = stationIndex - 1;
     const prevStationId: StationId = stationIdsInOrder[prevStationIndex];
@@ -185,7 +197,7 @@ const sortTrainsTopToBottom = (
 
 const trainWithDotPx = (
   train: TrainWithStopsTraveled,
-  stopsOnSegment: number,
+  stationIdsInOrder: StationId[],
   zoom: number,
   stationSpacingRatiosTopToBottom: number[],
 ): TrainWithDotPx => ({
@@ -193,7 +205,8 @@ const trainWithDotPx = (
   dotPx: stopsTraveledToPixelsFromTop(
     train.stopsTraveled,
     train.directionId,
-    stopsOnSegment,
+    train.trainLoc.stopStatus,
+    stationIdsInOrder,
     zoom,
     stationSpacingRatiosTopToBottom,
   ),
@@ -202,10 +215,24 @@ const trainWithDotPx = (
 const stopsTraveledToPixelsFromTop = (
   stopsTraveled: number,
   directionId: DirectionId,
-  stopsOnSegment: number,
+  stopStatus: StopStatus,
+  stationIdsInOrder: StationId[],
   zoom: number,
   stationSpacingRatiosTopToBottom: number[],
 ): number => {
+  const stopsOnSegment = stationIdsInOrder.length;
+
+  // If approaching first station under an arrow from westbound direction
+  // hardcode above the first station
+  if (
+    stationIdsInOrder[0] === "arrow" &&
+    stopsTraveled < 1.0 &&
+    directionId === DirectionId.Westbound &&
+    stopStatus === StopStatus.InTransitTo
+  ) {
+    return HALF_DISTANCE_PX;
+  }
+
   // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
   const stopsFromTop =
     directionId === DirectionId.Westbound
@@ -215,6 +242,19 @@ const stopsTraveledToPixelsFromTop = (
     stationSpacingRatiosTopToBottom
       .slice(0, stopsFromTop)
       .reduce((acc, current) => acc + current, 0);
+  const pixelsFromTop = sumOfStationRatiosForFullStopsAwayFromTop * zoom;
+
+  // If approaching first station above an arrow from eastbound direction
+  // hardcode below first station
+  if (
+    stationIdsInOrder[0] === "arrow" &&
+    stopsTraveled < 1.0 &&
+    directionId === DirectionId.Eastbound &&
+    stopStatus === StopStatus.InTransitTo
+  ) {
+    return pixelsFromTop - HALF_DISTANCE_PX;
+  }
+
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
   if (partialDistance !== 0) {
     return (
@@ -224,7 +264,7 @@ const stopsTraveledToPixelsFromTop = (
       zoom
     );
   }
-  return sumOfStationRatiosForFullStopsAwayFromTop * zoom;
+  return pixelsFromTop;
 };
 
 /**

@@ -15,6 +15,7 @@
     "prepare": "npm run build",
     "process-tokens": "tsx ./assets/process-figma-tokens.ts",
     "test": "jest",
+    "test:jest": "jest",
     "test:tsc": "tsc --noemit",
     "test:format": "prettier --check .",
     "watch": "tsx build.ts --watch"
