@@ -7,7 +7,7 @@ const colorStyles: Record<ButtonType, string> = {
   primary:
     "light:bg-alt-blue-700 light:text-white light:hover:bg-alt-blue-700/75 dark:bg-blue-300 dark:text-slate-800 dark:hover:bg-blue-300/75",
   secondary:
-    "border border-current hover:bg-slate-400/50 dark:text-white light:text-black",
+    "border border-current hover:bg-white/[.4] dark:text-white light:text-black light:hover:bg-slate-200/75",
   tertiary:
     "light:border light:border-alt-blue-700 light:text-alt-blue-700 light:hover:bg-alt-blue-700/25 dark:bg-blue-300/20 dark:text-blue-300 dark:hover:bg-blue-300/[.45]",
   quaternary:
