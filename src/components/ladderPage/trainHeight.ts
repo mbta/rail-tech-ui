@@ -13,7 +13,7 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
-const halfwayBetweenArrowAndStation = 45;
+const HALF_DISTANCE_PX = 45;
 
 interface TrainWithStopsTraveled {
   trainLoc: TrainLoc;
@@ -230,7 +230,7 @@ const stopsTraveledToPixelsFromTop = (
     directionId === DirectionId.Westbound &&
     stopStatus === StopStatus.InTransitTo
   ) {
-    return halfwayBetweenArrowAndStation;
+    return HALF_DISTANCE_PX;
   }
 
   // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
@@ -252,7 +252,7 @@ const stopsTraveledToPixelsFromTop = (
     directionId === DirectionId.Eastbound &&
     stopStatus === StopStatus.InTransitTo
   ) {
-    return pixelsFromTop - halfwayBetweenArrowAndStation;
+    return pixelsFromTop - HALF_DISTANCE_PX;
   }
 
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
