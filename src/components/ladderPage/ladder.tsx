@@ -229,12 +229,12 @@ const StationList = ({
         const stationId = station.id;
         const stationSpacingRatio = station.spacingRatio;
         const isSelected = stationId === stationSelection?.stationId;
-        const isLastStation: boolean = index === eastToWestStations.length - 1;
-        // post-station arrows are internally treated as stations, which means
-        // `isLastStation` isn't helpful for trainsheet button positioning.
-        const isLastRealStation: boolean =
+        const isLastStation: boolean =
           realStations.indexOf(station) == realStations.length - 1;
-        const heightPx = isLastStation ? 0 : stationSpacingRatio * zoom;
+        const heightPx =
+          index === eastToWestStations.length - 1
+            ? 0
+            : stationSpacingRatio * zoom;
         return (
           <li
             key={stationId}
@@ -271,7 +271,10 @@ const StationList = ({
             {station.externalUrl ? (
               <a
                 href={station.externalUrl}
-                className={`absolute inset-0 ${isLastRealStation ? "top-6" : "-top-10"} hidden text-ladder-text-primary-light md:block dark:text-ladder-text-primary-dark`}
+                className={className([
+                  "absolute inset-0 hidden text-ladder-text-primary-light md:block dark:text-ladder-text-primary-dark",
+                  isLastStation ? "top-6" : "-top-10",
+                ])}
                 target="_blank"
                 data-testid="trainsheet-link"
               >
