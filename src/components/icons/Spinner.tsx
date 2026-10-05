@@ -4,7 +4,7 @@ const Spinner = ({ extraClassName }: { extraClassName?: string }) => {
   return (
     <div
       className={className([
-        "h-6 w-6 animate-spin rounded-full border-4 border-dotted border-gray-400 border-t-transparent",
+        "h-6 w-6 animate-spin rounded-full border-4 border-dotted border-current border-t-transparent",
         extraClassName,
       ])}
       data-testid="spinner"
