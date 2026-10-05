@@ -1,4 +1,6 @@
 export { Ladder } from "./components/ladderPage/ladder";
+export { Button } from "./components/button";
+export { Spinner } from "./components/icons/Spinner";
 export type {
   PillAccessoryRenderer,
   PillAccessoryProps,
