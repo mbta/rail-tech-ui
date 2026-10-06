@@ -13,6 +13,8 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
+const STATIONS_BETWEEN_LADDERS: StationId[] = ["place-andrw", "place-jfk"];
+
 const HALF_DISTANCE_PX = 45;
 
 interface TrainWithStopsTraveled {
@@ -91,6 +93,7 @@ const trainWithStopsTraveled = (
     trainLoc,
     stationMap,
   );
+  // console.warn(`stopsTraveled: ${stopsTraveled}`);
   if (stopsTraveled === null) {
     return null;
   } else {
@@ -125,39 +128,71 @@ export const stopsTraveledAlongSegment = (
   trainLoc: TrainLoc,
   stationMap: StationMap,
 ): number | null => {
+  // console.warn(`stationIdsInOrder: ${stationIdsInOrder}`);
+  // console.warn(`stationMap: ${JSON.stringify(stationMap)}`);
+
   if (trainLoc.stationId === null || trainLoc.routeId === null) return null;
-  const stationIndex = stationIdsInOrder.indexOf(trainLoc.stationId);
-  if (stationIndex === -1) return null;
+
+  let stationIndex = stationIdsInOrder.indexOf(trainLoc.stationId);
+  // console.warn(`stationIndex: ${stationIndex}`);
+
+  // if (stationIndex === -1) return null;
   if (
-    trainLoc.stopStatus === StopStatus.StoppedAt ||
-    EXCEPTIONS.get(trainLoc.stationId)?.includes(trainLoc.directionId)
+    (trainLoc.stopStatus === StopStatus.StoppedAt ||
+      EXCEPTIONS.get(trainLoc.stationId)?.includes(trainLoc.directionId)) &&
+    stationIndex !== -1
   ) {
     return stationIndex;
   } else {
     if (trainLoc.latLng === null) return null;
     // if it's approaching the first station, it's not on the ladder
-    if (stationIndex === 0) return null;
+    // if (stationIndex === 0) return null;
 
     // TODO: remove once interpolating between ladders in: https://app.asana.com/1/15492006741476/project/1200882337457260/task/1210266614781194
     // if in transit to first station past an arrow,
     // return 0 stops traveled and manually provide height later on
-    if (stationIndex === 1 && stationIdsInOrder[0] === "arrow") {
-      return 0;
+    // if (stationIndex === 1 && stationIdsInOrder[0] === "arrow") {
+    //   return 0;
+    // }
+
+    if (
+      STATIONS_BETWEEN_LADDERS.includes(trainLoc.stationId) &&
+      stationIndex === -1
+    ) {
+      stationIndex = stationIdsInOrder.length - 1;
     }
+    if (stationIndex === -1) return null;
+
+    // console.warn(`stationIndex after recalc: ${stationIndex}`);
 
     // approximate distance between stations by looking at latlngs
     const prevStationIndex = stationIndex - 1;
     const prevStationId: StationId = stationIdsInOrder[prevStationIndex];
+    const destinationId: StationId = stationIdsInOrder[stationIndex];
+
+    // console.warn(`prevStationId: ${prevStationId}`); // place-jfk
+    // console.warn(
+    //   `latLng for prev: ${JSON.stringify(stationLatLng(stationMap, prevStationId))}, latLng for destination: ${JSON.stringify(stationLatLng(stationMap, destinationId))}`,
+    // );
+    // console.warn(`destinationId: ${destinationId}`); //arrow -- BUT THE WRONG END?
+    // console.warn(`stationMap: ${JSON.stringify(stationMap)}`);
     const proportionBetweenPrevAndNext: number = proportionBetweenLatLngs(
       stationLatLng(stationMap, prevStationId),
-      stationLatLng(stationMap, trainLoc.stationId),
+      // stationLatLng(stationMap, trainLoc.stationId),
+      stationLatLng(stationMap, destinationId),
       trainLoc.latLng,
     );
+    // console.warn(
+    //   `proportionBetweenPrevAndNext: ${proportionBetweenPrevAndNext}`,
+    // );
     /* Enforce a minimum distance from the nearest station, to make the difference
      * more clear between "just left a station" and "stopped at a station".
      * This is especially important in the subway, where there's often an AVI
      * right after a staion, and then no updates for a while.
      */
+    // console.warn(
+    //   `returning: ${prevStationIndex + clamp(proportionBetweenPrevAndNext, 0.2, 0.8)}`,
+    // );
     return prevStationIndex + clamp(proportionBetweenPrevAndNext, 0.2, 0.8);
   }
 };
@@ -224,14 +259,14 @@ const stopsTraveledToPixelsFromTop = (
 
   // If approaching first station under an arrow from westbound direction
   // hardcode above the first station
-  if (
-    stationIdsInOrder[0] === "arrow" &&
-    stopsTraveled < 1.0 &&
-    directionId === DirectionId.Westbound &&
-    stopStatus === StopStatus.InTransitTo
-  ) {
-    return HALF_DISTANCE_PX;
-  }
+  // if (
+  //   stationIdsInOrder[0] === "arrow" &&
+  //   stopsTraveled < 1.0 &&
+  //   directionId === DirectionId.Westbound &&
+  //   stopStatus === StopStatus.InTransitTo
+  // ) {
+  //   return HALF_DISTANCE_PX;
+  // }
 
   // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
   const stopsFromTop =
@@ -246,14 +281,14 @@ const stopsTraveledToPixelsFromTop = (
 
   // If approaching first station above an arrow from eastbound direction
   // hardcode below first station
-  if (
-    stationIdsInOrder[0] === "arrow" &&
-    stopsTraveled < 1.0 &&
-    directionId === DirectionId.Eastbound &&
-    stopStatus === StopStatus.InTransitTo
-  ) {
-    return pixelsFromTop - HALF_DISTANCE_PX;
-  }
+  // if (
+  //   stationIdsInOrder[0] === "arrow" &&
+  //   stopsTraveled < 1.0 &&
+  //   directionId === DirectionId.Eastbound &&
+  //   stopStatus === StopStatus.InTransitTo
+  // ) {
+  //   return pixelsFromTop - HALF_DISTANCE_PX;
+  // }
 
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
   if (partialDistance !== 0) {
