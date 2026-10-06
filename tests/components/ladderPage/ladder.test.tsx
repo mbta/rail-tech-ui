@@ -345,6 +345,9 @@ describe("Ladder", () => {
     const getDots = (item: HTMLElement): HTMLElement[] =>
       within(item).queryAllByTestId(/^ladder-station-dot-/);
 
+    const getUrl = (item: HTMLElement): HTMLElement | null =>
+      within(item).queryByTestId("trainsheet-link");
+
     describe("showName", () => {
       test.each([
         ["undefined", undefined],
@@ -411,6 +414,43 @@ describe("Ladder", () => {
         expect(
           getDots(getStationItem(view.container, "place-hwsst")),
         ).toHaveLength(2);
+      });
+    });
+
+    describe("externalUrl", () => {
+      test("shows external trainsheet link only on requested stations", () => {
+        const view = renderStations([
+          station({ externalUrl: "https://mbta.com" }),
+          buildStation("place-hwsst", "Hawes Street", 42.344906, -71.111145),
+        ]);
+        expect(
+          getUrl(getStationItem(view.container, "place-kencl")),
+        ).not.toBeNull();
+        expect(
+          getUrl(getStationItem(view.container, "place-hwsst")),
+        ).toBeNull();
+      });
+      test("shows trainsheet link on top for first station", () => {
+        const view = renderStations([
+          station({ externalUrl: "https://mbta.com" }),
+          buildStation("place-hwsst", "Hawes Street", 42.344906, -71.111145),
+        ]);
+        const kenclUrl = getUrl(getStationItem(view.container, "place-kencl"));
+        expect(kenclUrl).not.toBeNull();
+        // a little fragile since it's based on a specific class but I can't
+        // think of a better way to do it right now.
+        expect(kenclUrl?.classList).toContain("-top-10");
+      });
+      test("shows trainsheet link on bottom for last station", () => {
+        const view = renderStations([
+          buildStation("place-hwsst", "Hawes Street", 42.344906, -71.111145),
+          station({ externalUrl: "https://mbta.com" }),
+        ]);
+        const kenclUrl = getUrl(getStationItem(view.container, "place-kencl"));
+        expect(kenclUrl).not.toBeNull();
+        // a little fragile since it's based on a specific class but I can't
+        // think of a better way to do it right now.
+        expect(kenclUrl?.classList).toContain("top-6");
       });
     });
 

@@ -215,6 +215,11 @@ const StationList = ({
   const unselectedStopClass = className([
     "light:border-slate-300 light:bg-slate-100 dark:border-glides-blue-900 dark:bg-glides-blue-700",
   ]);
+  // filter down to actual stations, removing the arrow listings. used for
+  // trainsheet link orientation.
+  const realStations = eastToWestStations.filter(
+    (station) => station.shortName != undefined,
+  );
   return (
     <ul
       className="light:border-slate-200 mx-auto w-32 border-0 border-x-[6px] border-solid dark:border-glides-blue-900"
@@ -224,8 +229,12 @@ const StationList = ({
         const stationId = station.id;
         const stationSpacingRatio = station.spacingRatio;
         const isSelected = stationId === stationSelection?.stationId;
-        const isLastStation: boolean = index === eastToWestStations.length - 1;
-        const heightPx = isLastStation ? 0 : stationSpacingRatio * zoom;
+        const isLastStation: boolean =
+          realStations.indexOf(station) == realStations.length - 1;
+        const heightPx =
+          index === eastToWestStations.length - 1
+            ? 0
+            : stationSpacingRatio * zoom;
         return (
           <li
             key={stationId}
@@ -262,8 +271,12 @@ const StationList = ({
             {station.externalUrl ? (
               <a
                 href={station.externalUrl}
-                className="absolute inset-0 -top-10 hidden text-ladder-text-primary-light md:block dark:text-ladder-text-primary-dark"
+                className={className([
+                  "absolute inset-0 hidden text-ladder-text-primary-light md:block dark:text-ladder-text-primary-dark",
+                  isLastStation ? "top-6" : "-top-10",
+                ])}
                 target="_blank"
+                data-testid="trainsheet-link"
               >
                 <DepArrow
                   className="mx-auto h-5 w-5"
