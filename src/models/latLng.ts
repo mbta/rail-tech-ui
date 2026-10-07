@@ -39,3 +39,22 @@ export const proportionBetweenLatLngs = (
     totalLatDelta * totalLatDelta + totalLngDelta * totalLngDelta;
   return dotProductStartToPoint / startToFinishMagnitudeSquared;
 };
+
+// TODO: remove? just used to compute there arrow lat, lng's are for 0.6 threshold points
+const latLngAtProportion = (
+  start: LatLng,
+  finish: LatLng,
+  proportion: number,
+): LatLng => {
+  const latitude = start.latitude + (finish.latitude - start.latitude) * proportion;
+  const longitude = start.longitude + (finish.longitude - start.longitude) * proportion;
+  return { latitude, longitude };
+};
+
+// 0.6 westbound progress threshold point from Andrew -> JFK
+// console.log(latLngAtProportion({ latitude: 42.330154, longitude: -71.057655 }, { latitude: 42.320685, longitude: -71.052391 }, 0.6));
+// 42.3244726, -71.0544966
+
+// 0.6 eastbound progress threshold pointfrom JFK -> Andrew
+// console.log(latLngAtProportion({ latitude: 42.320685, longitude: -71.052391 }, { latitude: 42.330154, longitude: -71.057655 }, 0.6));
+// 42.326390, -71.056827

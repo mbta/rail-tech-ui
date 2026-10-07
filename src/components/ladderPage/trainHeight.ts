@@ -155,6 +155,8 @@ export const stopsTraveledAlongSegment = (
     //   return 0;
     // }
 
+    // train is between Andrew <-> JFK and not originally on this ladder
+    // i.e it was "jumped" to this ladder by Orbit's vehicle-to-branch matching
     if (
       STATIONS_BETWEEN_LADDERS.includes(trainLoc.stationId) &&
       stationIndex === -1
