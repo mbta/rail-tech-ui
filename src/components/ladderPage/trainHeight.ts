@@ -148,7 +148,7 @@ export const stopsTraveledAlongSegment = (
     // if it's approaching the first station, it's not on the ladder
     // if (stationIndex === 0) return null;
 
-    // TODO: remove once interpolating between ladders in: https://app.asana.com/1/15492006741476/project/1200882337457260/task/1210266614781194
+    // TODO: rework to specifically handle above Alewife/below Ashmont or Braintree?
     // if in transit to first station past an arrow,
     // return 0 stops traveled and manually provide height later on
     // if (stationIndex === 1 && stationIdsInOrder[0] === "arrow") {
@@ -161,6 +161,7 @@ export const stopsTraveledAlongSegment = (
       STATIONS_BETWEEN_LADDERS.includes(trainLoc.stationId) &&
       stationIndex === -1
     ) {
+      // console.warn(`Train is between ladders: ${trainLoc.stationId}`);
       stationIndex = stationIdsInOrder.length - 1;
     }
     if (stationIndex === -1) return null;
@@ -172,12 +173,8 @@ export const stopsTraveledAlongSegment = (
     const prevStationId: StationId = stationIdsInOrder[prevStationIndex];
     const destinationId: StationId = stationIdsInOrder[stationIndex];
 
-    // console.warn(`prevStationId: ${prevStationId}`); // place-jfk
-    // console.warn(
-    //   `latLng for prev: ${JSON.stringify(stationLatLng(stationMap, prevStationId))}, latLng for destination: ${JSON.stringify(stationLatLng(stationMap, destinationId))}`,
-    // );
-    // console.warn(`destinationId: ${destinationId}`); //arrow -- BUT THE WRONG END?
-    // console.warn(`stationMap: ${JSON.stringify(stationMap)}`);
+    // console.warn(`prevStationId: ${prevStationId}`);
+    // console.warn(`destinationId: ${destinationId}`);
     const proportionBetweenPrevAndNext: number = proportionBetweenLatLngs(
       stationLatLng(stationMap, prevStationId),
       // stationLatLng(stationMap, trainLoc.stationId),

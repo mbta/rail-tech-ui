@@ -245,7 +245,7 @@ const StationList = ({
             {station.arrowLeft === "down" && (
               <div
                 data-testid="ladder-station-arrow-left-down"
-                className="light:border-l-ladder-background-light light:border-r-ladder-background-light absolute bottom-0 left-[-18px] h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark dark:border-t-glides-blue-900"
+                className="translate-y-6 light:border-l-ladder-background-light light:border-r-ladder-background-light absolute bottom-0 left-[-18px] h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark dark:border-t-glides-blue-900"
               />
             )}
             {station.arrowLeft === "up" && (
@@ -264,7 +264,7 @@ const StationList = ({
             {station.arrowRight === "up" && (
               <div
                 data-testid="ladder-station-arrow-right-up"
-                className="light:border-l-ladder-background-light light:border-r-ladder-background-light absolute right-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] dark:border-b-glides-blue-900 dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark"
+                className="-translate-y-6 light:border-l-ladder-background-light light:border-r-ladder-background-light absolute right-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] dark:border-b-glides-blue-900 dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark"
               />
             )}
 
