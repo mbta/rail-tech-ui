@@ -13,6 +13,8 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
+const STATIONS_BETWEEN_LADDERS: StationId[] = ["place-andrw", "place-jfk"];
+
 const HALF_DISTANCE_PX = 45;
 
 interface TrainWithStopsTraveled {
@@ -126,31 +128,36 @@ export const stopsTraveledAlongSegment = (
   stationMap: StationMap,
 ): number | null => {
   if (trainLoc.stationId === null || trainLoc.routeId === null) return null;
-  const stationIndex = stationIdsInOrder.indexOf(trainLoc.stationId);
-  if (stationIndex === -1) return null;
+
+  let stationIndex = stationIdsInOrder.indexOf(trainLoc.stationId);
   if (
-    trainLoc.stopStatus === StopStatus.StoppedAt ||
-    EXCEPTIONS.get(trainLoc.stationId)?.includes(trainLoc.directionId)
+    (trainLoc.stopStatus === StopStatus.StoppedAt ||
+      EXCEPTIONS.get(trainLoc.stationId)?.includes(trainLoc.directionId)) &&
+    stationIndex !== -1
   ) {
     return stationIndex;
   } else {
     if (trainLoc.latLng === null) return null;
-    // if it's approaching the first station, it's not on the ladder
-    if (stationIndex === 0) return null;
 
-    // TODO: remove once interpolating between ladders in: https://app.asana.com/1/15492006741476/project/1200882337457260/task/1210266614781194
-    // if in transit to first station past an arrow,
-    // return 0 stops traveled and manually provide height later on
-    if (stationIndex === 1 && stationIdsInOrder[0] === "arrow") {
-      return 0;
+    // train is between Andrew <-> JFK and not originally on this ladder
+    // i.e it was "jumped" to this ladder by Orbit's vehicle-to-branch matching
+    if (
+      STATIONS_BETWEEN_LADDERS.includes(trainLoc.stationId) &&
+      stationIndex === -1
+    ) {
+      stationIndex = stationIdsInOrder.length - 1;
     }
+    if (stationIndex === -1) return null;
 
     // approximate distance between stations by looking at latlngs
     const prevStationIndex = stationIndex - 1;
     const prevStationId: StationId = stationIdsInOrder[prevStationIndex];
+    const destinationId: StationId = stationIdsInOrder[stationIndex];
+
     const proportionBetweenPrevAndNext: number = proportionBetweenLatLngs(
       stationLatLng(stationMap, prevStationId),
-      stationLatLng(stationMap, trainLoc.stationId),
+      // stationLatLng(stationMap, trainLoc.stationId),
+      stationLatLng(stationMap, destinationId),
       trainLoc.latLng,
     );
     /* Enforce a minimum distance from the nearest station, to make the difference
@@ -224,14 +231,14 @@ const stopsTraveledToPixelsFromTop = (
 
   // If approaching first station under an arrow from westbound direction
   // hardcode above the first station
-  if (
-    stationIdsInOrder[0] === "arrow" &&
-    stopsTraveled < 1.0 &&
-    directionId === DirectionId.Westbound &&
-    stopStatus === StopStatus.InTransitTo
-  ) {
-    return HALF_DISTANCE_PX;
-  }
+  // if (
+  //   stationIdsInOrder[0] === "arrow" &&
+  //   stopsTraveled < 1.0 &&
+  //   directionId === DirectionId.Westbound &&
+  //   stopStatus === StopStatus.InTransitTo
+  // ) {
+  //   return HALF_DISTANCE_PX;
+  // }
 
   // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
   const stopsFromTop =
@@ -246,14 +253,14 @@ const stopsTraveledToPixelsFromTop = (
 
   // If approaching first station above an arrow from eastbound direction
   // hardcode below first station
-  if (
-    stationIdsInOrder[0] === "arrow" &&
-    stopsTraveled < 1.0 &&
-    directionId === DirectionId.Eastbound &&
-    stopStatus === StopStatus.InTransitTo
-  ) {
-    return pixelsFromTop - HALF_DISTANCE_PX;
-  }
+  // if (
+  //   stationIdsInOrder[0] === "arrow" &&
+  //   stopsTraveled < 1.0 &&
+  //   directionId === DirectionId.Eastbound &&
+  //   stopStatus === StopStatus.InTransitTo
+  // ) {
+  //   return pixelsFromTop - HALF_DISTANCE_PX;
+  // }
 
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
   if (partialDistance !== 0) {

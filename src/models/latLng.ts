@@ -39,3 +39,14 @@ export const proportionBetweenLatLngs = (
     totalLatDelta * totalLatDelta + totalLngDelta * totalLngDelta;
   return dotProductStartToPoint / startToFinishMagnitudeSquared;
 };
+
+// TODO: remove? just used to compute there arrow lat, lng's are for 0.5 threshold points
+const latLngAtProportion = (
+  start: LatLng,
+  finish: LatLng,
+  proportion: number,
+): LatLng => {
+  const latitude = start.latitude + (finish.latitude - start.latitude) * proportion;
+  const longitude = start.longitude + (finish.longitude - start.longitude) * proportion;
+  return { latitude, longitude };
+};
