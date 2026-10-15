@@ -13,8 +13,6 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
-const HALF_DISTANCE_PX = 45;
-
 interface TrainWithStopsTraveled {
   trainLoc: TrainLoc;
 
@@ -54,11 +52,17 @@ export const trainHeights = (
   stationIdsInOrder: StationId[],
   stationSpacingRatiosTopToBottom: number[],
   stationMap: StationMap,
+  interLadderStationIds: StationId[],
 ): TrainWithHeights[] => {
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
     (trainLoc) =>
-      trainWithStopsTraveled(trainLoc, stationIdsInOrder, stationMap),
+      trainWithStopsTraveled(
+        trainLoc,
+        stationIdsInOrder,
+        stationMap,
+        interLadderStationIds,
+      ),
   );
   const trainsTopToBottom: TrainWithStopsTraveled[] = sortTrainsTopToBottom(
     trainsWithStopsTraveled,
@@ -81,6 +85,7 @@ const trainWithStopsTraveled = (
   trainLoc: TrainLoc,
   stationIdsInOrder: StationId[],
   stationMap: StationMap,
+  interLadderStationIds: StationId[],
 ): TrainWithStopsTraveled | null => {
   // don't even check if the route or direction is missing
   if (trainLoc.routeId === null || trainLoc.directionId === null) {
@@ -90,6 +95,7 @@ const trainWithStopsTraveled = (
     stationIdsInOrder,
     trainLoc,
     stationMap,
+    interLadderStationIds,
   );
   if (stopsTraveled === null) {
     return null;
@@ -124,33 +130,43 @@ export const stopsTraveledAlongSegment = (
   stationIdsInOrder: StationId[],
   trainLoc: TrainLoc,
   stationMap: StationMap,
+  interLadderStationIds: StationId[],
 ): number | null => {
   if (trainLoc.stationId === null || trainLoc.routeId === null) return null;
-  const stationIndex = stationIdsInOrder.indexOf(trainLoc.stationId);
-  if (stationIndex === -1) return null;
+
+  let stationIndex = stationIdsInOrder.indexOf(trainLoc.stationId);
   if (
-    trainLoc.stopStatus === StopStatus.StoppedAt ||
-    EXCEPTIONS.get(trainLoc.stationId)?.includes(trainLoc.directionId)
+    (trainLoc.stopStatus === StopStatus.StoppedAt ||
+      EXCEPTIONS.get(trainLoc.stationId)?.includes(trainLoc.directionId)) &&
+    stationIndex !== -1
   ) {
+    // Vehicle is STOPPED_AT, return its station index
     return stationIndex;
   } else {
     if (trainLoc.latLng === null) return null;
-    // if it's approaching the first station, it's not on the ladder
-    if (stationIndex === 0) return null;
 
-    // TODO: remove once interpolating between ladders in: https://app.asana.com/1/15492006741476/project/1200882337457260/task/1210266614781194
-    // if in transit to first station past an arrow,
-    // return 0 stops traveled and manually provide height later on
-    if (stationIndex === 1 && stationIdsInOrder[0] === "arrow") {
-      return 0;
+    // Vehicle is IN_TRANSIT_TO/INCOMING_AT, we must approximate distance
+
+    // Check if the train is on its way to a station that's explicitly not on this ladder
+    if (
+      interLadderStationIds.includes(trainLoc.stationId) &&
+      stationIndex === -1
+    ) {
+      // Draw it past the last station
+      stationIndex = stationIdsInOrder.length - 1;
     }
+
+    // If the vehicle's not on this ladder OR headed to the first station (w/ no arrows), don't draw it
+    if (stationIndex === -1 || stationIndex === 0) return null;
 
     // approximate distance between stations by looking at latlngs
     const prevStationIndex = stationIndex - 1;
     const prevStationId: StationId = stationIdsInOrder[prevStationIndex];
+    const destinationId: StationId = stationIdsInOrder[stationIndex];
+
     const proportionBetweenPrevAndNext: number = proportionBetweenLatLngs(
       stationLatLng(stationMap, prevStationId),
-      stationLatLng(stationMap, trainLoc.stationId),
+      stationLatLng(stationMap, destinationId),
       trainLoc.latLng,
     );
     /* Enforce a minimum distance from the nearest station, to make the difference
@@ -205,7 +221,6 @@ const trainWithDotPx = (
   dotPx: stopsTraveledToPixelsFromTop(
     train.stopsTraveled,
     train.directionId,
-    train.trainLoc.stopStatus,
     stationIdsInOrder,
     zoom,
     stationSpacingRatiosTopToBottom,
@@ -215,25 +230,12 @@ const trainWithDotPx = (
 const stopsTraveledToPixelsFromTop = (
   stopsTraveled: number,
   directionId: DirectionId,
-  stopStatus: StopStatus,
   stationIdsInOrder: StationId[],
   zoom: number,
   stationSpacingRatiosTopToBottom: number[],
 ): number => {
   const stopsOnSegment = stationIdsInOrder.length;
-
-  // If approaching first station under an arrow from westbound direction
-  // hardcode above the first station
-  if (
-    stationIdsInOrder[0] === "arrow" &&
-    stopsTraveled < 1.0 &&
-    directionId === DirectionId.Westbound &&
-    stopStatus === StopStatus.InTransitTo
-  ) {
-    return HALF_DISTANCE_PX;
-  }
-
-  // Makes the assumption that the top of the ladder is the eastern-most stop on the segment
+  // Makes the assumption that the ladder is ordered such that the rungs from top to bottom correspond to stations from east to west
   const stopsFromTop =
     directionId === DirectionId.Westbound
       ? stopsTraveled
@@ -243,17 +245,6 @@ const stopsTraveledToPixelsFromTop = (
       .slice(0, stopsFromTop)
       .reduce((acc, current) => acc + current, 0);
   const pixelsFromTop = sumOfStationRatiosForFullStopsAwayFromTop * zoom;
-
-  // If approaching first station above an arrow from eastbound direction
-  // hardcode below first station
-  if (
-    stationIdsInOrder[0] === "arrow" &&
-    stopsTraveled < 1.0 &&
-    directionId === DirectionId.Eastbound &&
-    stopStatus === StopStatus.InTransitTo
-  ) {
-    return pixelsFromTop - HALF_DISTANCE_PX;
-  }
 
   const partialDistance = stopsFromTop - Math.trunc(stopsFromTop);
   if (partialDistance !== 0) {

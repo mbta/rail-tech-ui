@@ -49,6 +49,7 @@ describe("trainHeights", () => {
         stationIdsWestbound,
         stationSpacingRatios,
         byId(DEMO_C_STATIONS),
+        [],
       ),
     ).toEqual([]);
   });
@@ -67,6 +68,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_B_STATIONS),
+      [],
     );
     expect(result.dotPx).toEqual(0);
   });
@@ -85,6 +87,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toBeWithinRange(41, 79);
   });
@@ -103,6 +106,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toEqual(80);
   });
@@ -121,6 +125,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toBeWithinRange(81, 119);
   });
@@ -139,35 +144,9 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toEqual(120);
-  });
-
-  test("westbound above an arrow", () => {
-    const stationIdsWestboundWithArrows = [
-      "arrow",
-      ...stationIdsWestbound,
-      "arrow",
-    ];
-    const trainLoc: TrainLoc = cTrainFactory.build({
-      consist: ["3900"],
-      directionId: DirectionId.Westbound,
-      stationId: "place-north",
-      stopStatus: StopStatus.InTransitTo,
-    });
-    const [result]: TrainWithHeights[] = trainHeights(
-      [trainLoc],
-      40,
-      1,
-      stationIdsWestboundWithArrows,
-      stationSpacingRatios,
-      byId([
-        buildStation("arrow", "top arrow", 42.367858, -71.064144),
-        ...DEMO_C_STATIONS,
-        buildStation("arrow", "bottom arrow", 42.336032, -71.149841),
-      ]),
-    );
-    expect(result.dotPx).toEqual(45);
   });
 
   test("eastbound before bottom station doesn't show", () => {
@@ -185,6 +164,7 @@ describe("trainHeights", () => {
         stationIdsEastbound,
         stationSpacingRatios,
         byId(DEMO_C_STATIONS),
+        [],
       ),
     ).toEqual([]);
   });
@@ -203,6 +183,7 @@ describe("trainHeights", () => {
       stationIdsEastboundM,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -221,6 +202,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -239,6 +221,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toBeWithinRange(81, 119);
   });
@@ -257,6 +240,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toEqual(80);
   });
@@ -275,6 +259,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toBeWithinRange(0, 39);
   });
@@ -293,36 +278,9 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     expect(result.dotPx).toEqual(0);
-  });
-
-  test("eastbound underneath an arrow", () => {
-    const stationIdsEastboundWithArrows = [
-      "arrow",
-      ...stationIdsEastbound,
-      "arrow",
-    ];
-    const trainLoc: TrainLoc = cTrainFactory.build({
-      consist: ["3900"],
-      directionId: DirectionId.Eastbound,
-      stationId: "place-clmnl",
-      stopStatus: StopStatus.InTransitTo,
-    });
-    const [result]: TrainWithHeights[] = trainHeights(
-      [trainLoc],
-      40,
-      1,
-      stationIdsEastboundWithArrows,
-      stationSpacingRatios,
-      byId([
-        buildStation("arrow", "top arrow", 42.367858, -71.064144),
-        ...DEMO_C_STATIONS,
-        buildStation("arrow", "bottom arrow", 42.336032, -71.149841),
-      ]),
-    );
-    // 40 (zoom) * 4.0 (1.0 spacing ratio for 4 stations) - 45 (manual adjustment in stopsTraveledToPixelsFromTop())
-    expect(result.dotPx).toEqual(115);
   });
 
   test("westbound overlapping trains are sorted by timestamp", () => {
@@ -349,6 +307,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     const [train1, train2] =
       result[0].consist[0] === "3901" ? result : reverse(result);
@@ -391,6 +350,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
+      [],
     );
     const [train1, train2] =
       result[0].consist[0] === "3901" ? result : reverse(result);
