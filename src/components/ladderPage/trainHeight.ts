@@ -13,10 +13,6 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
-const STATIONS_BETWEEN_LADDERS: StationId[] = ["place-andrw", "place-jfk"];
-
-const HALF_DISTANCE_PX = 45;
-
 interface TrainWithStopsTraveled {
   trainLoc: TrainLoc;
 
@@ -56,11 +52,12 @@ export const trainHeights = (
   stationIdsInOrder: StationId[],
   stationSpacingRatiosTopToBottom: number[],
   stationMap: StationMap,
+  interLadderStationIds: StationId[],
 ): TrainWithHeights[] => {
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
     (trainLoc) =>
-      trainWithStopsTraveled(trainLoc, stationIdsInOrder, stationMap),
+      trainWithStopsTraveled(trainLoc, stationIdsInOrder, stationMap, interLadderStationIds),
   );
   const trainsTopToBottom: TrainWithStopsTraveled[] = sortTrainsTopToBottom(
     trainsWithStopsTraveled,
@@ -83,6 +80,7 @@ const trainWithStopsTraveled = (
   trainLoc: TrainLoc,
   stationIdsInOrder: StationId[],
   stationMap: StationMap,
+  interLadderStationIds: StationId[],
 ): TrainWithStopsTraveled | null => {
   // don't even check if the route or direction is missing
   if (trainLoc.routeId === null || trainLoc.directionId === null) {
@@ -92,6 +90,7 @@ const trainWithStopsTraveled = (
     stationIdsInOrder,
     trainLoc,
     stationMap,
+    interLadderStationIds,
   );
   if (stopsTraveled === null) {
     return null;
@@ -126,6 +125,7 @@ export const stopsTraveledAlongSegment = (
   stationIdsInOrder: StationId[],
   trainLoc: TrainLoc,
   stationMap: StationMap,
+  interLadderStationIds: StationId[],
 ): number | null => {
   if (trainLoc.stationId === null || trainLoc.routeId === null) return null;
 
@@ -142,7 +142,7 @@ export const stopsTraveledAlongSegment = (
     // train is between Andrew <-> JFK and not originally on this ladder
     // i.e it was "jumped" to this ladder by Orbit's vehicle-to-branch matching
     if (
-      STATIONS_BETWEEN_LADDERS.includes(trainLoc.stationId) &&
+      interLadderStationIds.includes(trainLoc.stationId) &&
       stationIndex === -1
     ) {
       stationIndex = stationIdsInOrder.length - 1;
@@ -211,7 +211,6 @@ const trainWithDotPx = (
   dotPx: stopsTraveledToPixelsFromTop(
     train.stopsTraveled,
     train.directionId,
-    train.trainLoc.stopStatus,
     stationIdsInOrder,
     zoom,
     stationSpacingRatiosTopToBottom,
@@ -221,7 +220,6 @@ const trainWithDotPx = (
 const stopsTraveledToPixelsFromTop = (
   stopsTraveled: number,
   directionId: DirectionId,
-  stopStatus: StopStatus,
   stationIdsInOrder: StationId[],
   zoom: number,
   stationSpacingRatiosTopToBottom: number[],
@@ -243,7 +241,7 @@ const stopsTraveledToPixelsFromTop = (
     return (
       (sumOfStationRatiosForFullStopsAwayFromTop +
         partialDistance *
-          stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
+        stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
       zoom
     );
   }

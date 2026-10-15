@@ -3,7 +3,7 @@ import { Ladder, PillAccessoryProps } from "src/components/ladderPage/ladder";
 import { CarId } from "src/data";
 import { DirectionId } from "src/models/route";
 import { Station } from "src/models/stop";
-import { StopStatus, TrainLoc } from "src/models/trainLocation";
+import { TrainLoc } from "src/models/trainLocation";
 import { scrollTo } from "src/util/browser";
 import { trainLocFactory } from "tests/testHelpers/factory";
 import {
