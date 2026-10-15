@@ -248,7 +248,7 @@ const StationList = ({
             {station.arrowLeft === "down" && (
               <div
                 data-testid="ladder-station-arrow-left-down"
-                className="light:border-l-ladder-background-light light:border-r-ladder-background-light absolute bottom-0 left-[-18px] h-0 w-0 translate-y-6 border-l-[15px] border-r-[15px] border-t-[25px] dark:border-l-ladder-background-dark dark:border-r--background-dark dark:border-t-glides-blue-900"
+                className="light:border-l-ladder-background-light light:border-r-ladder-background-light dark:border-r--background-dark absolute bottom-0 left-[-18px] h-0 w-0 translate-y-6 border-l-[15px] border-r-[15px] border-t-[25px] dark:border-l-ladder-background-dark dark:border-t-glides-blue-900"
               />
             )}
             {station.arrowLeft === "up" && (
@@ -319,7 +319,7 @@ const StationList = ({
                     stopClass,
                     "left-[-12.6px]",
                     isSelected &&
-                      stationSelection.directionId === DirectionId.Westbound
+                    stationSelection.directionId === DirectionId.Westbound
                       ? selectedStopClass
                       : unselectedStopClass,
                   ])}
@@ -343,7 +343,7 @@ const StationList = ({
                     stopClass,
                     "right-[-12.6px]",
                     isSelected &&
-                      stationSelection.directionId === DirectionId.Eastbound
+                    stationSelection.directionId === DirectionId.Eastbound
                       ? selectedStopClass
                       : unselectedStopClass,
                   ])}
@@ -559,9 +559,9 @@ const LabelButton = ({
       renderAccessoryForTrainLoc == undefined
         ? null
         : renderAccessoryForTrainLoc({
-          trainLoc: trainWithHeights.trainLoc,
-          directionId: trainWithHeights.directionId,
-        }),
+            trainLoc: trainWithHeights.trainLoc,
+            directionId: trainWithHeights.directionId,
+          }),
     [renderAccessoryForTrainLoc, trainWithHeights.trainLoc],
   );
   return (

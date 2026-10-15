@@ -48,7 +48,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_B_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toEqual(0);
   });
@@ -67,7 +67,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toBeWithinRange(41, 79);
   });
@@ -86,7 +86,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toEqual(80);
   });
@@ -105,7 +105,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toBeWithinRange(81, 119);
   });
@@ -124,7 +124,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -143,7 +143,7 @@ describe("trainHeights", () => {
       stationIdsEastboundM,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -162,7 +162,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toEqual(120);
   });
@@ -181,7 +181,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toBeWithinRange(81, 119);
   });
@@ -200,7 +200,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toEqual(80);
   });
@@ -219,7 +219,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toBeWithinRange(0, 39);
   });
@@ -238,7 +238,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     expect(result.dotPx).toEqual(0);
   });
@@ -267,7 +267,7 @@ describe("trainHeights", () => {
       stationIdsWestbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     const [train1, train2] =
       result[0].consist[0] === "3901" ? result : reverse(result);
@@ -310,7 +310,7 @@ describe("trainHeights", () => {
       stationIdsEastbound,
       stationSpacingRatios,
       byId(DEMO_C_STATIONS),
-      []
+      [],
     );
     const [train1, train2] =
       result[0].consist[0] === "3901" ? result : reverse(result);

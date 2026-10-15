@@ -57,7 +57,12 @@ export const trainHeights = (
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
     (trainLoc) =>
-      trainWithStopsTraveled(trainLoc, stationIdsInOrder, stationMap, interLadderStationIds),
+      trainWithStopsTraveled(
+        trainLoc,
+        stationIdsInOrder,
+        stationMap,
+        interLadderStationIds,
+      ),
   );
   const trainsTopToBottom: TrainWithStopsTraveled[] = sortTrainsTopToBottom(
     trainsWithStopsTraveled,
@@ -241,7 +246,7 @@ const stopsTraveledToPixelsFromTop = (
     return (
       (sumOfStationRatiosForFullStopsAwayFromTop +
         partialDistance *
-        stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
+          stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
       zoom
     );
   }
