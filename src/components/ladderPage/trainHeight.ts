@@ -140,19 +140,24 @@ export const stopsTraveledAlongSegment = (
       EXCEPTIONS.get(trainLoc.stationId)?.includes(trainLoc.directionId)) &&
     stationIndex !== -1
   ) {
+    // Vehicle is STOPPED_AT, return its station index
     return stationIndex;
   } else {
     if (trainLoc.latLng === null) return null;
 
-    // train is between Andrew <-> JFK and not originally on this ladder
-    // i.e it was "jumped" to this ladder by Orbit's vehicle-to-branch matching
+    // Vehicle is IN_TRANSIT_TO/INCOMING_AT, we must approximate distance
+
+    // Check if the train is on its way to a station that's explicitly not on this ladder
     if (
       interLadderStationIds.includes(trainLoc.stationId) &&
       stationIndex === -1
     ) {
+      // Draw it past the last station
       stationIndex = stationIdsInOrder.length - 1;
     }
-    if (stationIndex === -1) return null;
+
+    // If the vehicle's not on this ladder OR headed to the first station (w/ no arrows), don't draw it
+    if (stationIndex === -1 || stationIndex === 0) return null;
 
     // approximate distance between stations by looking at latlngs
     const prevStationIndex = stationIndex - 1;
@@ -246,7 +251,7 @@ const stopsTraveledToPixelsFromTop = (
     return (
       (sumOfStationRatiosForFullStopsAwayFromTop +
         partialDistance *
-          stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
+        stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
       zoom
     );
   }

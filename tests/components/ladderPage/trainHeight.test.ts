@@ -34,6 +34,26 @@ const cTrainFactory = trainLocFactory.params({ routeId: "Green-C" });
 const matTrainFactory = trainLocFactory.params({ routeId: "Mattapan" });
 
 describe("trainHeights", () => {
+  test("westbound before top station doesn't show", () => {
+    const trainLoc: TrainLoc = cTrainFactory.build({
+      consist: ["3900"],
+      directionId: DirectionId.Westbound,
+      stationId: "place-north",
+      stopStatus: StopStatus.InTransitTo,
+    });
+    expect(
+      trainHeights(
+        [trainLoc],
+        40,
+        0,
+        stationIdsWestbound,
+        stationSpacingRatios,
+        byId(DEMO_C_STATIONS),
+        [],
+      ),
+    ).toEqual([]);
+  });
+
   test("westbound at top station", () => {
     const trainLoc: TrainLoc = cTrainFactory.build({
       consist: ["3900"],
@@ -127,6 +147,26 @@ describe("trainHeights", () => {
       [],
     );
     expect(result.dotPx).toEqual(120);
+  });
+
+  test("eastbound before bottom station doesn't show", () => {
+    const trainLoc: TrainLoc = cTrainFactory.build({
+      consist: ["3900"],
+      directionId: DirectionId.Eastbound,
+      stationId: "place-clmnl",
+      stopStatus: StopStatus.InTransitTo,
+    });
+    expect(
+      trainHeights(
+        [trainLoc],
+        40,
+        1,
+        stationIdsEastbound,
+        stationSpacingRatios,
+        byId(DEMO_C_STATIONS),
+        [],
+      ),
+    ).toEqual([]);
   });
 
   test("eastbound before Mattapan shows", () => {
