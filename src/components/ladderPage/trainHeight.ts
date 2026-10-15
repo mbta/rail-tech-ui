@@ -251,7 +251,7 @@ const stopsTraveledToPixelsFromTop = (
     return (
       (sumOfStationRatiosForFullStopsAwayFromTop +
         partialDistance *
-        stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
+          stationSpacingRatiosTopToBottom[Math.trunc(stopsFromTop)]) *
       zoom
     );
   }
