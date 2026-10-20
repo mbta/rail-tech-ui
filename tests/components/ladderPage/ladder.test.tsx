@@ -3,7 +3,7 @@ import { Ladder, PillAccessoryProps } from "src/components/ladderPage/ladder";
 import { CarId } from "src/data";
 import { DirectionId } from "src/models/route";
 import { Station } from "src/models/stop";
-import { TrainLoc } from "src/models/trainLocation";
+import { StopStatus, TrainLoc } from "src/models/trainLocation";
 import { scrollTo } from "src/util/browser";
 import { trainLocFactory } from "tests/testHelpers/factory";
 import {
@@ -174,6 +174,40 @@ describe("Ladder", () => {
     expect(
       view.queryByRole("button", { name: /3701/ }),
     ).not.toBeInTheDocument();
+  });
+
+  test("shows southbound train IN_TRANSIT_TO JFK", () => {
+    const view = render(
+      <Ladder
+        trainsClickable={true}
+        zoom={40}
+        labelMode="lead"
+        trainLocs={[trainLocFactory.build({
+          consist: ["1800", "1801", "1802", "1803", "1804", "1805"],
+          routeId: "Red",
+          directionId: DirectionId.Westbound,
+          stationId: "place-jfk",
+          stopStatus: StopStatus.InTransitTo,
+          // Almost to JFK/UMass (Ashmont)
+          latLng: { latitude: 42.32214242964672, longitude: -71.05262893077062 }
+        })]}
+        stationSelection={null}
+        scrollToConsist={null}
+        highlight={null}
+        onVehicleSelection={jest.fn()}
+        setStationSelection={jest.fn()}
+        eastToWestStations={DEMO_RL_STATIONS}
+        // Even though DEMO_RL_STATIONS doesn't contain JFK, we expect
+        //  the train to still be rendered (see trainHeight.ts:152)
+        interLadderStationIds={["place-jfk"]}
+        letterFn={() => "A"}
+        routeColorFn={() => "branch-color-heavy-rail-ashmont"}
+        getInitialPredictionsDirection={getInitialPredictionsDirection}
+      />,
+    );
+    expect(view.getByRole("button", { name: /1800/ })).toBeContainedWithClass(
+      "left-0",
+    );
   });
 
   test("scrolling to trains based on hash", async () => {
