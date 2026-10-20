@@ -5,7 +5,6 @@ import {
   useContext,
   useRef,
   useEffect,
-  SetStateAction,
   Dispatch,
   useMemo,
   useCallback,
@@ -19,7 +18,7 @@ import {
   RoutePatternId,
 } from "src/models/route";
 import { Station, StationId, StationMap } from "src/models/stop";
-import { StopStatus, TrainLoc } from "src/models/trainLocation";
+import { TrainLoc } from "src/models/trainLocation";
 import { isTripRevenue } from "src/models/trainsheet";
 import { scrollTo } from "src/util/browser";
 import { className } from "src/util/dom";
@@ -89,6 +88,7 @@ export const Ladder = ({
   onVehicleSelection,
   setStationSelection,
   eastToWestStations,
+  interLadderStationIds,
   getInitialPredictionsDirection,
   renderAccessoryForTrainLoc,
 }: {
@@ -110,6 +110,7 @@ export const Ladder = ({
   onVehicleSelection: (selection: VehicleSelection) => void;
   setStationSelection: Dispatch<StationSelection | null>;
   eastToWestStations: Station[];
+  interLadderStationIds?: StationId[];
   getInitialPredictionsDirection: () => DirectionId;
   renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
@@ -172,6 +173,7 @@ export const Ladder = ({
           stationMap={stationMap}
           onVehicleSelection={onVehicleSelection}
           renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
+          interLadderStationIds={interLadderStationIds ?? []}
         />
         <TrainList
           trainsClickable={trainsClickable}
@@ -187,6 +189,7 @@ export const Ladder = ({
           stationMap={stationMap}
           onVehicleSelection={onVehicleSelection}
           renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
+          interLadderStationIds={interLadderStationIds ?? []}
         />
       </div>
     </FocusContext.Provider>
@@ -245,26 +248,26 @@ const StationList = ({
             {station.arrowLeft === "down" && (
               <div
                 data-testid="ladder-station-arrow-left-down"
-                className="light:border-l-ladder-background-light light:border-r-ladder-background-light absolute bottom-0 left-[-18px] h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark dark:border-t-glides-blue-900"
+                className="light:border-l-ladder-background-light light:border-r-ladder-background-light dark:border-r--background-dark absolute bottom-0 left-[-18px] h-0 w-0 translate-y-6 border-l-[15px] border-r-[15px] border-t-[25px] dark:border-l-ladder-background-dark dark:border-t-glides-blue-900"
               />
             )}
             {station.arrowLeft === "up" && (
               <div
                 data-testid="ladder-station-arrow-left-up"
-                className="light:border-b-ladder-background-light light:border-l-ladder-background-light light:border-r-ladder-background-light absolute bottom-0 left-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] dark:border-b-ladder-background-dark dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark"
+                className="light:border-b-ladder-background-light light:border-l-ladder-background-light light:border-r-ladder-background-light absolute bottom-0 left-[-18px] h-0 w-0 -translate-y-6 border-b-[25px] border-l-[15px] border-r-[15px] dark:border-b-ladder-background-dark dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark"
               />
             )}
 
             {station.arrowRight === "down" && (
               <div
                 data-testid="ladder-station-arrow-right-down"
-                className="light:border-l-ladder-background-light light:border-r-ladder-background-light absolute bottom-0 right-[-18px] h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark dark:border-t-glides-blue-900"
+                className="light:border-l-ladder-background-light light:border-r-ladder-background-light absolute bottom-0 right-[-18px] h-0 w-0 translate-y-6 border-l-[15px] border-r-[15px] border-t-[25px] dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark dark:border-t-glides-blue-900"
               />
             )}
             {station.arrowRight === "up" && (
               <div
                 data-testid="ladder-station-arrow-right-up"
-                className="light:border-l-ladder-background-light light:border-r-ladder-background-light absolute right-[-18px] h-0 w-0 border-b-[25px] border-l-[15px] border-r-[15px] dark:border-b-glides-blue-900 dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark"
+                className="light:border-l-ladder-background-light light:border-r-ladder-background-light absolute right-[-18px] h-0 w-0 -translate-y-6 border-b-[25px] border-l-[15px] border-r-[15px] dark:border-b-glides-blue-900 dark:border-l-ladder-background-dark dark:border-r-ladder-background-dark"
               />
             )}
 
@@ -371,6 +374,7 @@ const TrainList = ({
   zoom,
   directionId,
   stationIdsInOrder,
+  interLadderStationIds,
   stationSpacingRatiosTopToBottom,
   labelMode,
   labelRemap,
@@ -385,6 +389,7 @@ const TrainList = ({
   zoom: number;
   directionId: DirectionId;
   stationIdsInOrder: StationId[];
+  interLadderStationIds: StationId[];
   stationSpacingRatiosTopToBottom: number[];
   labelMode: LabelMode;
   labelRemap?: (car: CarId) => string;
@@ -403,6 +408,7 @@ const TrainList = ({
     stationIdsInOrder,
     stationSpacingRatiosTopToBottom,
     stationMap,
+    interLadderStationIds,
   );
   return (
     <ul
