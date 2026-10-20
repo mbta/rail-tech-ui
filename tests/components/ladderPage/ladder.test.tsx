@@ -182,15 +182,20 @@ describe("Ladder", () => {
         trainsClickable={true}
         zoom={40}
         labelMode="lead"
-        trainLocs={[trainLocFactory.build({
-          consist: ["1800", "1801", "1802", "1803", "1804", "1805"],
-          routeId: "Red",
-          directionId: DirectionId.Westbound,
-          stationId: "place-jfk",
-          stopStatus: StopStatus.InTransitTo,
-          // Almost to JFK/UMass (Ashmont)
-          latLng: { latitude: 42.32214242964672, longitude: -71.05262893077062 }
-        })]}
+        trainLocs={[
+          trainLocFactory.build({
+            consist: ["1800", "1801", "1802", "1803", "1804", "1805"],
+            routeId: "Red",
+            directionId: DirectionId.Westbound,
+            stationId: "place-jfk",
+            stopStatus: StopStatus.InTransitTo,
+            // Almost to JFK/UMass (Ashmont)
+            latLng: {
+              latitude: 42.32214242964672,
+              longitude: -71.05262893077062,
+            },
+          }),
+        ]}
         stationSelection={null}
         scrollToConsist={null}
         highlight={null}
