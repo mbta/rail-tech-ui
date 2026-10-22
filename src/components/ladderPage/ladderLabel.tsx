@@ -38,11 +38,11 @@ export const LadderLabel = ({
             ? "light:bg-white dark:bg-glides-blue-900"
             : "bg-glides-branch"
           : primaryColor === "bg"
-            ? "light:border-glides-gray-500 light:bg-slate-100 border border-2 border-solid dark:border-glides-gray-400"
+            ? "light:border-glides-gray-500 light:bg-slate-100 border-2 border-solid dark:border-glides-gray-400"
             : "light:bg-white dark:bg-glides-blue-900",
         color,
         highlight
-          ? "ring-glides-branch/50 light:animate-train-label-search-result-light dark:animate-train-label-search-result ring-8"
+          ? "ring-glides-branch/50 light:animate-train-label-search-result-light ring-8 dark:animate-train-label-search-result"
           : primaryColor === "route"
             ? "light:ring-1 light:ring-inset light:ring-black/30"
             : null,

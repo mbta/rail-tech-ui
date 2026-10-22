@@ -471,7 +471,9 @@ const Train = ({
     if (shouldScrollTo && labelButtonRef.current !== null) {
       scrollTo(labelButtonRef.current, "center", false);
       if (onSearchResultTimeout === null) return;
-      const timeout = setTimeout(onSearchResultTimeout, 5000);
+      // 2.5 cycles of a 4 second animation (five color flips, ending on the
+      // original state)
+      const timeout = setTimeout(onSearchResultTimeout, 10000);
       return () => clearTimeout(timeout);
     }
   }, [shouldScrollTo, labelButtonRef, onSearchResultTimeout]);
