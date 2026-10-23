@@ -28,6 +28,10 @@
       "text": {
         "$value": "{tailwind-colors.slate.800}",
         "$type": "color"
+      },
+      "hover": {
+        "$value": "#93c5fdbf",
+        "$type": "color"
       }
     },
     "secondary": {
@@ -42,6 +46,10 @@
       "border": {
         "$value": "{tailwind-colors.white}",
         "$type": "color"
+      },
+      "hover": {
+        "$value": "#ffffff66",
+        "$type": "color"
       }
     },
     "tertiary": {
@@ -55,6 +63,24 @@
       },
       "border": {
         "$value": "#ffffff00",
+        "$type": "color"
+      },
+      "hover": {
+        "$value": "#93c5fd73",
+        "$type": "color"
+      }
+    },
+    "quaternary": {
+      "outline": {
+        "$value": "{tailwind-colors.blue.300}",
+        "$type": "color"
+      },
+      "text": {
+        "$value": "{tailwind-colors.blue.300}",
+        "$type": "color"
+      },
+      "hover": {
+        "$value": "#93c5fd40",
         "$type": "color"
       }
     }
@@ -72,20 +98,6 @@
       "border": {
         "$value": "#ffffff00",
         "$type": "color"
-      },
-      "nonrev": {
-        "border": {
-          "$value": "{custom-colors.glides-gray.400}",
-          "$type": "color"
-        },
-        "background": {
-          "$value": "{custom-colors.glides-blue.700}",
-          "$type": "color"
-        },
-        "text": {
-          "$value": "{custom-colors.glides-gray.400}",
-          "$type": "color"
-        }
       },
       "text": {
         "b": {
@@ -119,10 +131,32 @@
         "orangeline": {
           "$value": "{Orbit.orangeline}",
           "$type": "color"
+        },
+        "mattapan": {
+          "$value": "{Light-Rail.Mattapan.mattapan-branch}",
+          "$type": "color"
+        }
+      },
+      "nonrev": {
+        "border": {
+          "$value": "{custom-colors.glides-gray.400}",
+          "$type": "color"
+        },
+        "background": {
+          "$value": "{custom-colors.glides-blue.700}",
+          "$type": "color"
+        },
+        "text": {
+          "$value": "{custom-colors.glides-gray.400}",
+          "$type": "color"
         }
       }
     },
     "route ladder": {
+      "$value": "{custom-colors.glides-blue.900}",
+      "$type": "color"
+    },
+    "station marker": {
       "$value": "{custom-colors.glides-blue.900}",
       "$type": "color"
     },
@@ -161,10 +195,6 @@
         "$value": "{custom-colors.glides-blue.700}",
         "$type": "color"
       }
-    },
-    "station marker": {
-      "$value": "{custom-colors.glides-blue.900}",
-      "$type": "color"
     },
     "search result": {
       "highlight": {
@@ -252,5 +282,19 @@
   "TPS-bg": {
     "$value": "{tailwind-colors.slate.50}",
     "$type": "color"
+  },
+  "color mode picker": {
+    "background": {
+      "$value": "{tailwind-colors.slate.700}",
+      "$type": "color"
+    },
+    "border": {
+      "$value": "{tailwind-colors.slate.600}",
+      "$type": "color"
+    },
+    "dropdown arrow": {
+      "$value": "{custom-colors.glides-gray.200}",
+      "$type": "color"
+    }
   }
 }

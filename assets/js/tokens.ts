@@ -203,6 +203,13 @@ export default {
       "text-dark": "var(--button-tertiary-text-dark)",
       "border-dark": "var(--button-tertiary-border-dark)",
     },
+    quaternary: {
+      "outline-light":
+        "rgb(var(--button-quaternary-outline-light) / <alpha-value>)",
+      "text-light": "rgb(var(--button-quaternary-text-light) / <alpha-value>)",
+      "outline-dark": "var(--button-quaternary-outline-dark)",
+      "text-dark": "var(--button-quaternary-text-dark)",
+    },
   },
   ladder: {
     "background-light": "var(--ladder-background-light)",
@@ -210,17 +217,6 @@ export default {
       "background-light":
         "rgb(var(--ladder-pill-background-light) / <alpha-value>)",
       "border-light": "var(--ladder-pill-border-light)",
-      nonrev: {
-        "border-light":
-          "rgb(var(--ladder-pill-nonrev-border-light) / <alpha-value>)",
-        "background-light": "var(--ladder-pill-nonrev-background-light)",
-        "text-light": "var(--ladder-pill-nonrev-text-light)",
-        "border-dark":
-          "rgb(var(--ladder-pill-nonrev-border-dark) / <alpha-value>)",
-        "background-dark":
-          "rgb(var(--ladder-pill-nonrev-background-dark) / <alpha-value>)",
-        "text-dark": "rgb(var(--ladder-pill-nonrev-text-dark) / <alpha-value>)",
-      },
       text: {
         "b-light": "var(--ladder-pill-text-b-light)",
         "c-light": "var(--ladder-pill-text-c-light)",
@@ -230,6 +226,7 @@ export default {
         "ashmont-light": "var(--ladder-pill-text-ashmont-light)",
         "blueline-light": "var(--ladder-pill-text-blueline-light)",
         "orangeline-light": "var(--ladder-pill-text-orangeline-light)",
+        "mattapan-light": "var(--ladder-pill-text-mattapan-light)",
         "b-dark": "rgb(var(--ladder-pill-text-b-dark) / <alpha-value>)",
         "c-dark": "rgb(var(--ladder-pill-text-c-dark) / <alpha-value>)",
         "d-dark": "rgb(var(--ladder-pill-text-d-dark) / <alpha-value>)",
@@ -242,12 +239,26 @@ export default {
           "rgb(var(--ladder-pill-text-blueline-dark) / <alpha-value>)",
         "orangeline-dark":
           "rgb(var(--ladder-pill-text-orangeline-dark) / <alpha-value>)",
+        "mattapan-dark":
+          "rgb(var(--ladder-pill-text-mattapan-dark) / <alpha-value>)",
+      },
+      nonrev: {
+        "border-light":
+          "rgb(var(--ladder-pill-nonrev-border-light) / <alpha-value>)",
+        "background-light": "var(--ladder-pill-nonrev-background-light)",
+        "text-light": "var(--ladder-pill-nonrev-text-light)",
+        "border-dark":
+          "rgb(var(--ladder-pill-nonrev-border-dark) / <alpha-value>)",
+        "background-dark":
+          "rgb(var(--ladder-pill-nonrev-background-dark) / <alpha-value>)",
+        "text-dark": "rgb(var(--ladder-pill-nonrev-text-dark) / <alpha-value>)",
       },
       "background-dark":
         "rgb(var(--ladder-pill-background-dark) / <alpha-value>)",
       "border-dark": "var(--ladder-pill-border-dark)",
     },
     "route-ladder-light": "var(--ladder-route-ladder-light)",
+    "station-marker-light": "var(--ladder-station-marker-light)",
     text: {
       "primary-light": "var(--ladder-text-primary-light)",
       "secondary-light": "var(--ladder-text-secondary-light)",
@@ -281,7 +292,6 @@ export default {
       "active-dot-dark":
         "rgb(var(--ladder-branch-picker-active-dot-dark) / <alpha-value>)",
     },
-    "station-marker-light": "var(--ladder-station-marker-light)",
     "search-result": {
       "highlight-light": "var(--ladder-search-result-highlight-light)",
       "text-light":
@@ -343,6 +353,16 @@ export default {
     "background-dark": "rgb(var(--popup-background-dark) / <alpha-value>)",
   },
   tpsBgLight: "var(--tps-bg-light)",
+  colorModePicker: {
+    "background-light":
+      "rgb(var(--color-mode-picker-background-light) / <alpha-value>)",
+    "border-light": "var(--color-mode-picker-border-light)",
+    "dropdown-arrow-light": "var(--color-mode-picker-dropdown-arrow-light)",
+    "background-dark": "var(--color-mode-picker-background-dark)",
+    "border-dark": "var(--color-mode-picker-border-dark)",
+    "dropdown-arrow-dark":
+      "rgb(var(--color-mode-picker-dropdown-arrow-dark) / <alpha-value>)",
+  },
   tpsBgDark: "var(--tps-bg-dark)",
   xs: {
     regular: "var(--xs-regular)",
