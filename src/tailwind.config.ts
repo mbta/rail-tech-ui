@@ -164,6 +164,12 @@ const railTechUITheme = {
             "text-dark": figmaTokens.button.tertiary["text-dark"],
             "border-dark": figmaTokens.button.tertiary["border-dark"],
           },
+          quaternary: {
+            "outline-light": figmaTokens.button.quaternary["outline-light"],
+            "text-light": figmaTokens.button.quaternary["text-light"],
+            "outline-dark": figmaTokens.button.quaternary["outline-dark"],
+            "text-dark": figmaTokens.button.quaternary["text-dark"],
+          },
         },
         ladder: {
           "background-light": figmaTokens.ladder["background-light"],
