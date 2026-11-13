@@ -83,6 +83,7 @@ const railTechUITheme = {
       }),
       colors: {
         ...customColors,
+        "color-mode-picker": { ...figmaTokens.colorModePicker },
         "light-rail": {
           "b-branch": figmaTokens.LightRail.B["b-branch"],
           "c-branch": figmaTokens.LightRail.C["c-branch"],
