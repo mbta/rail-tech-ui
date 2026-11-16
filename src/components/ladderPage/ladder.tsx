@@ -23,7 +23,11 @@ import { isTripRevenue } from "src/models/trainsheet";
 import { scrollTo } from "src/util/browser";
 import { className } from "src/util/dom";
 import { LabelMode, StationSelection, VehicleSelection } from "./types";
-import { TrainWithHeights, trainHeights } from "./trainHeight";
+import {
+  TrainHeightOptions,
+  TrainWithHeights,
+  trainHeights,
+} from "./trainHeight";
 import { DepArrow } from "../icons/DepArrow";
 
 /**
@@ -91,6 +95,7 @@ export const Ladder = ({
   interLadderStationIds,
   getInitialPredictionsDirection,
   renderAccessoryForTrainLoc,
+  trainHeightOptions = {},
 }: {
   zoom: number;
   letterFn: (routeId: RouteId, routePatternId?: RoutePatternId) => string;
@@ -113,6 +118,7 @@ export const Ladder = ({
   interLadderStationIds?: StationId[];
   getInitialPredictionsDirection: () => DirectionId;
   renderAccessoryForTrainLoc?: PillAccessoryRenderer;
+  trainHeightOptions?: Partial<TrainHeightOptions>;
 }): ReactElement => {
   const westboundTrainLocs = trainLocs.filter(
     (trainLoc) => trainLoc.directionId === DirectionId.Westbound,
@@ -174,6 +180,7 @@ export const Ladder = ({
           onVehicleSelection={onVehicleSelection}
           renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
           interLadderStationIds={interLadderStationIds ?? []}
+          trainHeightOptions={trainHeightOptions}
         />
         <TrainList
           trainsClickable={trainsClickable}
@@ -190,6 +197,7 @@ export const Ladder = ({
           onVehicleSelection={onVehicleSelection}
           renderAccessoryForTrainLoc={renderAccessoryForTrainLoc}
           interLadderStationIds={interLadderStationIds ?? []}
+          trainHeightOptions={trainHeightOptions}
         />
       </div>
     </FocusContext.Provider>
@@ -385,6 +393,7 @@ const TrainList = ({
   stationMap,
   onVehicleSelection,
   renderAccessoryForTrainLoc,
+  trainHeightOptions,
 }: {
   zoom: number;
   directionId: DirectionId;
@@ -400,6 +409,7 @@ const TrainList = ({
   stationMap: StationMap;
   onVehicleSelection: (selection: VehicleSelection) => void;
   renderAccessoryForTrainLoc?: PillAccessoryRenderer;
+  trainHeightOptions: Partial<TrainHeightOptions>;
 }): ReactElement => {
   const trainsWithHeights: TrainWithHeights[] = trainHeights(
     trainLocs,
@@ -409,6 +419,7 @@ const TrainList = ({
     stationSpacingRatiosTopToBottom,
     stationMap,
     interLadderStationIds,
+    trainHeightOptions,
   );
   return (
     <ul
