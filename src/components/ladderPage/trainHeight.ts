@@ -13,6 +13,14 @@ const EXCEPTIONS: Map<StationId, [DirectionId | null]> = new Map([
   ["place-asmnl", [DirectionId.Westbound]],
 ]);
 
+export interface TrainHeightOptions {
+  clampOffsets: boolean;
+}
+
+const defaultOptions = (): TrainHeightOptions => ({
+  clampOffsets: true,
+});
+
 interface TrainWithStopsTraveled {
   trainLoc: TrainLoc;
 
@@ -53,7 +61,12 @@ export const trainHeights = (
   stationSpacingRatiosTopToBottom: number[],
   stationMap: StationMap,
   interLadderStationIds: StationId[],
+  options: Partial<TrainHeightOptions>,
 ): TrainWithHeights[] => {
+  const resolvedOptions = {
+    ...defaultOptions(),
+    ...options,
+  };
   const trainsWithStopsTraveled: TrainWithStopsTraveled[] = filterMap(
     trainLocs,
     (trainLoc) =>
@@ -62,6 +75,7 @@ export const trainHeights = (
         stationIdsInOrder,
         stationMap,
         interLadderStationIds,
+        resolvedOptions,
       ),
   );
   const trainsTopToBottom: TrainWithStopsTraveled[] = sortTrainsTopToBottom(
@@ -86,6 +100,7 @@ const trainWithStopsTraveled = (
   stationIdsInOrder: StationId[],
   stationMap: StationMap,
   interLadderStationIds: StationId[],
+  options: TrainHeightOptions,
 ): TrainWithStopsTraveled | null => {
   // don't even check if the route or direction is missing
   if (trainLoc.routeId === null || trainLoc.directionId === null) {
@@ -96,6 +111,7 @@ const trainWithStopsTraveled = (
     trainLoc,
     stationMap,
     interLadderStationIds,
+    options,
   );
   if (stopsTraveled === null) {
     return null;
@@ -131,6 +147,7 @@ export const stopsTraveledAlongSegment = (
   trainLoc: TrainLoc,
   stationMap: StationMap,
   interLadderStationIds: StationId[],
+  options: TrainHeightOptions,
 ): number | null => {
   if (trainLoc.stationId === null || trainLoc.routeId === null) return null;
 
@@ -169,12 +186,15 @@ export const stopsTraveledAlongSegment = (
       stationLatLng(stationMap, destinationId),
       trainLoc.latLng,
     );
-    /* Enforce a minimum distance from the nearest station, to make the difference
-     * more clear between "just left a station" and "stopped at a station".
-     * This is especially important in the subway, where there's often an AVI
-     * right after a staion, and then no updates for a while.
+    /* If clamping is specified, then enforce a minimum distance from the nearest
+     * station, to make the difference more clear between "just left a station" and
+     * "stopped at a station". This is especially important in the subway, where
+     * there's often an AVI right after a staion, and then no updates for a while.
      */
-    return prevStationIndex + clamp(proportionBetweenPrevAndNext, 0.2, 0.8);
+    const offset = options.clampOffsets
+      ? clamp(proportionBetweenPrevAndNext, 0.2, 0.8)
+      : proportionBetweenPrevAndNext;
+    return prevStationIndex + offset;
   }
 };
 
