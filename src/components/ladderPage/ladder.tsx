@@ -2,7 +2,7 @@ import {
   ReactElement,
   ReactNode,
   createContext,
-  useContext,
+  use,
   useRef,
   useEffect,
   Dispatch,
@@ -156,7 +156,7 @@ export const Ladder = ({
   );
 
   return (
-    <FocusContext.Provider value={focusContextValue}>
+    <FocusContext value={focusContextValue}>
       <div className="relative pb-20 sm:pb-0">
         <StationList
           zoom={zoom}
@@ -200,7 +200,7 @@ export const Ladder = ({
           trainHeightOptions={trainHeightOptions}
         />
       </div>
-    </FocusContext.Provider>
+    </FocusContext>
   );
 };
 
@@ -470,7 +470,7 @@ const Train = ({
   renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const { highlight, scrollToConsist, onSearchResultTimeout } =
-    useContext(FocusContext);
+    use(FocusContext);
   const shouldHighlight =
     highlight !== null &&
     consistEq(highlight, trainWithHeights.consist, "exact");
@@ -491,13 +491,13 @@ const Train = ({
 
   const letter = useMemo(() => {
     return letterFn(trainWithHeights.routeId, trainWithHeights.routePatternId);
-  }, [trainWithHeights.routeId, trainWithHeights.routePatternId]);
+  }, [letterFn, trainWithHeights.routeId, trainWithHeights.routePatternId]);
   const color = useMemo(() => {
     return routeColorFn(
       trainWithHeights.routeId,
       trainWithHeights.routePatternId,
     );
-  }, [trainWithHeights.routeId, trainWithHeights.routePatternId]);
+  }, [routeColorFn, trainWithHeights.routeId, trainWithHeights.routePatternId]);
   return (
     <>
       <Dot color={color} trainWithHeights={trainWithHeights} />
@@ -575,7 +575,11 @@ const LabelButton = ({
             trainLoc: trainWithHeights.trainLoc,
             directionId: trainWithHeights.directionId,
           }),
-    [renderAccessoryForTrainLoc, trainWithHeights.trainLoc],
+    [
+      renderAccessoryForTrainLoc,
+      trainWithHeights.trainLoc,
+      trainWithHeights.directionId,
+    ],
   );
   return (
     <button
@@ -623,7 +627,7 @@ const LineBetweenDotAndLabel = ({
   trainWithHeights: TrainWithHeights;
   color: string;
 }): ReactElement => {
-  const { dotPx, labelPx, routeId, trip } = trainWithHeights;
+  const { dotPx, labelPx, trip } = trainWithHeights;
   // svg 0,0 is at the dot
   const labelX =
     trainWithHeights.directionId === DirectionId.Westbound

@@ -157,7 +157,7 @@ const TrainConsist = ({
           index === 0 ? "text-base" : "text-sm",
           highlight ? "animate-train-label-search-result-car-id" : null,
         ])}
-        key={index}
+        key={carId}
       >
         {labelRemap ? labelRemap(carId) : carId}
       </div>

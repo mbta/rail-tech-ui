@@ -4,6 +4,7 @@ import type {
   ParserOptions,
   DesignTokens,
   TransformedToken,
+  Config,
 } from "style-dictionary/types";
 
 // heavily inspired by github.com/mbta/mbta_metro/blob/main/assets/process-figma-tokens.js
@@ -12,7 +13,7 @@ import type {
 interface TokenValue {
   value?: number | string;
   unit?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface Token {
@@ -20,22 +21,22 @@ interface Token {
   $value?: string | number | TokenValue;
   path?: string[];
   name?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface FormatArgs {
   dictionary: {
     allTokens: Token[];
-    [key: string]: any;
   };
-  [key: string]: any;
 }
 
 const SRC_DIR = "./assets/figma-tokens";
 const buildPath = "./assets/";
 
-function isLeaf(token: Record<string, any>): boolean {
-  return Object.keys(token).includes("$type");
+type TokenTree = { [key: string]: TokenTree | Token | string };
+
+function isLeaf(token: unknown): token is Token {
+  return typeof token === "object" && token !== null && "$type" in token;
 }
 
 function parseLeaf(token: Token): Token {
@@ -62,43 +63,42 @@ function kebabCase(str: string): string {
     .toLowerCase();
 }
 
-function normalizeComponentKeys(
-  dict: Record<string, any>,
-): Record<string, any> {
-  return Object.entries(dict).reduce<Record<string, any>>(
-    (acc, [key, value]) => {
-      const normalizedKey = kebabCase(key);
-      acc[normalizedKey] = isLeaf(value)
-        ? value
-        : normalizeComponentKeys(value);
-      return acc;
-    },
-    {},
-  );
+function normalizeComponentKeys(dict: TokenTree): TokenTree {
+  return Object.entries(dict).reduce<TokenTree>((acc, [key, value]) => {
+    const normalizedKey = kebabCase(key);
+    acc[normalizedKey] = isLeaf(value)
+      ? value
+      : normalizeComponentKeys(value as TokenTree);
+    return acc;
+  }, {});
 }
 
 function traverseTree(
-  dict: Record<string, any>,
+  dict: TokenTree,
   theme: "light" | "dark" | null = null,
-): Record<string, any> {
-  const output: Record<string, any> = {};
+): TokenTree {
+  const output: TokenTree = {};
   const themeSuffix = theme === "light" || theme === "dark" ? `-${theme}` : "";
 
   for (const key in dict) {
     if (key === "spacing") {
-      const spacingVals = dict[key];
-      output[key] = {};
+      const spacingVals = dict[key] as Record<string, Token>;
+      const spacingOut: TokenTree = {};
+      output[key] = spacingOut;
       for (const spacingKey in spacingVals) {
         const val = spacingVals[spacingKey];
         if (val.$type === "number") {
-          output[key][spacingKey] = {
+          spacingOut[spacingKey] = {
             $value: `${val.$value}px`,
             $type: "dimension",
           };
-        } else if (val.$value?.unit === "px") {
-          output[key][spacingKey] = `${val.$value.value}px`;
+        } else if (
+          typeof val.$value === "object" &&
+          val.$value?.unit === "px"
+        ) {
+          spacingOut[spacingKey] = `${val.$value.value}px`;
         } else {
-          output[key][spacingKey] = val;
+          spacingOut[spacingKey] = val;
         }
       }
     } else {
@@ -106,7 +106,7 @@ function traverseTree(
       if (isLeaf(val)) {
         output[`${key}${themeSuffix}`] = parseLeaf(val);
       } else {
-        output[key] = traverseTree(val, theme);
+        output[key] = traverseTree(val as TokenTree, theme);
       }
     }
   }
@@ -193,8 +193,10 @@ StyleDictionary.registerTransform({
   transitive: true,
   filter: (token: Token) => token.$type === "typography",
   transform: (token: Token) => {
-    const tokenValue = token.$value as Record<string, any>;
+    const tokenValue = token.$value as
+      { fontSize?: { value: number } } | undefined;
     const fontSize = tokenValue?.fontSize;
+    if (!fontSize) throw new Error(`Missing fontSize on ${token.name}`);
 
     return `${fontSize.value / 16}rem`;
   },
@@ -338,6 +340,8 @@ const tailwindConfig = {
   },
 };
 
+type NestedTokens = { [key: string]: NestedTokens | string };
+
 const capitalize = (str: string): string => {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -345,7 +349,7 @@ const capitalize = (str: string): string => {
 
 const camelCase = (str: string): string => {
   return str
-    .split(/[\s-_\+]+/g)
+    .split(/[\s\-_+]+/g)
     .map((part, index) => (index === 0 ? part : capitalize(part)))
     .join("");
 };
@@ -355,12 +359,12 @@ StyleDictionary.registerFormat({
   name: "typescript/tailwind",
   format: function ({ dictionary }: FormatArgs) {
     const buildNestedObject = (tokens: Token[]) => {
-      const result: Record<string, any> = {};
+      const result: NestedTokens = {};
 
       tokens.forEach((token) => {
         const path = token.path || [];
         const $value = token.$value;
-        let current = result;
+        let current: NestedTokens = result;
 
         path.forEach((part: string, index: number) => {
           const partName = index === 0 ? camelCase(part) : part;
@@ -378,8 +382,8 @@ StyleDictionary.registerFormat({
               current[partName] = `var(${varName})`;
             }
           } else {
-            current[partName] = current[partName] || {};
-            current = current[partName];
+            current[partName] ??= {};
+            current = current[partName] as NestedTokens;
           }
         });
       });
@@ -396,8 +400,8 @@ const buildTokens = async () => {
   const allConfigs = [baseConfig, opsConfig, ...themeConfigs, tailwindConfig];
 
   for (const config of allConfigs) {
-    // Cast to 'any' when passing to SD to bypass internal configuration validation
-    const sd = new StyleDictionary(config as any, { verbosity: "verbose" });
+    // Cast to bypass SD's internal configuration validation
+    const sd = new StyleDictionary(config as Config, { verbosity: "verbose" });
     await sd.cleanAllPlatforms();
     await sd.buildAllPlatforms();
   }
