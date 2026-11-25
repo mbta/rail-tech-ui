@@ -10,7 +10,6 @@ import { trainLocFactory } from "tests/testHelpers/factory";
 import {
   DEMO_B_STATIONS,
   DEMO_C_STATIONS,
-  buildStation,
   byId,
 } from "tests/testHelpers/stops";
 

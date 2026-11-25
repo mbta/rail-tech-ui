@@ -491,13 +491,13 @@ const Train = ({
 
   const letter = useMemo(() => {
     return letterFn(trainWithHeights.routeId, trainWithHeights.routePatternId);
-  }, [trainWithHeights.routeId, trainWithHeights.routePatternId]);
+  }, [letterFn, trainWithHeights.routeId, trainWithHeights.routePatternId]);
   const color = useMemo(() => {
     return routeColorFn(
       trainWithHeights.routeId,
       trainWithHeights.routePatternId,
     );
-  }, [trainWithHeights.routeId, trainWithHeights.routePatternId]);
+  }, [routeColorFn, trainWithHeights.routeId, trainWithHeights.routePatternId]);
   return (
     <>
       <Dot color={color} trainWithHeights={trainWithHeights} />
@@ -575,7 +575,11 @@ const LabelButton = ({
             trainLoc: trainWithHeights.trainLoc,
             directionId: trainWithHeights.directionId,
           }),
-    [renderAccessoryForTrainLoc, trainWithHeights.trainLoc],
+    [
+      renderAccessoryForTrainLoc,
+      trainWithHeights.trainLoc,
+      trainWithHeights.directionId,
+    ],
   );
   return (
     <button
@@ -623,7 +627,7 @@ const LineBetweenDotAndLabel = ({
   trainWithHeights: TrainWithHeights;
   color: string;
 }): ReactElement => {
-  const { dotPx, labelPx, routeId, trip } = trainWithHeights;
+  const { dotPx, labelPx, trip } = trainWithHeights;
   // svg 0,0 is at the dot
   const labelX =
     trainWithHeights.directionId === DirectionId.Westbound
