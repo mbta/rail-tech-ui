@@ -2,7 +2,7 @@ import {
   ReactElement,
   ReactNode,
   createContext,
-  useContext,
+  use,
   useRef,
   useEffect,
   Dispatch,
@@ -156,7 +156,7 @@ export const Ladder = ({
   );
 
   return (
-    <FocusContext.Provider value={focusContextValue}>
+    <FocusContext value={focusContextValue}>
       <div className="relative pb-20 sm:pb-0">
         <StationList
           zoom={zoom}
@@ -200,7 +200,7 @@ export const Ladder = ({
           trainHeightOptions={trainHeightOptions}
         />
       </div>
-    </FocusContext.Provider>
+    </FocusContext>
   );
 };
 
@@ -470,7 +470,7 @@ const Train = ({
   renderAccessoryForTrainLoc?: PillAccessoryRenderer;
 }): ReactElement => {
   const { highlight, scrollToConsist, onSearchResultTimeout } =
-    useContext(FocusContext);
+    use(FocusContext);
   const shouldHighlight =
     highlight !== null &&
     consistEq(highlight, trainWithHeights.consist, "exact");
